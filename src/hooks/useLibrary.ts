@@ -17,8 +17,8 @@ export const useLibrary = () => {
   const fetchResources = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.executeAsync('SELECT * FROM LibraryResources ORDER BY created_at DESC');
-      setResources(result.rows?._array || []);
+      const result = await db.execute('SELECT * FROM LibraryResources ORDER BY created_at DESC');
+      setResources((result.rows as any[]) || []);
     } catch (error) {
       console.error('Error fetching library resources:', error);
     } finally {
@@ -32,7 +32,7 @@ export const useLibrary = () => {
 
   const addResource = async (title: string, category: string, url: string, notes: string) => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'INSERT INTO LibraryResources (title, category, url, notes) VALUES (?, ?, ?, ?)',
         [title, category, url, notes]
       );
@@ -44,7 +44,7 @@ export const useLibrary = () => {
 
   const deleteResource = async (id: number) => {
     try {
-      await db.executeAsync('DELETE FROM LibraryResources WHERE id = ?', [id]);
+      await db.execute('DELETE FROM LibraryResources WHERE id = ?', [id]);
       await fetchResources();
     } catch (error) {
       console.error('Error deleting library resource:', error);

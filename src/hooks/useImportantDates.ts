@@ -16,8 +16,8 @@ export const useImportantDates = () => {
   const fetchDates = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.executeAsync('SELECT * FROM ImportantDates ORDER BY target_date ASC');
-      setDates(result.rows?._array || []);
+      const result = await db.execute('SELECT * FROM ImportantDates ORDER BY target_date ASC');
+      setDates((result.rows as any[]) || []);
     } catch (error) {
       console.error('Error fetching important dates:', error);
     } finally {
@@ -31,7 +31,7 @@ export const useImportantDates = () => {
 
   const addDate = async (title: string, target_date: string, target_time: string, note: string) => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'INSERT INTO ImportantDates (title, target_date, target_time, note) VALUES (?, ?, ?, ?)',
         [title, target_date, target_time, note]
       );
@@ -43,7 +43,7 @@ export const useImportantDates = () => {
 
   const deleteDate = async (id: number) => {
     try {
-      await db.executeAsync('DELETE FROM ImportantDates WHERE id = ?', [id]);
+      await db.execute('DELETE FROM ImportantDates WHERE id = ?', [id]);
       await fetchDates();
     } catch (error) {
       console.error('Error deleting important date:', error);

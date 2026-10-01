@@ -18,8 +18,8 @@ export const useReminders = () => {
   const fetchReminders = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.executeAsync('SELECT * FROM Reminders ORDER BY time ASC');
-      const rows = result.rows?._array || [];
+      const result = await db.execute('SELECT * FROM Reminders ORDER BY time ASC');
+      const rows = (result.rows as any[]) || [];
       
       const formatted = rows.map((row: any) => ({
         ...row,
@@ -41,7 +41,7 @@ export const useReminders = () => {
 
   const addReminder = async (time: string, label: string, is_hard_mode: boolean = false, days: string = '[]') => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'INSERT INTO Reminders (time, label, is_active, is_hard_mode, days) VALUES (?, ?, 1, ?, ?)',
         [time, label, is_hard_mode ? 1 : 0, days]
       );
@@ -53,7 +53,7 @@ export const useReminders = () => {
 
   const toggleReminder = async (id: number, currentStatus: boolean) => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'UPDATE Reminders SET is_active = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
         [currentStatus ? 0 : 1, id]
       );
@@ -65,7 +65,7 @@ export const useReminders = () => {
 
   const deleteReminder = async (id: number) => {
     try {
-      await db.executeAsync('DELETE FROM Reminders WHERE id = ?', [id]);
+      await db.execute('DELETE FROM Reminders WHERE id = ?', [id]);
       await fetchReminders();
     } catch (error) {
       console.error('Error deleting reminder:', error);

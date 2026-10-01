@@ -9,8 +9,8 @@ export const useNotes = (date: string) => {
   const fetchNote = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.executeAsync('SELECT * FROM DailyNotes WHERE date = ?', [date]);
-      const rows = result.rows?._array || [];
+      const result = await db.execute('SELECT * FROM DailyNotes WHERE date = ?', [date]);
+      const rows = (result.rows as any[]) || [];
       
       if (rows.length > 0) {
         setNote(rows[0].content || '');
@@ -31,7 +31,7 @@ export const useNotes = (date: string) => {
   const saveNote = async (content: string) => {
     try {
       setSaveStatus('saving');
-      await db.executeAsync(
+      await db.execute(
         'INSERT INTO DailyNotes (date, content, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(date) DO UPDATE SET content = excluded.content, updated_at = CURRENT_TIMESTAMP',
         [date, content]
       );

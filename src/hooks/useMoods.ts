@@ -8,8 +8,8 @@ export const useMoods = (date: string) => {
   const fetchMood = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.executeAsync('SELECT * FROM Moods WHERE date = ?', [date]);
-      const rows = result.rows?._array || [];
+      const result = await db.execute('SELECT * FROM Moods WHERE date = ?', [date]);
+      const rows = (result.rows as any[]) || [];
       if (rows.length > 0) {
         setRating(rows[0].rating);
       } else {
@@ -28,7 +28,7 @@ export const useMoods = (date: string) => {
 
   const saveMood = async (newRating: number) => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'INSERT INTO Moods (date, rating) VALUES (?, ?) ON CONFLICT(date) DO UPDATE SET rating = excluded.rating',
         [date, newRating]
       );

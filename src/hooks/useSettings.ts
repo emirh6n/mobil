@@ -38,8 +38,8 @@ export const useSettings = () => {
   const fetchSettings = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.executeAsync('SELECT * FROM Settings');
-      const rows = result.rows?._array || [];
+      const result = await db.execute('SELECT * FROM Settings');
+      const rows = (result.rows as any[]) || [];
       
       const loadedSettings = { ...defaultSettings };
       
@@ -63,7 +63,7 @@ export const useSettings = () => {
 
   const updateSetting = async (key: keyof AppSettings, value: string) => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'INSERT INTO Settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP',
         [key, value]
       );
@@ -77,7 +77,7 @@ export const useSettings = () => {
     try {
       const keys = Object.keys(updates);
       for (const key of keys) {
-        await db.executeAsync(
+        await db.execute(
           'INSERT INTO Settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP',
           [key, (updates as any)[key]]
         );

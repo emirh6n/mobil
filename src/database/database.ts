@@ -9,7 +9,7 @@ const db = open({
 export const initDatabase = async () => {
   try {
     // Basic Key-Value Settings (User Profile, Daily Goals, App Config)
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS Settings (
         key TEXT PRIMARY KEY,
         value TEXT,
@@ -19,7 +19,7 @@ export const initDatabase = async () => {
     );
 
     // Tasks / Görev Disiplini
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS Tasks (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -33,7 +33,7 @@ export const initDatabase = async () => {
     );
 
     // Reminders / Alarmlar
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS Reminders (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         time TEXT NOT NULL, -- HH:MM
@@ -48,7 +48,7 @@ export const initDatabase = async () => {
     );
 
     // Important Dates / Önemli Tarihler
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS ImportantDates (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -60,7 +60,7 @@ export const initDatabase = async () => {
     );
 
     // Library / Kütüphane
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS LibraryResources (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         title TEXT NOT NULL,
@@ -72,7 +72,7 @@ export const initDatabase = async () => {
     );
 
     // Daily Notes / Günlük Notlar
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS DailyNotes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT UNIQUE NOT NULL, -- YYYY-MM-DD
@@ -83,7 +83,7 @@ export const initDatabase = async () => {
     );
 
     // Moods / Güne Puanım
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS Moods (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT UNIQUE NOT NULL, -- YYYY-MM-DD
@@ -93,7 +93,7 @@ export const initDatabase = async () => {
     );
 
     // Workouts (Antrenman Takibi)
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS Workouts (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT NOT NULL, -- YYYY-MM-DD
@@ -106,7 +106,7 @@ export const initDatabase = async () => {
     );
 
     // Workout Exercises (Antrenman Hareketleri)
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS WorkoutExercises (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         workout_id INTEGER,
@@ -120,7 +120,7 @@ export const initDatabase = async () => {
     );
 
     // Nutrition Logs (Besin Takibi)
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS NutritionLogs (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT NOT NULL, -- YYYY-MM-DD
@@ -135,7 +135,7 @@ export const initDatabase = async () => {
     );
 
     // Macros Daily Summary (Günlük Makro Özeti - optional, can be computed, but good for caching)
-    await db.executeAsync(
+    await db.execute(
       `CREATE TABLE IF NOT EXISTS DailyMacros (
         date TEXT PRIMARY KEY, -- YYYY-MM-DD
         total_calories INTEGER DEFAULT 0,

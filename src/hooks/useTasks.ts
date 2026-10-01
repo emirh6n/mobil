@@ -25,8 +25,8 @@ export const useTasks = (targetDate?: string) => {
         params = [targetDate];
       }
       
-      const result = await db.executeAsync(query, params);
-      const rows = result.rows?._array || [];
+      const result = await db.execute(query, params);
+      const rows = (result.rows as any[]) || [];
       
       const formattedTasks = rows.map((row: any) => ({
         ...row,
@@ -47,7 +47,7 @@ export const useTasks = (targetDate?: string) => {
 
   const addTask = async (title: string, description: string, target_date?: string, target_time?: string) => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'INSERT INTO Tasks (title, description, target_date, target_time, is_completed) VALUES (?, ?, ?, ?, 0)',
         [title, description, target_date || null, target_time || null]
       );
@@ -59,7 +59,7 @@ export const useTasks = (targetDate?: string) => {
 
   const toggleTask = async (id: number, currentStatus: boolean) => {
     try {
-      await db.executeAsync(
+      await db.execute(
         'UPDATE Tasks SET is_completed = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
         [currentStatus ? 0 : 1, id]
       );
@@ -71,7 +71,7 @@ export const useTasks = (targetDate?: string) => {
   
   const deleteTask = async (id: number) => {
     try {
-      await db.executeAsync('DELETE FROM Tasks WHERE id = ?', [id]);
+      await db.execute('DELETE FROM Tasks WHERE id = ?', [id]);
       await fetchTasks();
     } catch (error) {
       console.error('Error deleting task:', error);
