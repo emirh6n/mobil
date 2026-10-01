@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
   formCard: { backgroundColor: theme.colors.surfaceContainer, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: theme.colors.surfaceBorder, gap: 12 },
   formHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: 'rgba(38, 40, 46, 0.6)', paddingBottom: 8 },
   formHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  pulseDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: theme.colors.primary },
   formTitle: { ...theme.typography.labelMd, color: theme.colors.onSurface, fontWeight: 'bold', textTransform: 'uppercase' },
   formSub: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
   
