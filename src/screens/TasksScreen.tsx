@@ -6,18 +6,19 @@ import { Icon } from '../components/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { useTasks } from '../hooks/useTasks';
 
+import { Header } from '../components/Header';
+import { useDateContext } from '../context/DateContext';
+
 export const TasksScreen = () => {
-  const navigation = useNavigation();
-  // We'll use a fixed date for now or today's date
-  const todayDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-  const { tasks, loading, addTask, toggleTask, deleteTask } = useTasks(todayDate);
+  const { selectedDate } = useDateContext();
+  const { tasks, loading, addTask, toggleTask, deleteTask } = useTasks(selectedDate);
   
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
 
   const handleAddTask = () => {
     if (!title.trim()) return;
-    addTask(title, desc, todayDate);
+    addTask(title, desc, selectedDate);
     setTitle('');
     setDesc('');
   };
@@ -27,31 +28,18 @@ export const TasksScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
-          </TouchableOpacity>
-          <View>
-            <Text style={styles.headerTitle}>Görev Disiplini</Text>
-            <Text style={styles.headerSubtitle}>TRKN • Günlük Rutin</Text>
-          </View>
-        </View>
-        <View style={styles.headerRight}>
-          <View style={styles.dateBadge}>
-            <Icon name="calendar-today" size={14} color={theme.colors.primary} />
-            <Text style={styles.dateBadgeText}>01 EKI</Text>
-          </View>
-          <TouchableOpacity style={styles.iconBtn}>
-            <Icon name="settings" size={20} color={theme.colors.onSurfaceVariant} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header subtitle="Görev Disiplini" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <View style={styles.dateRow}>
-          <Text style={styles.dateLabel}>SEÇİLİ GÜN</Text>
-          <Text style={styles.dateValue}>{new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' })}</Text>
+        <View style={styles.subheadRow}>
+          <View style={styles.subheadLeft}>
+            <Icon name="calendar-month" size={18} color={theme.colors.primary} />
+            <Text style={styles.subheadLabel}>SEÇİLİ GÜN</Text>
+          </View>
+          <View style={styles.subheadRight}>
+            <View style={styles.pulseDot} />
+            <Text style={styles.subheadDateText}>{selectedDate}</Text>
+          </View>
         </View>
 
         {/* Task Lists */}
@@ -161,9 +149,12 @@ const styles = StyleSheet.create({
   
   scrollContent: { padding: theme.spacing.margin, paddingBottom: 100, gap: 16 },
   
-  dateRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 4 },
-  dateLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, fontWeight: 'bold', letterSpacing: 1 },
-  dateValue: { ...theme.typography.labelMd, color: theme.colors.onSurface },
+  subheadRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 },
+  subheadLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  subheadLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, letterSpacing: 1 },
+  subheadRight: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: theme.colors.surfaceContainerHigh, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 16 },
+  pulseDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: theme.colors.primary },
+  subheadDateText: { ...theme.typography.labelMd, color: theme.colors.onSurface },
   
   taskListContainer: { gap: 16 },
   listSection: { gap: 12 },

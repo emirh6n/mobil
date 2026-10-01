@@ -3,13 +3,15 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Activi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
+import { Header } from '../components/Header';
 import { useWorkouts } from '../hooks/useWorkouts';
 import { useNavigation } from '@react-navigation/native';
+import { useDateContext } from '../context/DateContext';
 
 export const SportsScreen = () => {
   const navigation = useNavigation();
-  const todayDate = new Date().toISOString().split('T')[0];
-  const { workouts, loading, addWorkoutExercise, deleteWorkout } = useWorkouts(todayDate);
+  const { selectedDate } = useDateContext();
+  const { workouts, loading, addWorkoutExercise, deleteWorkout } = useWorkouts(selectedDate);
 
   const [muscleGroup, setMuscleGroup] = useState('');
   const [exerciseName, setExerciseName] = useState('');
@@ -38,26 +40,7 @@ export const SportsScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }}>
-            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
-          </TouchableOpacity>
-          <View style={[styles.iconBox, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
-            <Icon name="bolt" size={32} color={theme.colors.primary} />
-          </View>
-          <View style={styles.headerTextContainer}>
-            <Text style={[styles.headerTitle, { fontSize: 26 }]}>TRKN</Text>
-            <Text style={styles.headerSubtitle}>Spor Merkezi</Text>
-          </View>
-        </View>
-        <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.dateBtn}>
-            <Icon name="calendar-today" size={18} color={theme.colors.primary} />
-            <Text style={styles.dateBtnText}>01 EKI</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header subtitle="Spor Merkezi" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Date Selector */}
@@ -68,7 +51,7 @@ export const SportsScreen = () => {
           </View>
           <View style={styles.subheadRight}>
             <View style={styles.pulseDot} />
-            <Text style={styles.subheadDateText}>{todayDate}</Text>
+            <Text style={styles.subheadDateText}>{selectedDate}</Text>
           </View>
         </View>
 

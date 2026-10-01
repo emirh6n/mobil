@@ -357,3 +357,130 @@
 {"_e":"metro:bundling:progress","_t":1790887230421,"id":"1","progress":0.999,"total":1038,"current":1038}
 {"_e":"metro:bundling:done","_t":1790887230601,"id":"1","total":1038,"ms":4743.0422}
 {"_e":"metro:client_log","_t":1790887233687,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790887535964,"id":"3","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790887535964,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790887536002,"id":"3","total":1,"ms":38.0459}
+{"_e":"metro:client_log","_t":1790887539375,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790888371846,"level":"error","data":["[ReferenceError: Property 'Header' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790888379667,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"root:init","_t":1790888537020,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790888537021,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790888537023,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790888537234,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790888537576,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790888537767,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790888541821,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790888547236,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790888547236,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790888547288,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790888547388,"id":"1","progress":0.14556216835212338,"total":249,"current":95}
+{"_e":"metro:bundling:progress","_t":1790888547488,"id":"1","progress":0.26103621212410133,"total":458,"current":234}
+{"_e":"metro:bundling:progress","_t":1790888547588,"id":"1","progress":0.5976572353613945,"total":639,"current":494}
+{"_e":"metro:bundling:progress","_t":1790888547694,"id":"1","progress":0.7620262975778547,"total":850,"current":742}
+{"_e":"metro:bundling:progress","_t":1790888547802,"id":"1","progress":0.8861433782987956,"total":1006,"current":947}
+{"_e":"metro:bundling:done","_t":1790888547881,"id":"1","total":1006,"ms":644.9132}
+{"_e":"metro:client_log","_t":1790888551341,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790889407074,"level":"error","data":["[ReferenceError: Property 'DateProvider' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790889407817,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790889475718,"level":"error","data":["[ReferenceError: Property 'todayDate' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790889485236,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790889519881,"level":"error","data":["[ReferenceError: Property 'todayDate' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790889524634,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790889629510,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790889757610,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790889815222,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGCircle]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGClipPath]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGDefs]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGEllipse]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGGroup]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGForeignObject]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGImage]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGLine]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGLinearGradient]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGMarker]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGMask]"]}
+{"_e":"metro:client_log","_t":1790889815236,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGPath]"]}
+{"_e":"metro:client_log","_t":1790889815244,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGPattern]"]}
+{"_e":"metro:client_log","_t":1790889815245,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGRadialGradient]"]}
+{"_e":"metro:client_log","_t":1790889815245,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGRect]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGSvgViewAndroid]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGSvgView]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGSymbol]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGTSpan]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGText]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGTextPath]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGUse]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFeBlend]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFeColorMatrix]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFeComposite]"]}
+{"_e":"metro:client_log","_t":1790889815291,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFeFlood]"]}
+{"_e":"metro:client_log","_t":1790889815295,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFeGaussianBlur]"]}
+{"_e":"metro:client_log","_t":1790889815295,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFeMerge]"]}
+{"_e":"metro:client_log","_t":1790889815372,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFeOffset]"]}
+{"_e":"metro:client_log","_t":1790889815372,"level":"error","data":["[Invariant Violation: Tried to register two views with the same name RNSVGFilter]"]}
+{"_e":"metro:client_log","_t":1790890174062,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790890235294,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"root:init","_t":1790890744799,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790890744799,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790890744802,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790890745005,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790890745309,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790890745511,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790890749854,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"root:init","_t":1790890782765,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790890782766,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790890782768,"mode":"development","files":[],"env":{}}
+{"_e":"root:init","_t":1790890805669,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790890805669,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790890805671,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790890807853,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790890808148,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790890808316,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790890812511,"atlas":false,"workers":12,"host":"::","port":8082}
+{"_e":"metro:bundling:started","_t":1790890816795,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790890816796,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790890816800,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790890817307,"id":"1","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790890817408,"id":"1","progress":0.010000000000000002,"total":3,"current":1}
+{"_e":"metro:bundling:progress","_t":1790890817456,"id":"1","progress":0.04000000000000001,"total":3,"current":2}
+{"_e":"metro:bundling:progress","_t":1790890817562,"id":"1","progress":0.04000000000000001,"total":27,"current":5}
+{"_e":"metro:bundling:progress","_t":1790890817687,"id":"1","progress":0.08163265306122448,"total":28,"current":8}
+{"_e":"metro:bundling:progress","_t":1790890817800,"id":"1","progress":0.2197265625,"total":32,"current":15}
+{"_e":"metro:bundling:progress","_t":1790890817903,"id":"1","progress":0.2197265625,"total":54,"current":17}
+{"_e":"metro:bundling:progress","_t":1790890818056,"id":"1","progress":0.2197265625,"total":54,"current":18}
+{"_e":"metro:bundling:progress","_t":1790890818160,"id":"1","progress":0.2197265625,"total":77,"current":26}
+{"_e":"metro:bundling:progress","_t":1790890818268,"id":"1","progress":0.2197265625,"total":111,"current":36}
+{"_e":"metro:bundling:progress","_t":1790890818369,"id":"1","progress":0.2197265625,"total":146,"current":59}
+{"_e":"metro:bundling:progress","_t":1790890818469,"id":"1","progress":0.2197265625,"total":254,"current":79}
+{"_e":"metro:bundling:progress","_t":1790890818577,"id":"1","progress":0.2197265625,"total":280,"current":91}
+{"_e":"metro:bundling:progress","_t":1790890818678,"id":"1","progress":0.2197265625,"total":317,"current":118}
+{"_e":"metro:bundling:progress","_t":1790890818778,"id":"1","progress":0.2197265625,"total":367,"current":153}
+{"_e":"metro:bundling:progress","_t":1790890818878,"id":"1","progress":0.2197265625,"total":396,"current":176}
+{"_e":"metro:bundling:progress","_t":1790890818983,"id":"1","progress":0.22185465238395294,"total":414,"current":195}
+{"_e":"metro:bundling:progress","_t":1790890819084,"id":"1","progress":0.26339051796075996,"total":454,"current":233}
+{"_e":"metro:bundling:progress","_t":1790890819185,"id":"1","progress":0.30503667652877225,"total":478,"current":264}
+{"_e":"metro:bundling:progress","_t":1790890819305,"id":"1","progress":0.30503667652877225,"total":521,"current":285}
+{"_e":"metro:bundling:progress","_t":1790890819406,"id":"1","progress":0.34170901816609,"total":544,"current":318}
+{"_e":"metro:bundling:progress","_t":1790890819505,"id":"1","progress":0.39227146814404423,"total":570,"current":357}
+{"_e":"metro:bundling:progress","_t":1790890819605,"id":"1","progress":0.4592582473874735,"total":605,"current":410}
+{"_e":"metro:bundling:progress","_t":1790890819706,"id":"1","progress":0.48073904035195014,"total":662,"current":459}
+{"_e":"metro:bundling:progress","_t":1790890819811,"id":"1","progress":0.5312790123456791,"total":675,"current":492}
+{"_e":"metro:bundling:progress","_t":1790890819922,"id":"1","progress":0.5312790123456791,"total":735,"current":530}
+{"_e":"metro:bundling:progress","_t":1790890820025,"id":"1","progress":0.5735537777777777,"total":750,"current":568}
+{"_e":"metro:bundling:progress","_t":1790890820124,"id":"1","progress":0.6618787704682564,"total":767,"current":624}
+{"_e":"metro:bundling:progress","_t":1790890820225,"id":"1","progress":0.7009674314793052,"total":811,"current":679}
+{"_e":"metro:bundling:progress","_t":1790890820329,"id":"1","progress":0.7072631697236824,"total":849,"current":714}
+{"_e":"metro:bundling:progress","_t":1790890820431,"id":"1","progress":0.7072631697236824,"total":904,"current":752}
+{"_e":"metro:bundling:progress","_t":1790890820534,"id":"1","progress":0.7437427297345202,"total":923,"current":796}
+{"_e":"metro:bundling:progress","_t":1790890820685,"id":"1","progress":0.767692238240317,"total":953,"current":835}
+{"_e":"metro:bundling:progress","_t":1790890820785,"id":"1","progress":0.8472365702479339,"total":968,"current":891}
+{"_e":"metro:bundling:progress","_t":1790890820885,"id":"1","progress":0.8472365702479339,"total":1070,"current":932}
+{"_e":"metro:bundling:progress","_t":1790890820985,"id":"1","progress":0.8472365702479339,"total":1093,"current":975}
+{"_e":"metro:bundling:progress","_t":1790890821085,"id":"1","progress":0.9032711294832588,"total":1109,"current":1054}
+{"_e":"metro:bundling:progress","_t":1790890821185,"id":"1","progress":0.9313514235045098,"total":1145,"current":1105}
+{"_e":"metro:bundling:progress","_t":1790890821289,"id":"1","progress":0.996524763705104,"total":1150,"current":1148}
+{"_e":"metro:bundling:progress","_t":1790890821391,"id":"1","progress":0.9982616257088847,"total":1150,"current":1149}
+{"_e":"metro:bundling:progress","_t":1790890821508,"id":"1","progress":0.999,"total":1150,"current":1150}
+{"_e":"metro:bundling:progress","_t":1790890821622,"id":"1","progress":0.999,"total":1153,"current":1153}
+{"_e":"metro:bundling:done","_t":1790890821755,"id":"1","total":1153,"ms":4959.0766}
+{"_e":"metro:client_log","_t":1790890824841,"level":"log","data":["Database schema and tables initialized successfully."]}

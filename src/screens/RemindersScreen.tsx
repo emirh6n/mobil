@@ -7,6 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 import { useReminders } from '../hooks/useReminders';
 import { useImportantDates } from '../hooks/useImportantDates';
 
+import { Header } from '../components/Header';
+
 export const RemindersScreen = () => {
   const navigation = useNavigation();
   const { reminders, loading: remindersLoading, addReminder, toggleReminder, deleteReminder } = useReminders();
@@ -42,23 +44,7 @@ export const RemindersScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Hatırlatıcılar</Text>
-        </View>
-        <View style={styles.headerRight}>
-          <View style={styles.dateBadge}>
-            <Icon name="calendar-today" size={14} color={theme.colors.primary} />
-            <Text style={styles.dateBadgeText}>01 EKI</Text>
-          </View>
-          <TouchableOpacity style={styles.iconBtn}>
-            <Icon name="settings" size={20} color={theme.colors.onSurfaceVariant} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header subtitle="Hatırlatıcılar" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         

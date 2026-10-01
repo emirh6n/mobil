@@ -4,6 +4,8 @@ import { RootNavigator } from './src/navigation/RootNavigator';
 import { StatusBar } from 'react-native';
 import { initDatabase } from './src/database/database';
 
+import { DateProvider } from './src/context/DateContext';
+
 const App = () => {
   const [dbReady, setDbReady] = React.useState(false);
 
@@ -20,7 +22,9 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
-      <RootNavigator />
+      <DateProvider>
+        <RootNavigator />
+      </DateProvider>
     </SafeAreaProvider>
   );
 };

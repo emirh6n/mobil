@@ -6,6 +6,8 @@ import { Icon } from '../components/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { useLibrary } from '../hooks/useLibrary';
 
+import { Header } from '../components/Header';
+
 export const LibraryScreen = () => {
   const navigation = useNavigation();
   const { resources, loading, addResource, deleteResource } = useLibrary();
@@ -37,23 +39,7 @@ export const LibraryScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
-          </TouchableOpacity>
-          <Text style={styles.headerTitle}>Kütüphane</Text>
-        </View>
-        <View style={styles.headerRight}>
-          <View style={styles.dateBadge}>
-            <Icon name="calendar-today" size={14} color={theme.colors.primary} />
-            <Text style={styles.dateBadgeText}>01 EKI</Text>
-          </View>
-          <TouchableOpacity style={styles.iconBtn}>
-            <Icon name="settings" size={20} color={theme.colors.onSurfaceVariant} />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header subtitle="Kütüphane" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         

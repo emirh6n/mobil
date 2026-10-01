@@ -3,13 +3,15 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
+import { Header } from '../components/Header';
 import { useNavigation } from '@react-navigation/native';
 import { useStatistics } from '../hooks/useStatistics';
+import { useDateContext } from '../context/DateContext';
 
 export const StatisticsScreen = () => {
   const navigation = useNavigation();
-  const todayDate = new Date().toISOString().split('T')[0];
-  const { loading, tasksCompleted, tasksTotal, calories, prs } = useStatistics(todayDate);
+  const { selectedDate } = useDateContext();
+  const { loading, tasksCompleted, tasksTotal, calories, prs } = useStatistics(selectedDate);
 
   const [activeCategory, setActiveCategory] = useState('hepsi');
   const [activePeriod, setActivePeriod] = useState('bu-hafta');
@@ -99,26 +101,7 @@ export const StatisticsScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.header}>
-        <View style={styles.headerLeft}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }}>
-            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
-          </TouchableOpacity>
-          <View style={[styles.iconBox, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
-            <Icon name="bolt" size={32} color={theme.colors.primary} />
-          </View>
-          <View style={styles.headerTextContainer}>
-            <Text style={[styles.headerTitle, { fontSize: 26 }]}>TRKN</Text>
-            <Text style={styles.headerSubtitle}>İstatistik</Text>
-          </View>
-        </View>
-        <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.dateBtn}>
-            <Icon name="calendar-today" size={18} color={theme.colors.primary} />
-            <Text style={styles.dateBtnText}>01 EKI</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+      <Header subtitle="İstatistik" />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Date Row */}
@@ -127,7 +110,10 @@ export const StatisticsScreen = () => {
             <Icon name="calendar-month" size={18} color={theme.colors.primary} />
             <Text style={styles.subheadLabel}>SEÇİLİ GÜN</Text>
           </View>
-          <Text style={styles.subheadDateText}>{todayDate}</Text>
+          <View style={styles.subheadRight}>
+            <View style={styles.pulseDot} />
+            <Text style={styles.subheadDateText}>{selectedDate}</Text>
+          </View>
         </View>
 
         {/* Period Chips */}
@@ -231,7 +217,8 @@ const styles = StyleSheet.create({
   subheadRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 },
   subheadLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   subheadLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, letterSpacing: 1 },
-  subheadDateText: { ...theme.typography.labelMd, color: theme.colors.onSurface, fontWeight: 'bold' },
+  subheadRight: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: theme.colors.surfaceContainerHigh, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 16 },
+  subheadDateText: { ...theme.typography.labelMd, color: theme.colors.onSurface },
   
   chipRow: { gap: 8, paddingVertical: 4 },
   periodChip: { height: 36, paddingHorizontal: 16, borderRadius: 18, backgroundColor: theme.colors.surfaceContainerHigh, justifyContent: 'center', alignItems: 'center' },

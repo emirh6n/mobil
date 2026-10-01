@@ -12,6 +12,7 @@ import { TasksScreen } from '../screens/TasksScreen';
 import { RemindersScreen } from '../screens/RemindersScreen';
 import { LibraryScreen } from '../screens/LibraryScreen';
 import { NotesScreen } from '../screens/NotesScreen';
+import { FocusScreen } from '../screens/FocusScreen';
 import { Icon } from '../components/Icon';
 import { theme } from '../theme/theme';
 
@@ -108,6 +109,7 @@ export const RootNavigator = () => {
         <Stack.Screen name="Reminders" component={RemindersScreen} />
         <Stack.Screen name="Library" component={LibraryScreen} />
         <Stack.Screen name="Notes" component={NotesScreen} />
+        <Stack.Screen name="Focus" component={FocusScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

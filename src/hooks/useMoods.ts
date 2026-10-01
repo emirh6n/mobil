@@ -40,3 +40,28 @@ export const useMoods = (date: string) => {
 
   return { rating, loading, saveMood, refresh: fetchMood };
 };
+
+export const useMonthlyMoods = (yearMonth: string) => {
+  const [moods, setMoods] = useState<Record<string, number>>({});
+
+  const fetchMonthMoods = useCallback(async () => {
+    try {
+      // yearMonth format: 'YYYY-MM'
+      const result = await db.execute('SELECT date, rating FROM Moods WHERE date LIKE ?', [`${yearMonth}-%`]);
+      const rows = (result.rows as any[]) || [];
+      const moodMap: Record<string, number> = {};
+      rows.forEach(r => {
+        moodMap[r.date] = r.rating;
+      });
+      setMoods(moodMap);
+    } catch (error) {
+      console.error('Error fetching monthly moods:', error);
+    }
+  }, [yearMonth]);
+
+  useEffect(() => {
+    fetchMonthMoods();
+  }, [fetchMonthMoods]);
+
+  return { moods, refreshMonth: fetchMonthMoods };
+};
