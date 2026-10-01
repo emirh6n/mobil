@@ -1,0 +1,194 @@
+<!DOCTYPE html><html class="dark" lang="tr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>TRKN - Notlar</title>
+<!-- Google Fonts: Inter & Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            kinetik: {
+              bg: '#121316',
+              card: '#1b1b1f',
+              inner: '#151619',
+              border: '#26272b',
+              accent: '#84e034',
+              accentDark: '#6bc723',
+              textMuted: '#8a8d93'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="base-styling">
+    body {
+      background-color: #121316;
+      color: #ffffff;
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    /* Custom scrollbar hiding for clean native look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .material-symbols-outlined.fill {
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+<style data-purpose="status-bar-safe-area">
+    .safe-top {
+      padding-top: max(env(safe-area-inset-top), 12px);
+    }
+    .safe-bottom {
+      padding-bottom: max(env(safe-area-inset-bottom), 16px);
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="bg-kinetik-bg min-h-screen flex flex-col justify-between overflow-x-hidden antialiased">
+<!-- BEGIN: MainContainer -->
+<div class="flex-1 flex flex-col w-full max-w-md mx-auto relative pb-28">
+<!-- BEGIN: TopBar -->
+<header class="sticky top-0 z-30 bg-[#121316] backdrop-blur-md px-4 pt-3 pb-3 border-b border-[#26282e]/60 safe-top">
+<div class="flex items-center justify-between">
+<!-- Back Navigation & Page Title -->
+<div class="flex items-center gap-3">
+<button aria-label="Geri" class="w-10 h-10 rounded-full flex items-center justify-center text-white active:bg-white/10 transition-colors" type="button">
+<span class="material-symbols-outlined text-[26px]">arrow_back</span>
+</button>
+<h1 class="text-xl font-bold tracking-tight text-white">Notlar</h1>
+</div>
+<!-- Date Pill & Settings Button -->
+<div class="flex items-center gap-2"><button class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#1b1b1f] border border-[#26282e] text-xs font-semibold tracking-wider text-neutral-200 active:scale-95 transition-all" type="button"><span class="material-symbols-outlined text-[#84e034] text-[16px]">calendar_today</span><span class="">01 EKİ</span></button><button aria-label="Ayarlar" class="w-10 h-10 rounded-full flex items-center justify-center text-neutral-300 bg-[#1b1b1f] border border-[#26282e] active:bg-[#26282f] transition-colors" type="button"><span class="material-symbols-outlined text-[20px]">settings</span></button></div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: ContentArea -->
+<main class="flex-1 px-4 pt-4 space-y-5">
+<!-- Date Sub-header Info (Ref: SEÇİLİ GÜN - 1 Ekim 2026) -->
+<section class="flex items-center justify-between text-xs font-semibold tracking-wider text-neutral-400 px-1" data-purpose="date-indicator">
+<span class="uppercase text-neutral-500 font-medium tracking-widest text-[11px]">SEÇİLİ GÜN</span>
+<span class="text-neutral-200">1 Ekim 2026</span>
+</section>
+<!-- BEGIN: ActiveNoteCard (Reference: not.jpeg) -->
+<section class="bg-[#1b1b1f] border border-[#26282e] rounded-2xl p-4 shadow-xl" data-purpose="active-note-editor">
+<!-- Editor Header: Info & Save Button -->
+<div class="flex items-center justify-between gap-3 mb-3">
+<p class="text-xs text-neutral-400 font-normal">Bu not seçili güne özeldir.</p>
+<button class="bg-kinetik-accent hover:bg-kinetik-accentDark text-[#121316] font-semibold text-xs px-4 py-2 rounded-xl active:scale-95 transition-all shadow-sm flex items-center gap-1" id="saveBtn" type="button">
+<span class="">Kaydet</span>
+</button>
+</div>
+<!-- Note Textarea -->
+<div class="bg-[#151619] rounded-xl p-3 border border-[#26282e] focus-within:border-[#84e034]/80 transition-colors">
+<textarea class="w-full bg-transparent border-0 p-0 text-sm text-neutral-100 placeholder-neutral-500 focus:ring-0 focus:outline-none resize-none leading-relaxed" id="noteTextarea" placeholder="Bugünün notunu yaz..." rows="6">Antrenman öncesi 1 porsiyon kreatin alındı. Bench press son sette form stabil kaldı, omuzda ağrı hissedilmedi.</textarea>
+</div>
+<!-- Editor Status: Auto-saved Indicator -->
+<div class="flex items-center gap-1.5 mt-3 pt-1 text-xs text-neutral-400">
+<span class="material-symbols-outlined text-kinetik-accent text-[18px]">check_circle</span>
+<span class="text-[12px] font-medium text-neutral-300">Otomatik kaydedildi</span>
+</div>
+</section>
+<!-- END: ActiveNoteCard -->
+<!-- BEGIN: PastNotesSection -->
+<section class="pt-2" data-purpose="past-notes">
+<div class="flex items-center justify-between mb-3 px-1">
+
+
+</div>
+<!-- Past Notes Card List -->
+
+</section>
+<!-- END: PastNotesSection -->
+</main>
+<!-- END: ContentArea -->
+<!-- BEGIN: FloatingActionButton -->
+<!-- Not Ekle Floating Button positioned right above bottom navigation bar -->
+<div class="fixed bottom-20 right-4 z-40 max-w-md">
+
+</div>
+<!-- END: FloatingActionButton -->
+<!-- BEGIN: Material3BottomNav -->
+<nav aria-label="Ana Gezinti Çubuğu" class="fixed bottom-0 left-0 right-0 z-50 bg-[#121316] backdrop-blur-lg border-t border-[#26282e]/60 safe-bottom">
+<div class="max-w-md mx-auto grid grid-cols-4 items-center h-16 px-2">
+<!-- Tab 1: Ana Sayfa -->
+<a class="flex flex-col items-center justify-center gap-1 text-neutral-400 hover:text-white transition-colors" href="#home">
+<span class="material-symbols-outlined text-[22px]">home</span>
+<span class="text-[10px] font-medium">Ana Sayfa</span>
+</a>
+<!-- Tab 2: Spor -->
+<a class="flex flex-col items-center justify-center gap-1 text-neutral-400 hover:text-white transition-colors" href="#fitness">
+<span class="material-symbols-outlined text-[22px]">fitness_center</span>
+<span class="text-[10px] font-medium">Spor</span>
+</a>
+<!-- Tab 3: Besin -->
+<a class="flex flex-col items-center justify-center gap-1 text-neutral-400 hover:text-white transition-colors" href="#nutrition">
+<span class="material-symbols-outlined text-[22px]">restaurant</span>
+<span class="text-[10px] font-medium">Besin</span>
+</a>
+<!-- Tab 4: İstatistik -->
+<a class="flex flex-col items-center justify-center gap-1 text-neutral-400 hover:text-white transition-colors" href="#analytics">
+<span class="material-symbols-outlined text-[22px]">insights</span>
+<span class="text-[10px] font-medium">İstatistik</span>
+</a>
+</div>
+</nav>
+<!-- END: Material3BottomNav -->
+</div>
+<!-- END: MainContainer -->
+<!-- BEGIN: InteractiveScripts -->
+<script data-purpose="interaction-handlers">
+    document.addEventListener('DOMContentLoaded', () => {
+      const saveBtn = document.getElementById('saveBtn');
+      const noteTextarea = document.getElementById('noteTextarea');
+      const fabAddNote = document.getElementById('fabAddNote');
+
+      // Feedback animation when clicking save
+      saveBtn.addEventListener('click', () => {
+        const originalText = saveBtn.innerText;
+        saveBtn.innerText = 'Kaydedildi!';
+        saveBtn.classList.remove('bg-kinetik-accent');
+        saveBtn.classList.add('bg-white', 'text-black');
+        setTimeout(() => {
+          saveBtn.innerText = originalText;
+          saveBtn.classList.remove('bg-white', 'text-black');
+          saveBtn.classList.add('bg-kinetik-accent');
+        }, 1500);
+      });
+
+      // Quick focus to textarea when FAB is clicked
+      fabAddNote.addEventListener('click', () => {
+        noteTextarea.focus();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+  </script>
+<!-- END: InteractiveScripts -->
+
+
+
+
+</body></html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html><html class="dark" lang="tr" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+<title>Görev Disiplini - TRKN</title>
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#121316',
+              surface: '#1b1b1f',
+              card: '#1e1f24',
+              accent: '#84e034',
+              accentHover: '#72c42b',
+              subtle: '#26282e',
+              border: '#2e3038',
+              muted: '#8b8e99'
+            }
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom Styles for Mobile Form Factors -->
+<style data-purpose="base-enhancements">
+    /* Remove tap highlight on mobile iOS */
+    * {
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    input, textarea {
+      user-select: text;
+    }
+    /* Hide scrollbars for slick mobile look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-brand-bg text-gray-100 font-sans antialiased min-h-screen flex justify-center selection:bg-brand-accent selection:text-black">
+<!-- Mobile Viewport Frame (iOS Aspect Ratio Simulator) -->
+<div class="w-full max-w-md bg-brand-bg min-h-screen flex flex-col relative shadow-2xl overflow-hidden pb-24 border-x border-brand-border/40">
+<!-- BEGIN: TopBar -->
+<header class="sticky top-0 z-30 bg-[#121316] backdrop-blur-md px-4 pt-11 pb-3 border-b border-[#26282e]/60 flex items-center justify-between">
+<!-- Back Button & Page Title -->
+<div class="flex items-center gap-3">
+<button aria-label="Geri Dön" class="p-2 rounded-full hover:bg-[#1b1b1f] active:scale-95 transition-all text-zinc-300 hover:text-white" type="button">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+<path d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+<div>
+<h1 class="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+            Görev Disiplini
+          </h1>
+<p class="text-[11px] font-medium text-brand-muted">TRKN • Günlük Rutin</p>
+</div>
+</div>
+<!-- Date Pill & Settings -->
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1.5 bg-[#1b1b1f] border border-[#26282e] px-2.5 py-1 rounded-full text-xs font-semibold text-[#84e034]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="">01 EKİ</span>
+</div>
+<button aria-label="Ayarlar" class="p-2 rounded-full hover:bg-[#1b1b1f] text-zinc-400 hover:text-white transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round"></path>
+<path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</button>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContent -->
+<main class="px-4 py-4 flex-1 flex flex-col space-y-4">
+<!-- Date Indicator -->
+<section class="flex justify-between items-center text-xs px-1" data-purpose="date-indicator">
+<span class="text-brand-muted tracking-wider uppercase font-semibold text-[10px]">Seçili Gün</span>
+<span class="text-gray-200 font-medium">1 Ekim 2026, Perşembe</span>
+</section>
+<!-- BEGIN: TabBar -->
+
+<!-- END: TabBar -->
+<!-- BEGIN: TaskList -->
+<div class="space-y-6 pt-1" data-purpose="all-tasks-stream"><section class="space-y-2.5"><div class="flex items-center justify-between px-1"><div class="flex items-center gap-2"><h2 class="text-xs font-bold uppercase tracking-wider text-white flex items-center gap-1.5"><span class="">Bekleyen Görevler</span></h2></div><span class="text-[11px] text-brand-muted font-medium">Bugün</span></div><div class="space-y-2.5"></div></section><div class="border-t border-brand-border/60 my-2"></div><section class="space-y-2.5"><div class="flex items-center justify-between px-1"><div class="flex items-center gap-2"><h2 class="text-xs font-bold uppercase tracking-wider text-gray-400 flex items-center gap-1.5"><span class="">Tamamlanan Görevler</span></h2></div></div><div class="space-y-2.5"></div></section></div>
+<!-- END: TaskList -->
+<!-- BEGIN: NewTaskModalCard -->
+<section class="mt-4 bg-[#1b1b1f] border border-[#26282e] rounded-2xl p-4 shadow-lg space-y-3" data-purpose="new-task-form">
+<div class="flex items-center justify-between border-b border-brand-border/60 pb-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-brand-accent animate-pulse"></div>
+<h2 class="text-xs font-bold uppercase tracking-wider text-white">Hızlı Görev Ekle</h2>
+</div>
+<span class="text-[10px] text-brand-muted">Gelişmiş Form</span>
+</div>
+<form action="#" class="space-y-3" method="POST">
+<!-- Task Title Input -->
+<div>
+<label class="block text-[11px] font-semibold text-gray-300 mb-1" for="task-title">Görev Başlığı</label>
+<input class="w-full bg-brand-bg text-sm text-gray-100 placeholder-brand-muted/60 border border-brand-border rounded-xl px-3.5 py-2.5 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent outline-none transition-all" id="task-title" name="task-title" placeholder="Başlık" type="text">
+</div>
+<!-- Task Description -->
+<div>
+<label class="block text-[11px] font-semibold text-gray-300 mb-1" for="task-desc">Açıklama / Hedef</label>
+<textarea class="w-full bg-brand-bg text-sm text-gray-100 placeholder-brand-muted/60 border border-brand-border rounded-xl px-3.5 py-2 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent outline-none resize-none transition-all" id="task-desc" name="task-desc" placeholder=".
+
+" rows="2"></textarea>
+</div>
+<!-- Date & Time Row -->
+<div class="grid grid-cols-2 gap-2.5">
+<div>
+
+
+</div>
+<div>
+
+
+</div>
+</div>
+<!-- Submit Button -->
+<button class="w-full bg-brand-accent hover:bg-brand-accentHover text-black font-bold text-sm py-3 rounded-xl transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 mt-2" type="submit">
+<svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+<span class="">Görevi Kaydet</span>
+</button>
+</form>
+</section>
+<!-- END: NewTaskModalCard -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: FloatingActionButton -->
+<aside aria-label="Eylemler" class="fixed bottom-20 right-4 sm:right-[calc(50%-200px)] z-40">
+
+</aside>
+<!-- END: FloatingActionButton -->
+<!-- BEGIN: BottomNavigation (Material Design 3) -->
+<nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#121316] backdrop-blur-lg border-t border-[#26282e]/60 z-50 px-2 py-1.5"><div class="grid grid-cols-4 items-center"><a class="flex flex-col items-center justify-center py-1 text-zinc-400 hover:text-white transition-colors group" href="#home"><div class="px-3.5 py-1 rounded-full group-hover:bg-[#1b1b1f] transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="text-[10px] font-medium mt-0.5">Ana Sayfa</span></a><a class="flex flex-col items-center justify-center py-1 text-[#84e034] transition-colors" href="#workout"><div class="px-3.5 py-1 rounded-full bg-[#84e034]/15 border border-[#84e034]/20"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3.75 10.5v3m3-4.5v6m10.5-6v6m3-4.5v3M6.75 12h10.5M3 12h.75m16.5 0h.75" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="text-[10px] font-bold mt-0.5">Spor</span></a><a class="flex flex-col items-center justify-center py-1 text-zinc-400 hover:text-white transition-colors group" href="#diet"><div class="px-3.5 py-1 rounded-full group-hover:bg-[#1b1b1f] transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21a9 9 0 100-18 9 9 0 000 18zM8 7v4a2 2 0 002 2h0m-2-6h2m-1 6v5m9-11v5a2 2 0 01-2 2h-1m3-7h-3m3 7v4" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="text-[10px] font-medium mt-0.5">Besin</span></a><a class="flex flex-col items-center justify-center py-1 text-zinc-400 hover:text-white transition-colors group" href="#stats"><div class="px-3.5 py-1 rounded-full group-hover:bg-[#1b1b1f] transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" stroke-linecap="round" stroke-linejoin="round"></path></svg></div><span class="text-[10px] font-medium mt-0.5">İstatistik</span></a></div></nav>
+<!-- END: BottomNavigation -->
+</div>
+
+
+
+
+
+
+</body></html>
