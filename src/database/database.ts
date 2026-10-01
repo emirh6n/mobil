@@ -1,10 +1,54 @@
-import { open } from '@op-engineering/op-sqlite';
+import * as SQLite from 'expo-sqlite';
 
-// Initialize the SQLite database
-const db = open({
-  name: 'trkn_app.sqlite',
-  // encryptionKey: 'your_encryption_key_here', // Uncomment if encryption is needed in the future
-});
+let expoDb: any;
+try {
+  // Try modern Expo SDK 50+ API
+  if (typeof SQLite.openDatabaseSync === 'function') {
+    expoDb = SQLite.openDatabaseSync('trkn_app.sqlite');
+  } else if ((SQLite as any).openDatabase) {
+    // Legacy API
+    expoDb = (SQLite as any).openDatabase('trkn_app.sqlite');
+  } else {
+    throw new Error('No openDatabase method found in expo-sqlite');
+  }
+} catch (e) {
+  console.error("Error opening Expo SQLite database", e);
+}
+
+const db = {
+  execute: async (query: string, params: any[] = []): Promise<any> => {
+    if (expoDb && typeof expoDb.getAllAsync === 'function') {
+      // Modern Expo SDK 50+ API
+      if (query.trim().toUpperCase().startsWith('SELECT')) {
+        const rows = await expoDb.getAllAsync(query, params);
+        return { rows };
+      } else {
+        const result = await expoDb.runAsync(query, params);
+        return { insertId: result.lastInsertRowId, rows: [] };
+      }
+    } else {
+      // Legacy API
+      return new Promise((resolve, reject) => {
+        expoDb.transaction((tx: any) => {
+          tx.executeSql(
+            query,
+            params,
+            (_: any, result: any) => {
+              // Convert legacy result.rows._array to just rows array so our hooks work flawlessly
+              const rowsArray = result.rows ? (result.rows._array || []) : [];
+              resolve({ rows: rowsArray, insertId: result.insertId });
+            },
+            (_: any, error: any) => {
+              console.error("SQL Error", error);
+              reject(error);
+              return false;
+            }
+          );
+        });
+      });
+    }
+  }
+};
 
 export const initDatabase = async () => {
   try {
@@ -134,7 +178,7 @@ export const initDatabase = async () => {
       );`
     );
 
-    // Macros Daily Summary (Günlük Makro Özeti - optional, can be computed, but good for caching)
+    // Macros Daily Summary
     await db.execute(
       `CREATE TABLE IF NOT EXISTS DailyMacros (
         date TEXT PRIMARY KEY, -- YYYY-MM-DD

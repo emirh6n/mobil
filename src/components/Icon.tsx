@@ -1,5 +1,5 @@
 import React from 'react';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { theme } from '../theme/theme';
 
 interface IconProps {

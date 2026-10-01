@@ -1,0 +1,315 @@
+{"_e":"root:init","_t":1790886627173,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790886627174,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790886627175,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790886627320,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790886627539,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790886627791,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790886631637,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790886641492,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790886641492,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790886641494,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1790886641687,"id":"1","message":"node_modules\\expo\\AppEntry.js: Cannot find module 'babel-preset-expo'\nRequire stack:\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@babel\\core\\lib\\config\\files\\plugins.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@babel\\core\\lib\\config\\files\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@babel\\core\\lib\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\transform-worker\\metro-transform-worker.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\transform-worker\\supervising-transform-worker.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@expo\\metro\\node_modules\\metro\\src\\DeltaBundler\\Worker.flow.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@expo\\metro\\node_modules\\metro\\src\\DeltaBundler\\Worker.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\jest-worker\\build\\workers\\processChild.js\n\nMake sure that all the Babel plugins and presets you are using\nare defined as dependencies or devDependencies in your package.json\nfile. It's possible that the missing plugin is loaded by a preset\nyou are using that forgot to add the plugin to its dependencies: you\ncan workaround this problem by explicitly adding the missing package\nto your top-level package.json.\n","importStack":null,"filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1790886687617,"id":"2","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790886687617,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790886687618,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:failed","_t":1790886687620,"id":"2","message":"node_modules\\expo\\AppEntry.js: Cannot find module 'babel-preset-expo'\nRequire stack:\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@babel\\core\\lib\\config\\files\\plugins.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@babel\\core\\lib\\config\\files\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@babel\\core\\lib\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\transform-worker\\metro-transform-worker.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\transform-worker\\supervising-transform-worker.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@expo\\metro\\node_modules\\metro\\src\\DeltaBundler\\Worker.flow.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\@expo\\metro\\node_modules\\metro\\src\\DeltaBundler\\Worker.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\jest-worker\\build\\workers\\processChild.js\n\nMake sure that all the Babel plugins and presets you are using\nare defined as dependencies or devDependencies in your package.json\nfile. It's possible that the missing plugin is loaded by a preset\nyou are using that forgot to add the plugin to its dependencies: you\ncan workaround this problem by explicitly adding the missing package\nto your top-level package.json.\n","importStack":null,"filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"root:init","_t":1790886729516,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790886729517,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790886729518,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790886729663,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790886729883,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790886730068,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790886733320,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790886739331,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790886739331,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790886739333,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790886739738,"id":"1","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790886739851,"id":"1","progress":0.04000000000000001,"total":4,"current":2}
+{"_e":"metro:bundling:progress","_t":1790886740151,"id":"1","progress":0.09,"total":4,"current":3}
+{"_e":"metro:bundling:progress","_t":1790886740256,"id":"1","progress":0.25,"total":16,"current":8}
+{"_e":"metro:bundling:progress","_t":1790886740304,"id":"1","progress":0.31640625,"total":16,"current":9}
+{"_e":"metro:bundling:progress","_t":1790886740637,"id":"1","progress":0.390625,"total":16,"current":10}
+{"_e":"metro:bundling:progress","_t":1790886740740,"id":"1","progress":0.390625,"total":153,"current":23}
+{"_e":"metro:bundling:progress","_t":1790886740841,"id":"1","progress":0.390625,"total":191,"current":39}
+{"_e":"metro:bundling:progress","_t":1790886740941,"id":"1","progress":0.390625,"total":205,"current":52}
+{"_e":"metro:bundling:progress","_t":1790886741041,"id":"1","progress":0.390625,"total":234,"current":65}
+{"_e":"metro:bundling:progress","_t":1790886741141,"id":"1","progress":0.390625,"total":248,"current":77}
+{"_e":"metro:bundling:progress","_t":1790886741246,"id":"1","progress":0.390625,"total":279,"current":108}
+{"_e":"metro:bundling:progress","_t":1790886741346,"id":"1","progress":0.390625,"total":309,"current":139}
+{"_e":"metro:bundling:progress","_t":1790886741446,"id":"1","progress":0.390625,"total":361,"current":182}
+{"_e":"metro:bundling:progress","_t":1790886741547,"id":"1","progress":0.390625,"total":483,"current":223}
+{"_e":"metro:bundling:progress","_t":1790886741647,"id":"1","progress":0.390625,"total":557,"current":275}
+{"_e":"metro:bundling:progress","_t":1790886741747,"id":"1","progress":0.390625,"total":601,"current":322}
+{"_e":"metro:bundling:progress","_t":1790886741847,"id":"1","progress":0.390625,"total":650,"current":370}
+{"_e":"metro:bundling:progress","_t":1790886741948,"id":"1","progress":0.390625,"total":683,"current":419}
+{"_e":"metro:bundling:progress","_t":1790886742047,"id":"1","progress":0.46496445876178527,"total":701,"current":478}
+{"_e":"metro:bundling:progress","_t":1790886742118,"id":"1","progress":0.46496445876178527,"total":701,"current":478}
+{"_e":"metro:bundling:progress","_t":1790886742147,"id":"1","progress":0.47346189756796037,"total":747,"current":514}
+{"_e":"metro:bundling:progress","_t":1790886742248,"id":"1","progress":0.5380307901373824,"total":773,"current":567}
+{"_e":"metro:bundling:progress","_t":1790886742348,"id":"1","progress":0.6097367536117861,"total":794,"current":620}
+{"_e":"metro:bundling:progress","_t":1790886742440,"id":"1","progress":0.6097367536117861,"total":794,"current":620}
+{"_e":"metro:bundling:progress","_t":1790886742448,"id":"1","progress":0.6407835934374948,"total":817,"current":654}
+{"_e":"metro:bundling:progress","_t":1790886742548,"id":"1","progress":0.7379158940803832,"total":837,"current":719}
+{"_e":"metro:bundling:progress","_t":1790886742648,"id":"1","progress":0.7805442660879179,"total":884,"current":781}
+{"_e":"metro:bundling:progress","_t":1790886742748,"id":"1","progress":0.8127594577900781,"total":914,"current":824}
+{"_e":"metro:bundling:progress","_t":1790886742848,"id":"1","progress":0.8127594577900781,"total":983,"current":883}
+{"_e":"metro:bundling:progress","_t":1790886742949,"id":"1","progress":0.8707385627945705,"total":1002,"current":935}
+{"_e":"metro:bundling:progress","_t":1790886743049,"id":"1","progress":0.899038833484993,"total":1042,"current":988}
+{"_e":"metro:bundling:progress","_t":1790886743149,"id":"1","progress":0.9494228186469543,"total":1054,"current":1027}
+{"_e":"metro:bundling:progress","_t":1790886743255,"id":"1","progress":0.9962299750800997,"total":1060,"current":1058}
+{"_e":"metro:bundling:progress","_t":1790886743680,"id":"1","progress":0.9981140975436097,"total":1060,"current":1059}
+{"_e":"metro:bundling:progress","_t":1790886743789,"id":"1","progress":0.9981194174353457,"total":1063,"current":1062}
+{"_e":"metro:bundling:progress","_t":1790886743883,"id":"1","progress":0.999,"total":1063,"current":1063}
+{"_e":"metro:bundling:progress","_t":1790886743993,"id":"1","progress":0.999,"total":1072,"current":1072}
+{"_e":"metro:bundling:done","_t":1790886744106,"id":"1","total":1072,"ms":4775.1926}
+{"_e":"metro:client_log","_t":1790886747596,"level":"error","data":["Error fetching tasks:","[Error: Call to function 'NativeDatabase.prepareAsync' has been rejected.\n→ Caused by: Error code \u0001: no such table: Tasks]"]}
+{"_e":"metro:client_log","_t":1790886747640,"level":"error","data":["Error fetching library resources:","[Error: Call to function 'NativeDatabase.prepareAsync' has been rejected.\n→ Caused by: Error code \u0001: no such table: LibraryResources]"]}
+{"_e":"metro:client_log","_t":1790886747641,"level":"error","data":["Error fetching mood:","[Error: Call to function 'NativeDatabase.prepareAsync' has been rejected.\n→ Caused by: Error code \u0001: no such table: Moods]"]}
+{"_e":"metro:client_log","_t":1790886747641,"level":"error","data":["Error fetching tasks:","[Error: Call to function 'NativeDatabase.prepareAsync' has been rejected.\n→ Caused by: Error code \u0001: no such table: Tasks]"]}
+{"_e":"metro:client_log","_t":1790886747641,"level":"error","data":["Error fetching library resources:","[Error: Call to function 'NativeDatabase.prepareAsync' has been rejected.\n→ Caused by: Error code \u0001: no such table: LibraryResources]"]}
+{"_e":"metro:client_log","_t":1790886747641,"level":"error","data":["Error fetching mood:","[Error: Call to function 'NativeDatabase.prepareAsync' has been rejected.\n→ Caused by: Error code \u0001: no such table: Moods]"]}
+{"_e":"metro:client_log","_t":1790886747842,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790886749480,"level":"error","data":["[Error: Uncaught (in promise, id: 0): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 1): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 2): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 3): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 4): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 5): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 6): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 7): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 8): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749490,"level":"error","data":["[Error: Uncaught (in promise, id: 9): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749494,"level":"error","data":["[Error: Uncaught (in promise, id: 10): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749494,"level":"error","data":["[Error: Uncaught (in promise, id: 11): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749494,"level":"error","data":["[Error: Uncaught (in promise, id: 12): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749494,"level":"error","data":["[Error: Uncaught (in promise, id: 13): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 14): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 15): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 16): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 17): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 18): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 19): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 20): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749496,"level":"error","data":["[Error: Uncaught (in promise, id: 21): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749497,"level":"error","data":["[Error: Uncaught (in promise, id: 22): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886749511,"level":"error","data":["[Error: Uncaught (in promise, id: 23): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886754546,"level":"error","data":["[Error: Uncaught (in promise, id: 24): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886754597,"level":"error","data":["[Error: Uncaught (in promise, id: 25): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886754597,"level":"error","data":["[Error: Uncaught (in promise, id: 26): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886754597,"level":"error","data":["[Error: Uncaught (in promise, id: 27): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886754597,"level":"error","data":["[Error: Uncaught (in promise, id: 28): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886756688,"level":"error","data":["[Error: Uncaught (in promise, id: 29): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886756740,"level":"error","data":["[Error: Uncaught (in promise, id: 30): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886756740,"level":"error","data":["[Error: Uncaught (in promise, id: 31): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769768,"level":"error","data":["[Error: Uncaught (in promise, id: 32): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 33): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 34): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 35): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 36): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 37): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 38): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 39): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 40): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769782,"level":"error","data":["[Error: Uncaught (in promise, id: 41): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 42): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 43): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 44): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 45): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 46): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 47): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 48): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 49): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 50): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 51): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 52): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 53): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 54): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 55): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769785,"level":"error","data":["[Error: Uncaught (in promise, id: 56): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769791,"level":"error","data":["[Error: Uncaught (in promise, id: 57): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769791,"level":"error","data":["[Error: Uncaught (in promise, id: 58): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769791,"level":"error","data":["[Error: Uncaught (in promise, id: 59): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769791,"level":"error","data":["[Error: Uncaught (in promise, id: 60): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769841,"level":"error","data":["[Error: Uncaught (in promise, id: 61): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769841,"level":"error","data":["[Error: Uncaught (in promise, id: 62): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769841,"level":"error","data":["[Error: Uncaught (in promise, id: 63): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769841,"level":"error","data":["[Error: Uncaught (in promise, id: 64): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886769841,"level":"error","data":["[Error: Uncaught (in promise, id: 65): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886810686,"level":"error","data":["React has detected a change in the order of Hooks called by App. This will lead to bugs and errors if not fixed. For more information, read the Rules of Hooks: https://react.dev/link/rules-of-hooks\n\n   Previous render            Next render\n   ------------------------------------------------------\n1. useEffect                  useState\n   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"]}
+{"_e":"metro:client_log","_t":1790886810735,"level":"error","data":["[Error: Should have a queue. You are likely calling Hooks conditionally, which is not allowed. (https://react.dev/link/invalid-hook-call)]"]}
+{"_e":"root:init","_t":1790886857794,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790886857795,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790886857797,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790886858001,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790886858312,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790886858567,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790886862983,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790886869754,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790886869754,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790886869758,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790886870334,"id":"1","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790886870445,"id":"1","progress":0.03515625,"total":16,"current":3}
+{"_e":"metro:bundling:progress","_t":1790886870568,"id":"1","progress":0.16000000000000003,"total":20,"current":8}
+{"_e":"metro:bundling:progress","_t":1790886870677,"id":"1","progress":0.16000000000000003,"total":30,"current":11}
+{"_e":"metro:bundling:progress","_t":1790886870785,"id":"1","progress":0.16000000000000003,"total":48,"current":15}
+{"_e":"metro:bundling:progress","_t":1790886870885,"id":"1","progress":0.16598079561042522,"total":54,"current":22}
+{"_e":"metro:bundling:progress","_t":1790886870988,"id":"1","progress":0.2330558858501784,"total":58,"current":28}
+{"_e":"metro:bundling:progress","_t":1790886871102,"id":"1","progress":0.25,"total":60,"current":30}
+{"_e":"metro:bundling:progress","_t":1790886871202,"id":"1","progress":0.299072265625,"total":64,"current":35}
+{"_e":"metro:bundling:progress","_t":1790886871302,"id":"1","progress":0.33284023668639046,"total":78,"current":45}
+{"_e":"metro:bundling:progress","_t":1790886871403,"id":"1","progress":0.4495092975206611,"total":88,"current":59}
+{"_e":"metro:bundling:progress","_t":1790886871512,"id":"1","progress":0.4495092975206611,"total":201,"current":73}
+{"_e":"metro:bundling:progress","_t":1790886871612,"id":"1","progress":0.4495092975206611,"total":215,"current":92}
+{"_e":"metro:bundling:progress","_t":1790886871713,"id":"1","progress":0.4495092975206611,"total":231,"current":103}
+{"_e":"metro:bundling:progress","_t":1790886871816,"id":"1","progress":0.4495092975206611,"total":246,"current":117}
+{"_e":"metro:bundling:progress","_t":1790886871919,"id":"1","progress":0.4495092975206611,"total":277,"current":144}
+{"_e":"metro:bundling:progress","_t":1790886872022,"id":"1","progress":0.4495092975206611,"total":313,"current":178}
+{"_e":"metro:bundling:progress","_t":1790886872121,"id":"1","progress":0.4495092975206611,"total":356,"current":191}
+{"_e":"metro:bundling:progress","_t":1790886872221,"id":"1","progress":0.4495092975206611,"total":367,"current":199}
+{"_e":"metro:bundling:progress","_t":1790886872325,"id":"1","progress":0.4495092975206611,"total":431,"current":233}
+{"_e":"metro:bundling:progress","_t":1790886872427,"id":"1","progress":0.4495092975206611,"total":466,"current":272}
+{"_e":"metro:bundling:progress","_t":1790886872528,"id":"1","progress":0.4495092975206611,"total":507,"current":310}
+{"_e":"metro:bundling:progress","_t":1790886872630,"id":"1","progress":0.4495092975206611,"total":546,"current":342}
+{"_e":"metro:bundling:progress","_t":1790886872729,"id":"1","progress":0.4495092975206611,"total":608,"current":379}
+{"_e":"metro:bundling:progress","_t":1790886872813,"id":"1","progress":0.4495092975206611,"total":608,"current":379}
+{"_e":"metro:bundling:progress","_t":1790886872833,"id":"1","progress":0.4708414303655231,"total":615,"current":422}
+{"_e":"metro:bundling:progress","_t":1790886872935,"id":"1","progress":0.5431806063612128,"total":635,"current":468}
+{"_e":"metro:bundling:progress","_t":1790886873038,"id":"1","progress":0.6096828673297054,"total":657,"current":513}
+{"_e":"metro:bundling:progress","_t":1790886873138,"id":"1","progress":0.6641033637781243,"total":670,"current":546}
+{"_e":"metro:bundling:progress","_t":1790886873185,"id":"1","progress":0.6641033637781243,"total":670,"current":546}
+{"_e":"metro:bundling:progress","_t":1790886873244,"id":"1","progress":0.6641033637781243,"total":732,"current":579}
+{"_e":"metro:bundling:progress","_t":1790886873347,"id":"1","progress":0.6641033637781243,"total":769,"current":614}
+{"_e":"metro:bundling:progress","_t":1790886873452,"id":"1","progress":0.6641033637781243,"total":812,"current":649}
+{"_e":"metro:bundling:progress","_t":1790886873552,"id":"1","progress":0.6683643673771927,"total":844,"current":690}
+{"_e":"metro:bundling:progress","_t":1790886873653,"id":"1","progress":0.7219057166609615,"total":858,"current":729}
+{"_e":"metro:bundling:progress","_t":1790886873754,"id":"1","progress":0.7914863258026159,"total":870,"current":774}
+{"_e":"metro:bundling:progress","_t":1790886873854,"id":"1","progress":0.79467841066482,"total":912,"current":813}
+{"_e":"metro:bundling:progress","_t":1790886873955,"id":"1","progress":0.8231015952828002,"total":938,"current":851}
+{"_e":"metro:bundling:progress","_t":1790886874056,"id":"1","progress":0.8309878792385486,"total":984,"current":897}
+{"_e":"metro:bundling:progress","_t":1790886874155,"id":"1","progress":0.8554422034401412,"total":1012,"current":936}
+{"_e":"metro:bundling:progress","_t":1790886874255,"id":"1","progress":0.8974096371207614,"total":1025,"current":971}
+{"_e":"metro:bundling:progress","_t":1790886874355,"id":"1","progress":0.92846065952168,"total":1043,"current":1005}
+{"_e":"metro:bundling:progress","_t":1790886874455,"id":"1","progress":0.9681519348076338,"total":1059,"current":1042}
+{"_e":"metro:bundling:progress","_t":1790886874570,"id":"1","progress":0.9962299750800997,"total":1060,"current":1058}
+{"_e":"metro:bundling:progress","_t":1790886874884,"id":"1","progress":0.9981140975436097,"total":1060,"current":1059}
+{"_e":"metro:bundling:progress","_t":1790886874985,"id":"1","progress":0.9981194174353457,"total":1063,"current":1062}
+{"_e":"metro:bundling:progress","_t":1790886875469,"id":"1","progress":0.999,"total":1063,"current":1063}
+{"_e":"metro:bundling:progress","_t":1790886875570,"id":"1","progress":0.999,"total":1072,"current":1072}
+{"_e":"metro:bundling:done","_t":1790886875801,"id":"1","total":1072,"ms":6047.325}
+{"_e":"metro:client_log","_t":1790886878244,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790886881086,"level":"error","data":["[Error: Uncaught (in promise, id: 0): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881115,"level":"error","data":["[Error: Uncaught (in promise, id: 1): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 2): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 3): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 4): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 5): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 6): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 7): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 8): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881116,"level":"error","data":["[Error: Uncaught (in promise, id: 9): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 10): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 11): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 12): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 13): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 14): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 15): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 16): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 17): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 18): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881118,"level":"error","data":["[Error: Uncaught (in promise, id: 19): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881119,"level":"error","data":["[Error: Uncaught (in promise, id: 20): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881119,"level":"error","data":["[Error: Uncaught (in promise, id: 21): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881119,"level":"error","data":["[Error: Uncaught (in promise, id: 22): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886881119,"level":"error","data":["[Error: Uncaught (in promise, id: 23): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925202,"level":"error","data":["[Error: Uncaught (in promise, id: 24): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 25): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 26): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 27): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 28): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 29): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 30): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 31): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 32): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925244,"level":"error","data":["[Error: Uncaught (in promise, id: 33): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 34): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 35): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 36): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 37): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 38): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 39): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 40): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 41): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925250,"level":"error","data":["[Error: Uncaught (in promise, id: 42): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925251,"level":"error","data":["[Error: Uncaught (in promise, id: 43): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925252,"level":"error","data":["[Error: Uncaught (in promise, id: 44): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925252,"level":"error","data":["[Error: Uncaught (in promise, id: 45): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925268,"level":"error","data":["[Error: Uncaught (in promise, id: 46): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925325,"level":"error","data":["[Error: Uncaught (in promise, id: 47): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925540,"level":"error","data":["[Error: Uncaught (in promise, id: 48): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925615,"level":"error","data":["[Error: Uncaught (in promise, id: 49): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925615,"level":"error","data":["[Error: Uncaught (in promise, id: 50): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925615,"level":"error","data":["[Error: Uncaught (in promise, id: 51): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925615,"level":"error","data":["[Error: Uncaught (in promise, id: 52): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925615,"level":"error","data":["[Error: Uncaught (in promise, id: 53): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925670,"level":"error","data":["[Error: Uncaught (in promise, id: 54): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925670,"level":"error","data":["[Error: Uncaught (in promise, id: 55): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925670,"level":"error","data":["[Error: Uncaught (in promise, id: 56): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"metro:client_log","_t":1790886925670,"level":"error","data":["[Error: Uncaught (in promise, id: 57): \"Error: Module \"6\" is missing from the asset registry\"]"]}
+{"_e":"root:init","_t":1790887015911,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790887015912,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790887015913,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790887016115,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790887016410,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790887016666,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790887021547,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790887027134,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790887027134,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790887027138,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790887027659,"id":"1","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790887027759,"id":"1","progress":0.010000000000000002,"total":3,"current":1}
+{"_e":"metro:bundling:progress","_t":1790887027799,"id":"1","progress":0.04000000000000001,"total":3,"current":2}
+{"_e":"metro:bundling:progress","_t":1790887027913,"id":"1","progress":0.09,"total":7,"current":3}
+{"_e":"metro:bundling:progress","_t":1790887028018,"id":"1","progress":0.09,"total":106,"current":4}
+{"_e":"metro:bundling:progress","_t":1790887028118,"id":"1","progress":0.09,"total":113,"current":8}
+{"_e":"metro:bundling:progress","_t":1790887028222,"id":"1","progress":0.09,"total":123,"current":14}
+{"_e":"metro:bundling:progress","_t":1790887028327,"id":"1","progress":0.09,"total":124,"current":16}
+{"_e":"metro:bundling:progress","_t":1790887028436,"id":"1","progress":0.09,"total":138,"current":19}
+{"_e":"metro:bundling:progress","_t":1790887028546,"id":"1","progress":0.09,"total":155,"current":28}
+{"_e":"metro:bundling:progress","_t":1790887028651,"id":"1","progress":0.09,"total":168,"current":43}
+{"_e":"metro:bundling:progress","_t":1790887028752,"id":"1","progress":0.13633136094674558,"total":195,"current":72}
+{"_e":"metro:bundling:progress","_t":1790887028852,"id":"1","progress":0.2212187589773054,"total":236,"current":111}
+{"_e":"metro:bundling:progress","_t":1790887028953,"id":"1","progress":0.3127709190672153,"total":270,"current":151}
+{"_e":"metro:bundling:progress","_t":1790887029055,"id":"1","progress":0.3169973871901702,"total":357,"current":201}
+{"_e":"metro:bundling:progress","_t":1790887029107,"id":"1","progress":0.3169973871901702,"total":357,"current":201}
+{"_e":"metro:bundling:progress","_t":1790887029155,"id":"1","progress":0.3718793608824256,"total":387,"current":236}
+{"_e":"metro:bundling:progress","_t":1790887029256,"id":"1","progress":0.3718793608824256,"total":460,"current":270}
+{"_e":"metro:bundling:progress","_t":1790887029357,"id":"1","progress":0.3718793608824256,"total":501,"current":278}
+{"_e":"metro:bundling:progress","_t":1790887029457,"id":"1","progress":0.3718793608824256,"total":515,"current":311}
+{"_e":"metro:bundling:progress","_t":1790887029557,"id":"1","progress":0.4595519645387086,"total":534,"current":362}
+{"_e":"metro:bundling:progress","_t":1790887029658,"id":"1","progress":0.5303357741608801,"total":563,"current":410}
+{"_e":"metro:bundling:progress","_t":1790887029757,"id":"1","progress":0.5303357741608801,"total":630,"current":458}
+{"_e":"metro:bundling:progress","_t":1790887029857,"id":"1","progress":0.641470982085275,"total":653,"current":523}
+{"_e":"metro:bundling:progress","_t":1790887029957,"id":"1","progress":0.7049203949346788,"total":692,"current":581}
+{"_e":"metro:bundling:progress","_t":1790887030057,"id":"1","progress":0.7049203949346788,"total":769,"current":620}
+{"_e":"metro:bundling:progress","_t":1790887030158,"id":"1","progress":0.7049203949346788,"total":824,"current":669}
+{"_e":"metro:bundling:progress","_t":1790887030258,"id":"1","progress":0.7278034689264443,"total":851,"current":726}
+{"_e":"metro:bundling:progress","_t":1790887030358,"id":"1","progress":0.7780760074248899,"total":882,"current":778}
+{"_e":"metro:bundling:progress","_t":1790887030458,"id":"1","progress":0.7869406867845994,"total":930,"current":825}
+{"_e":"metro:bundling:progress","_t":1790887030558,"id":"1","progress":0.831200769578995,"total":940,"current":857}
+{"_e":"metro:bundling:progress","_t":1790887030658,"id":"1","progress":0.8758791943868445,"total":967,"current":905}
+{"_e":"metro:bundling:progress","_t":1790887030758,"id":"1","progress":0.899623507805326,"total":990,"current":939}
+{"_e":"metro:bundling:progress","_t":1790887030858,"id":"1","progress":0.9403696060180664,"total":1024,"current":993}
+{"_e":"metro:bundling:progress","_t":1790887030958,"id":"1","progress":0.9961051643620638,"total":1026,"current":1024}
+{"_e":"metro:bundling:progress","_t":1790887031339,"id":"1","progress":0.9980516322211203,"total":1026,"current":1025}
+{"_e":"metro:bundling:progress","_t":1790887031442,"id":"1","progress":0.9980573098321655,"total":1029,"current":1028}
+{"_e":"metro:bundling:progress","_t":1790887031771,"id":"1","progress":0.999,"total":1029,"current":1029}
+{"_e":"metro:bundling:failed","_t":1790887031814,"id":"1","message":"Cannot find module 'C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\react-native\\rn-get-polyfills'\nRequire stack:\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\ExpoMetroConfig.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\config\\loadUserConfig.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\instantiateMetro.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\MetroBundlerDevServer.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\DevServerManager.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\startAsync.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\bin\\cli\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\bin\\cli","importStack":null,"filename":null,"targetModuleName":null,"originModulePath":null}
+{"_e":"metro:bundling:started","_t":1790887079355,"id":"2","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790887079355,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790887079359,"id":"2","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790887079459,"id":"2","progress":0.19586605186267347,"total":296,"current":131}
+{"_e":"metro:bundling:progress","_t":1790887079559,"id":"2","progress":0.30908782859153644,"total":554,"current":308}
+{"_e":"metro:bundling:progress","_t":1790887079579,"id":"2","progress":0.30908782859153644,"total":554,"current":308}
+{"_e":"metro:bundling:progress","_t":1790887079659,"id":"2","progress":0.6247118989092711,"total":749,"current":592}
+{"_e":"metro:bundling:progress","_t":1790887079759,"id":"2","progress":0.8311394250608583,"total":917,"current":836}
+{"_e":"metro:bundling:failed","_t":1790887079862,"id":"2","message":"Cannot find module 'C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\react-native\\rn-get-polyfills'\nRequire stack:\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\ExpoMetroConfig.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\config\\loadUserConfig.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\metro-config\\build\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\instantiateMetro.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\metro\\MetroBundlerDevServer.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\server\\DevServerManager.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\startAsync.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\src\\start\\index.js\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\node_modules\\@expo\\cli\\build\\bin\\cli\n- C:\\Users\\gsemi\\OneDrive\\Masaüstü\\mobil\\node_modules\\expo\\bin\\cli","importStack":null,"filename":null,"targetModuleName":null,"originModulePath":null}

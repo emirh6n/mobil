@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
+import { useWorkouts } from '../hooks/useWorkouts';
+import { useNavigation } from '@react-navigation/native';
 
 export const SportsScreen = () => {
+  const navigation = useNavigation();
+  const todayDate = new Date().toISOString().split('T')[0];
+  const { workouts, loading, addWorkoutExercise, deleteWorkout } = useWorkouts(todayDate);
+
+  const [muscleGroup, setMuscleGroup] = useState('');
+  const [exerciseName, setExerciseName] = useState('');
   const [sets, setSets] = useState('');
   const [reps, setReps] = useState('');
   const [weight, setWeight] = useState('');
@@ -19,10 +27,22 @@ export const SportsScreen = () => {
     return 0;
   }, [sets, reps, weight]);
 
+  const handleSubmit = () => {
+    if (!muscleGroup.trim() || !exerciseName.trim() || !sets.trim() || !reps.trim()) return;
+    addWorkoutExercise(muscleGroup, exerciseName, parseInt(sets, 10) || 0, reps, weight);
+    setExerciseName('');
+    setSets('');
+    setReps('');
+    setWeight('');
+  };
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }}>
+            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
+          </TouchableOpacity>
           <View style={[styles.iconBox, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
             <Icon name="bolt" size={32} color={theme.colors.primary} />
           </View>
@@ -48,7 +68,7 @@ export const SportsScreen = () => {
           </View>
           <View style={styles.subheadRight}>
             <View style={styles.pulseDot} />
-            <Text style={styles.subheadDateText}>1 Ekim 2026</Text>
+            <Text style={styles.subheadDateText}>{todayDate}</Text>
           </View>
         </View>
 
@@ -66,18 +86,16 @@ export const SportsScreen = () => {
 
           <View style={styles.formGroup}>
             <Text style={styles.inputLabel}>Hedef kas grubu</Text>
-            <TouchableOpacity style={styles.selectBox}>
-              <Text style={styles.selectText}>Seçiniz</Text>
-              <Icon name="expand-more" size={20} color={theme.colors.onSurfaceVariant} />
-            </TouchableOpacity>
+            <View style={styles.selectBox}>
+              <TextInput style={styles.selectText} placeholder="Örn: Göğüs, Sırt" placeholderTextColor={theme.colors.onSurfaceVariant} value={muscleGroup} onChangeText={setMuscleGroup} />
+            </View>
           </View>
 
           <View style={styles.formGroup}>
             <Text style={styles.inputLabel}>Egzersiz</Text>
-            <TouchableOpacity style={styles.selectBox}>
-              <Text style={[styles.selectText, { color: theme.colors.onSurfaceVariant }]}>Önce kas grubu seçin</Text>
-              <Icon name="expand-more" size={20} color={theme.colors.onSurfaceVariant} />
-            </TouchableOpacity>
+            <View style={styles.selectBox}>
+              <TextInput style={styles.selectText} placeholder="Örn: Bench Press" placeholderTextColor={theme.colors.onSurfaceVariant} value={exerciseName} onChangeText={setExerciseName} />
+            </View>
           </View>
 
           <View style={styles.telemetryMatrix}>
@@ -133,7 +151,7 @@ export const SportsScreen = () => {
             </View>
           </View>
 
-          <TouchableOpacity style={styles.submitBtn}>
+          <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit} disabled={loading}>
             <Icon name="bolt" size={22} color={theme.colors.onPrimary} />
             <Text style={styles.submitBtnText}>Sisteme işle ve kaloriye ekle</Text>
           </TouchableOpacity>
@@ -147,17 +165,38 @@ export const SportsScreen = () => {
               <Text style={styles.cardTitle}>Bugünün Antrenmanları</Text>
             </View>
             <View style={[styles.badge, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
-              <Text style={[styles.badgeText, { color: theme.colors.onSurfaceVariant }]}>0 Kayıt</Text>
+              <Text style={[styles.badgeText, { color: theme.colors.onSurfaceVariant }]}>{workouts.length} Kayıt</Text>
             </View>
           </View>
           
-          <View style={styles.emptyState}>
-            <View style={styles.emptyStateIcon}>
-              <Icon name="sports-gymnastics" size={24} color={theme.colors.onSurfaceVariant} />
+          {loading ? (
+            <ActivityIndicator size="small" color={theme.colors.primary} />
+          ) : workouts.length === 0 ? (
+            <View style={styles.emptyState}>
+              <View style={styles.emptyStateIcon}>
+                <Icon name="sports-gymnastics" size={24} color={theme.colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.emptyStateTitle}>Bugün henüz antrenman kaydı yok.</Text>
+              <Text style={styles.emptyStateDesc}>Yukarıdaki formu kullanarak ilk setinizi kaydedin.</Text>
             </View>
-            <Text style={styles.emptyStateTitle}>Bugün henüz antrenman kaydı yok.</Text>
-            <Text style={styles.emptyStateDesc}>Yukarıdaki formu kullanarak ilk setinizi kaydedin.</Text>
-          </View>
+          ) : (
+            workouts.map(workout => (
+              <View key={workout.id} style={{ backgroundColor: theme.colors.surfaceContainerLowest, padding: 12, borderRadius: 12, marginBottom: 8, borderWidth: 1, borderColor: theme.colors.surfaceBorder }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <Text style={{ ...theme.typography.labelMd, color: theme.colors.primary, fontWeight: 'bold' }}>{workout.name}</Text>
+                  <TouchableOpacity onPress={() => deleteWorkout(workout.id)}>
+                    <Icon name="delete" size={20} color={theme.colors.error} />
+                  </TouchableOpacity>
+                </View>
+                {workout.exercises && workout.exercises.map(ex => (
+                  <View key={ex.id} style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                    <Text style={{ fontSize: 12, color: theme.colors.onSurface }}>{ex.exercise_name}</Text>
+                    <Text style={{ fontSize: 12, color: theme.colors.onSurfaceVariant }}>{ex.sets} set, {ex.reps} tekrar {ex.weight ? `(${ex.weight} kg)` : ''}</Text>
+                  </View>
+                ))}
+              </View>
+            ))
+          )}
         </View>
 
       </ScrollView>

@@ -1,40 +1,26 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
-
-interface RoutineItem {
-  id: string;
-  title: string;
-  category: string;
-  icon: string;
-  checked: boolean;
-}
+import { useNavigation } from '@react-navigation/native';
+import { useNutrition } from '../hooks/useNutrition';
 
 export const NutritionScreen = () => {
-  const [protein, setProtein] = useState('150');
+  const navigation = useNavigation();
+  const todayDate = new Date().toISOString().split('T')[0];
+  const { protein, setProtein, routine, loading, saveProtein, addRoutineItem, toggleCheck, removeItem } = useNutrition(todayDate);
+
   const [vitamin, setVitamin] = useState('');
   const [supplement, setSupplement] = useState('');
-  const [routine, setRoutine] = useState<RoutineItem[]>([]);
-
-  const addRoutineItem = (title: string, category: string, icon: string) => {
-    if (!title.trim()) return;
-    setRoutine(prev => [...prev, { id: Date.now().toString() + Math.random(), title, category, icon, checked: false }]);
-  };
-
-  const toggleCheck = (id: string) => {
-    setRoutine(prev => prev.map(item => item.id === id ? { ...item, checked: !item.checked } : item));
-  };
-
-  const removeItem = (id: string) => {
-    setRoutine(prev => prev.filter(item => item.id !== id));
-  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }}>
+            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
+          </TouchableOpacity>
           <View style={[styles.iconBox, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
             <Icon name="bolt" size={32} color={theme.colors.primary} />
           </View>
@@ -56,7 +42,7 @@ export const NutritionScreen = () => {
         <View style={styles.subheadRow}>
           <View style={styles.subheadLeft}>
             <Text style={styles.subheadLabel}>SEÇİLİ GÜN</Text>
-            <Text style={styles.subheadDateText}>1 Ekim 2026</Text>
+            <Text style={styles.subheadDateText}>{todayDate}</Text>
           </View>
           <View style={styles.subheadRight}>
             <Icon name="verified" size={18} color={theme.colors.primary} />
@@ -86,7 +72,7 @@ export const NutritionScreen = () => {
                 />
                 <Text style={styles.proteinUnit}>Gram</Text>
               </View>
-              <TouchableOpacity style={styles.saveBtn}>
+              <TouchableOpacity style={styles.saveBtn} onPress={() => saveProtein(protein)} disabled={loading}>
                 <Icon name="check" size={20} color={theme.colors.onPrimary} />
                 <Text style={styles.saveBtnText}>Kaydet</Text>
               </TouchableOpacity>
@@ -94,7 +80,9 @@ export const NutritionScreen = () => {
           </View>
 
           <View style={styles.routineListContainer}>
-            {routine.length === 0 ? (
+            {loading ? (
+              <ActivityIndicator size="small" color={theme.colors.primary} />
+            ) : routine.length === 0 ? (
               <View style={styles.emptyState}>
                 <View style={styles.emptyStateIcon}>
                   <Icon name="format-list-bulleted" size={30} color={theme.colors.onSurfaceVariant} />
@@ -116,7 +104,7 @@ export const NutritionScreen = () => {
                       </View>
                     </View>
                     <View style={styles.listItemRight}>
-                      <TouchableOpacity onPress={() => toggleCheck(item.id)} style={styles.iconBtn}>
+                      <TouchableOpacity onPress={() => toggleCheck(item.id, item.checked)} style={styles.iconBtn}>
                         <Icon name={item.checked ? "check-circle" : "radio-button-unchecked"} size={22} color={item.checked ? theme.colors.primary : theme.colors.onSurfaceVariant} />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.iconBtn}>

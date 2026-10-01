@@ -5,9 +5,17 @@ import { StatusBar } from 'react-native';
 import { initDatabase } from './src/database/database';
 
 const App = () => {
+  const [dbReady, setDbReady] = React.useState(false);
+
   useEffect(() => {
-    initDatabase();
+    initDatabase().then(() => {
+      setDbReady(true);
+    });
   }, []);
+
+  if (!dbReady) {
+    return null; // Or a splash screen
+  }
 
   return (
     <SafeAreaProvider>

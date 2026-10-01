@@ -1,13 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
+import { useNavigation } from '@react-navigation/native';
+import { useStatistics } from '../hooks/useStatistics';
 
 export const StatisticsScreen = () => {
+  const navigation = useNavigation();
+  const todayDate = new Date().toISOString().split('T')[0];
+  const { loading, tasksCompleted, tasksTotal, calories, prs } = useStatistics(todayDate);
+
   const [activeCategory, setActiveCategory] = useState('hepsi');
   const [activePeriod, setActivePeriod] = useState('bu-hafta');
   const [activeMuscle, setActiveMuscle] = useState('gogus');
+
+  const tasksPercent = tasksTotal > 0 ? Math.round((tasksCompleted / tasksTotal) * 100) : 0;
+  const calPercent = Math.min(100, Math.round((calories / 2400) * 100));
 
   const renderEnerji = () => (
     <View style={styles.section}>
@@ -18,44 +27,48 @@ export const StatisticsScreen = () => {
         </View>
         <Text style={styles.sectionSubtitle}>Özet Telemetri</Text>
       </View>
-      <View style={styles.grid2}>
-        <View style={styles.telemetryCard}>
-          <View style={styles.telemetryTop}>
-            <View>
-              <Text style={styles.telemetryLabel}>Kalori Dengesi</Text>
-              <Text style={styles.telemetryValue}>-4 <Text style={styles.telemetryUnit}>kcal</Text></Text>
+      {loading ? (
+        <ActivityIndicator size="small" color={theme.colors.primary} />
+      ) : (
+        <View style={styles.grid2}>
+          <View style={styles.telemetryCard}>
+            <View style={styles.telemetryTop}>
+              <View>
+                <Text style={styles.telemetryLabel}>Kalori Dengesi</Text>
+                <Text style={styles.telemetryValue}>{calories} <Text style={styles.telemetryUnit}>kcal</Text></Text>
+              </View>
+              <View style={styles.telemetryIconBox}>
+                <Icon name="favorite" size={20} color={theme.colors.primary} />
+              </View>
             </View>
-            <View style={styles.telemetryIconBox}>
-              <Icon name="favorite" size={20} color={theme.colors.primary} />
+            <View style={styles.telemetryBottom}>
+              <View style={styles.telemetryBottomLeft}>
+                <Icon name="trending-flat" size={14} color={theme.colors.primary} />
+                <Text style={styles.telemetrySubLabel}>Hedef: 2,400</Text>
+              </View>
+              <View style={styles.progressBarBg}><View style={[styles.progressBarFill, { width: `${calPercent}%` }]} /></View>
             </View>
           </View>
-          <View style={styles.telemetryBottom}>
-            <View style={styles.telemetryBottomLeft}>
-              <Icon name="trending-flat" size={14} color={theme.colors.primary} />
-              <Text style={styles.telemetrySubLabel}>Hedef: 2,400</Text>
+          <View style={styles.telemetryCard}>
+            <View style={styles.telemetryTop}>
+              <View>
+                <Text style={styles.telemetryLabel}>Görev Başarısı</Text>
+                <Text style={styles.telemetryValue}>%{tasksPercent} <Text style={styles.telemetryUnit}>tamam</Text></Text>
+              </View>
+              <View style={styles.telemetryIconBox}>
+                <Icon name="check-box" size={20} color={theme.colors.primary} />
+              </View>
             </View>
-            <View style={styles.progressBarBg}><View style={[styles.progressBarFill, { width: '66%' }]} /></View>
+            <View style={styles.telemetryBottom}>
+              <View style={styles.telemetryBottomLeft}>
+                <Icon name={tasksPercent === 100 ? "flag" : "flag"} size={14} color={tasksPercent === 100 ? theme.colors.primary : theme.colors.error} />
+                <Text style={styles.telemetrySubLabel}>{tasksCompleted}/{tasksTotal} Görev</Text>
+              </View>
+              <View style={styles.progressBarBg}><View style={[styles.progressBarFill, { width: `${tasksPercent}%` }]} /></View>
+            </View>
           </View>
         </View>
-        <View style={styles.telemetryCard}>
-          <View style={styles.telemetryTop}>
-            <View>
-              <Text style={styles.telemetryLabel}>Görev Başarısı</Text>
-              <Text style={styles.telemetryValue}>%0 <Text style={styles.telemetryUnit}>tamam</Text></Text>
-            </View>
-            <View style={styles.telemetryIconBox}>
-              <Icon name="check-box" size={20} color={theme.colors.primary} />
-            </View>
-          </View>
-          <View style={styles.telemetryBottom}>
-            <View style={styles.telemetryBottomLeft}>
-              <Icon name="flag" size={14} color={theme.colors.error} />
-              <Text style={styles.telemetrySubLabel}>0/6 Görev</Text>
-            </View>
-            <View style={styles.progressBarBg}><View style={[styles.progressBarFill, { width: '0%' }]} /></View>
-          </View>
-        </View>
-      </View>
+      )}
     </View>
   );
 
@@ -77,8 +90,8 @@ export const StatisticsScreen = () => {
           <View style={styles.verimlilikIconBox}><Icon name="directions-walk" size={18} color={theme.colors.primary} /></View>
         </View>
         <View style={styles.verimlilikContent}>
-          <Text style={[styles.verimlilikValue, { color: theme.colors.onSurface }]}>4 <Text style={[styles.verimlilikUnit, { color: theme.colors.primary }]}>Adım</Text></Text>
-          <Text style={styles.verimlilikDesc}>Haftalık günlük ortalama</Text>
+          <Text style={[styles.verimlilikValue, { color: theme.colors.onSurface }]}>0 <Text style={[styles.verimlilikUnit, { color: theme.colors.primary }]}>Adım</Text></Text>
+          <Text style={styles.verimlilikDesc}>Günlük Adım</Text>
         </View>
       </View>
     </View>
@@ -88,6 +101,9 @@ export const StatisticsScreen = () => {
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }}>
+            <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
+          </TouchableOpacity>
           <View style={[styles.iconBox, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
             <Icon name="bolt" size={32} color={theme.colors.primary} />
           </View>
@@ -101,9 +117,6 @@ export const StatisticsScreen = () => {
             <Icon name="calendar-today" size={18} color={theme.colors.primary} />
             <Text style={styles.dateBtnText}>01 EKI</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.settingsBtn}>
-            <Icon name="settings" size={22} color={theme.colors.onSurfaceVariant} />
-          </TouchableOpacity>
         </View>
       </View>
 
@@ -114,7 +127,7 @@ export const StatisticsScreen = () => {
             <Icon name="calendar-month" size={18} color={theme.colors.primary} />
             <Text style={styles.subheadLabel}>SEÇİLİ GÜN</Text>
           </View>
-          <Text style={styles.subheadDateText}>1 Ekim 2026</Text>
+          <Text style={styles.subheadDateText}>{todayDate}</Text>
         </View>
 
         {/* Period Chips */}
@@ -161,28 +174,28 @@ export const StatisticsScreen = () => {
               </View>
               <Text style={{ ...theme.typography.labelSm, color: theme.colors.secondary }}>Spor Merkezi</Text>
             </View>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-              {['Göğüs', 'Sırt', 'Omuz', 'Kol', 'Bacak', 'Karın'].map(m => (
-                <TouchableOpacity key={m} style={[styles.periodChip, activeMuscle === m && styles.periodChipActive]} onPress={() => setActiveMuscle(m)}>
-                  <Text style={[styles.periodChipText, activeMuscle === m && styles.periodChipTextActive]}>{m}</Text>
-                </TouchableOpacity>
-              ))}
-            </ScrollView>
             
             <View style={styles.prList}>
-              <View style={styles.prItem}>
-                <View style={styles.prItemLeft}>
-                  <View style={styles.prIconBox}><Icon name="fitness-center" size={20} color={theme.colors.primary} /></View>
-                  <View>
-                    <Text style={styles.prTitle}>Bench Press</Text>
-                    <Text style={styles.prSub}>Son Kayıt: 24 Eyl</Text>
+              {loading ? (
+                 <ActivityIndicator size="small" color={theme.colors.primary} />
+              ) : prs.length === 0 ? (
+                <Text style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center', padding: 12 }}>Henüz kaydedilmiş ağırlık rekoru yok.</Text>
+              ) : (
+                prs.map((pr, idx) => (
+                  <View key={idx} style={styles.prItem}>
+                    <View style={styles.prItemLeft}>
+                      <View style={styles.prIconBox}><Icon name="fitness-center" size={20} color={theme.colors.primary} /></View>
+                      <View>
+                        <Text style={styles.prTitle}>{pr.exercise_name}</Text>
+                      </View>
+                    </View>
+                    <View style={styles.prItemRight}>
+                      <Text style={styles.prValue}>{pr.max_weight} <Text style={styles.prUnit}>kg</Text></Text>
+                      <Text style={styles.prSubRight}>{pr.sets} x {pr.reps} Tekrar</Text>
+                    </View>
                   </View>
-                </View>
-                <View style={styles.prItemRight}>
-                  <Text style={styles.prValue}>110 <Text style={styles.prUnit}>kg</Text></Text>
-                  <Text style={styles.prSubRight}>3 x 8 Tekrar</Text>
-                </View>
-              </View>
+                ))
+              )}
             </View>
           </View>
         )}

@@ -1,4 +1,12 @@
 {
   "name": "TRKN",
-  "displayName": "TRKN"
+  "displayName": "TRKN",
+  "expo": {
+    "name": "TRKN",
+    "slug": "mobil",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
 }
