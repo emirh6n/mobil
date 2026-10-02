@@ -725,3 +725,66 @@
 {"_e":"metro:bundling:progress","_t":1790947013779,"id":"1","progress":0.999,"total":1210,"current":1210}
 {"_e":"metro:bundling:progress","_t":1790947013885,"id":"1","progress":0.999,"total":1220,"current":1220}
 {"_e":"metro:bundling:done","_t":1790947013954,"id":"1","total":1220,"ms":3814.0747}
+{"_e":"root:init","_t":1790947134659,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790947134660,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790947134661,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790947134836,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790947135029,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790947135159,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790947138402,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790947140544,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790947140544,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790947140546,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790947140879,"id":"1","progress":0.010000000000000002,"total":1,"current":1}
+{"_e":"metro:bundling:progress","_t":1790947140979,"id":"1","progress":0.1111111111111111,"total":15,"current":5}
+{"_e":"metro:bundling:progress","_t":1790947141089,"id":"1","progress":0.1111111111111111,"total":27,"current":8}
+{"_e":"metro:bundling:progress","_t":1790947141198,"id":"1","progress":0.23507805325987147,"total":33,"current":16}
+{"_e":"metro:bundling:progress","_t":1790947141312,"id":"1","progress":0.26538108356290174,"total":33,"current":17}
+{"_e":"metro:bundling:progress","_t":1790947141412,"id":"1","progress":0.31821170282708744,"total":39,"current":22}
+{"_e":"metro:bundling:progress","_t":1790947141513,"id":"1","progress":0.31821170282708744,"total":83,"current":37}
+{"_e":"metro:bundling:progress","_t":1790947141621,"id":"1","progress":0.4675286726568778,"total":117,"current":80}
+{"_e":"metro:bundling:progress","_t":1790947141721,"id":"1","progress":0.4675286726568778,"total":273,"current":122}
+{"_e":"metro:bundling:progress","_t":1790947141821,"id":"1","progress":0.4675286726568778,"total":298,"current":149}
+{"_e":"metro:bundling:progress","_t":1790947141921,"id":"1","progress":0.4675286726568778,"total":359,"current":210}
+{"_e":"metro:bundling:progress","_t":1790947142022,"id":"1","progress":0.4675286726568778,"total":415,"current":231}
+{"_e":"metro:bundling:progress","_t":1790947142124,"id":"1","progress":0.4675286726568778,"total":510,"current":276}
+{"_e":"metro:bundling:progress","_t":1790947142227,"id":"1","progress":0.4675286726568778,"total":584,"current":355}
+{"_e":"metro:bundling:progress","_t":1790947142327,"id":"1","progress":0.4675286726568778,"total":666,"current":419}
+{"_e":"metro:bundling:progress","_t":1790947142427,"id":"1","progress":0.4675286726568778,"total":739,"current":481}
+{"_e":"metro:bundling:progress","_t":1790947142527,"id":"1","progress":0.49389144732823903,"total":757,"current":532}
+{"_e":"metro:bundling:progress","_t":1790947142627,"id":"1","progress":0.5625,"total":804,"current":603}
+{"_e":"metro:bundling:progress","_t":1790947142727,"id":"1","progress":0.5719789599359058,"total":874,"current":661}
+{"_e":"metro:bundling:progress","_t":1790947142827,"id":"1","progress":0.619664694349837,"total":921,"current":725}
+{"_e":"metro:bundling:progress","_t":1790947142927,"id":"1","progress":0.7046836135735276,"total":953,"current":800}
+{"_e":"metro:bundling:progress","_t":1790947143027,"id":"1","progress":0.7046836135735276,"total":1068,"current":873}
+{"_e":"metro:bundling:progress","_t":1790947143127,"id":"1","progress":0.7238840256499973,"total":1106,"current":941}
+{"_e":"metro:bundling:progress","_t":1790947143227,"id":"1","progress":0.7998014001369219,"total":1126,"current":1007}
+{"_e":"metro:bundling:progress","_t":1790947143327,"id":"1","progress":0.8941515208461973,"total":1158,"current":1095}
+{"_e":"metro:bundling:progress","_t":1790947143428,"id":"1","progress":0.963366993856366,"total":1190,"current":1168}
+{"_e":"metro:bundling:progress","_t":1790947143530,"id":"1","progress":0.9966471104905184,"total":1192,"current":1190}
+{"_e":"metro:bundling:progress","_t":1790947143651,"id":"1","progress":0.9983228514481329,"total":1192,"current":1191}
+{"_e":"metro:bundling:progress","_t":1790947143757,"id":"1","progress":0.9983367986245886,"total":1202,"current":1201}
+{"_e":"metro:bundling:progress","_t":1790947143812,"id":"1","progress":0.999,"total":1202,"current":1202}
+{"_e":"metro:bundling:progress","_t":1790947143912,"id":"1","progress":0.999,"total":1205,"current":1205}
+{"_e":"metro:bundling:done","_t":1790947143975,"id":"1","total":1205,"ms":3431.0168}
+{"_e":"metro:client_log","_t":1790947149545,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790947163468,"level":"warn","data":["DateTimePicker: `onChange` is deprecated. Use `onValueChange`, `onDismiss`, and `onNeutralButtonPress` instead."]}
+{"_e":"metro:bundling:started","_t":1790947280221,"id":"6","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790947280221,"id":"6","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790947280246,"id":"6","total":1,"ms":25.1441}
+{"_e":"metro:client_log","_t":1790947283553,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790947296580,"level":"warn","data":["DateTimePicker: `onChange` is deprecated. Use `onValueChange`, `onDismiss`, and `onNeutralButtonPress` instead."]}
+{"_e":"metro:bundling:started","_t":1790947579629,"id":"8","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790947579629,"id":"8","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790947579653,"id":"8","total":1,"ms":24.5785}
+{"_e":"metro:client_log","_t":1790947584014,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790947690099,"level":"error","data":["[Error: Uncaught (in promise, id: 0): \"com.facebook.react.bridge.JSApplicationIllegalArgumentException: Could not open URL 'Y': No Activity found to handle Intent { act=android.intent.action.VIEW dat= flg=0x10000000 }\"]"]}
+{"_e":"metro:client_log","_t":1790947690603,"level":"error","data":["[Error: Uncaught (in promise, id: 1): \"com.facebook.react.bridge.JSApplicationIllegalArgumentException: Could not open URL 'Y': No Activity found to handle Intent { act=android.intent.action.VIEW dat= flg=0x10000000 }\"]"]}
+{"_e":"metro:client_log","_t":1790947691078,"level":"error","data":["[Error: Uncaught (in promise, id: 2): \"com.facebook.react.bridge.JSApplicationIllegalArgumentException: Could not open URL 'Y': No Activity found to handle Intent { act=android.intent.action.VIEW dat= flg=0x10000000 }\"]"]}
+{"_e":"metro:client_log","_t":1790947812065,"level":"error","data":["Alarm check error:","[ReferenceError: Property 'activeHardAlarms' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790947817080,"level":"error","data":["Alarm check error:","[ReferenceError: Property 'activeHardAlarms' doesn't exist]"]}
+{"_e":"metro:bundling:started","_t":1790947887324,"id":"d","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790947887324,"id":"d","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790947887347,"id":"d","total":1,"ms":23.8427}
+{"_e":"metro:client_log","_t":1790947890560,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790951196555,"level":"warn","data":["DateTimePicker: `onChange` is deprecated. Use `onValueChange`, `onDismiss`, and `onNeutralButtonPress` instead."]}

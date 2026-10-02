@@ -78,5 +78,17 @@ export const useTasks = (targetDate?: string) => {
     }
   }
 
-  return { tasks, loading, addTask, toggleTask, deleteTask, refresh: fetchTasks };
+  const updateTask = async (id: number, title: string, description: string) => {
+    try {
+      await db.execute(
+        'UPDATE Tasks SET title = ?, description = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        [title, description, id]
+      );
+      await fetchTasks();
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
+
+  return { tasks, loading, addTask, updateTask, toggleTask, deleteTask, refresh: fetchTasks };
 };

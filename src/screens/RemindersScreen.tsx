@@ -135,6 +135,30 @@ export const RemindersScreen = () => {
     ]);
   };
 
+  const handleLongPressAlarm = (alarm: any) => {
+    Alert.alert(
+      'İşlem Seçin',
+      'Bu alarm için ne yapmak istiyorsunuz?',
+      [
+        { text: 'Düzenle', onPress: () => handleEditAlarm(alarm) },
+        { text: 'Sil', style: 'destructive', onPress: () => confirmDeleteAlarm(alarm.id) },
+        { text: 'İptal', style: 'cancel' }
+      ]
+    );
+  };
+
+  const handleLongPressDate = (date: any) => {
+    Alert.alert(
+      'İşlem Seçin',
+      'Bu tarih için ne yapmak istiyorsunuz?',
+      [
+        { text: 'Düzenle', onPress: () => handleEditDate(date) },
+        { text: 'Sil', style: 'destructive', onPress: () => confirmDeleteDate(date.id) },
+        { text: 'İptal', style: 'cancel' }
+      ]
+    );
+  };
+
   const activeRemindersCount = reminders.filter(r => r.is_active).length;
 
   const toggleDay = (dayIndex: number) => {
@@ -166,7 +190,7 @@ export const RemindersScreen = () => {
             <Text style={{ color: theme.colors.onSurfaceVariant, fontSize: 12 }}>Kayıtlı alarm yok.</Text>
           ) : (
             reminders.map(alarm => (
-              <TouchableOpacity key={alarm.id} style={[styles.alarmItem, { marginBottom: 8 }]} onPress={() => handleEditAlarm(alarm)} onLongPress={() => confirmDeleteAlarm(alarm.id)}>
+              <TouchableOpacity key={alarm.id} style={[styles.alarmItem, { marginBottom: 8 }]} onLongPress={() => handleLongPressAlarm(alarm)}>
                 <View style={styles.alarmLeft}>
                   <View style={styles.alarmIconBox}>
                     <Icon name="alarm" size={20} color={theme.colors.primary} />
@@ -313,7 +337,7 @@ export const RemindersScreen = () => {
             </View>
           ) : (
             dates.map(date => (
-              <TouchableOpacity key={date.id} style={[styles.alarmItem, { marginBottom: 8 }]} onPress={() => handleEditDate(date)} onLongPress={() => confirmDeleteDate(date.id)}>
+              <TouchableOpacity key={date.id} style={[styles.alarmItem, { marginBottom: 8 }]} onLongPress={() => handleLongPressDate(date)}>
                 <View style={styles.alarmLeft}>
                   <View style={[styles.alarmIconBox, { backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 0.2)' }]}>
                     <Icon name="event" size={20} color="#3b82f6" />

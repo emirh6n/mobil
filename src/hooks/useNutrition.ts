@@ -113,5 +113,14 @@ export const useNutrition = (date: string) => {
     }
   };
 
-  return { protein, setProtein, routine, loading, saveProtein, addRoutineItem, toggleCheck, removeItem, refresh: fetchNutritionData };
+  const updateRoutineItem = async (id: number, title: string) => {
+    try {
+      await db.execute('UPDATE NutritionRoutines SET title = ? WHERE id = ?', [title, id]);
+      await fetchNutritionData();
+    } catch (error) {
+      console.error('Error updating routine item:', error);
+    }
+  };
+
+  return { protein, setProtein, routine, loading, saveProtein, addRoutineItem, updateRoutineItem, toggleCheck, removeItem, refresh: fetchNutritionData };
 };

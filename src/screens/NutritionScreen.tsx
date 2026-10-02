@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -11,10 +11,44 @@ import { useDateContext } from '../context/DateContext';
 export const NutritionScreen = () => {
   const navigation = useNavigation();
   const { selectedDate } = useDateContext();
-  const { protein, setProtein, routine, loading, saveProtein, addRoutineItem, toggleCheck, removeItem } = useNutrition(selectedDate);
+  const { protein, setProtein, routine, loading, saveProtein, addRoutineItem, updateRoutineItem, toggleCheck, removeItem } = useNutrition(selectedDate);
 
   const [vitamin, setVitamin] = useState('');
   const [supplement, setSupplement] = useState('');
+  const [isEditingProtein, setIsEditingProtein] = useState(false);
+  const [editingRoutineId, setEditingRoutineId] = useState<number | null>(null);
+  const [editingRoutineType, setEditingRoutineType] = useState<'vitamin' | 'supplement' | null>(null);
+
+  const confirmDeleteRoutine = (id: number) => {
+    Alert.alert('Emin misiniz?', 'Silmek istediğinize emin misiniz?', [
+      { text: 'İptal', style: 'cancel' },
+      { text: 'Sil', style: 'destructive', onPress: () => removeItem(id) }
+    ]);
+  };
+
+  const handleLongPressRoutine = (item: any) => {
+    Alert.alert(
+      'İşlem Seçin',
+      'Ne yapmak istiyorsunuz?',
+      [
+        {
+          text: 'Düzenle',
+          onPress: () => {
+            setEditingRoutineId(item.id);
+            if (item.category.includes('Vitamin')) {
+              setEditingRoutineType('vitamin');
+              setVitamin(item.title);
+            } else {
+              setEditingRoutineType('supplement');
+              setSupplement(item.title);
+            }
+          }
+        },
+        { text: 'Sil', style: 'destructive', onPress: () => confirmDeleteRoutine(item.id) },
+        { text: 'İptal', style: 'cancel' }
+      ]
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -40,25 +74,37 @@ export const NutritionScreen = () => {
               <Icon name="track-changes" size={22} color={theme.colors.primary} />
               <Text style={styles.cardTitle}>Bugünün Rutini</Text>
             </View>
-            <Icon name="fitness-center" size={20} color={theme.colors.onSurfaceVariant} />
           </View>
 
           <View style={styles.formGroup}>
             <Text style={styles.inputLabel}>Günlük Protein (g)</Text>
             <View style={styles.proteinRow}>
-              <View style={styles.proteinInputWrapper}>
-                <TextInput 
-                  style={styles.proteinInput} 
-                  keyboardType="numeric" 
-                  value={protein} 
-                  onChangeText={setProtein} 
-                />
-                <Text style={styles.proteinUnit}>Gram</Text>
-              </View>
-              <TouchableOpacity style={styles.saveBtn} onPress={() => saveProtein(protein)} disabled={loading}>
-                <Icon name="check" size={20} color={theme.colors.onPrimary} />
-                <Text style={styles.saveBtnText}>Kaydet</Text>
-              </TouchableOpacity>
+              {isEditingProtein ? (
+                <>
+                  <View style={styles.proteinInputWrapper}>
+                    <TextInput 
+                      style={styles.proteinInput} 
+                      keyboardType="numeric" 
+                      value={protein} 
+                      onChangeText={setProtein} 
+                      autoFocus
+                    />
+                    <Text style={styles.proteinUnit}>Gram</Text>
+                  </View>
+                  <TouchableOpacity style={styles.saveBtn} onPress={() => { saveProtein(protein); setIsEditingProtein(false); }} disabled={loading}>
+                    <Icon name="check" size={20} color={theme.colors.onPrimary} />
+                    <Text style={styles.saveBtnText}>Kaydet</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <TouchableOpacity style={[styles.proteinInputWrapper, { flex: 1, paddingVertical: 12, justifyContent: 'space-between' }]} onPress={() => setIsEditingProtein(true)}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={[styles.proteinInput, { marginRight: 8 }]}>{protein}</Text>
+                    <Text style={styles.proteinUnit}>Gram</Text>
+                  </View>
+                  <Icon name="edit" size={20} color={theme.colors.primary} />
+                </TouchableOpacity>
+              )}
             </View>
           </View>
 
@@ -76,7 +122,12 @@ export const NutritionScreen = () => {
             ) : (
               <View style={styles.list}>
                 {routine.map(item => (
-                  <View key={item.id} style={styles.listItem}>
+                  <TouchableOpacity 
+                    key={item.id} 
+                    style={styles.listItem} 
+                    onPress={() => toggleCheck(item.id, item.checked)}
+                    onLongPress={() => handleLongPressRoutine(item)}
+                  >
                     <View style={styles.listItemLeft}>
                       <View style={styles.listItemIconWrapper}>
                         <Icon name={item.icon as any} size={20} color={theme.colors.primary} />
@@ -87,14 +138,11 @@ export const NutritionScreen = () => {
                       </View>
                     </View>
                     <View style={styles.listItemRight}>
-                      <TouchableOpacity onPress={() => toggleCheck(item.id, item.checked)} style={styles.iconBtn}>
+                      <View style={styles.iconBtn}>
                         <Icon name={item.checked ? "check-circle" : "radio-button-unchecked"} size={22} color={item.checked ? theme.colors.primary : theme.colors.onSurfaceVariant} />
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => removeItem(item.id)} style={styles.iconBtn}>
-                        <Icon name="close" size={22} color={theme.colors.error} />
-                      </TouchableOpacity>
+                      </View>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 ))}
               </View>
             )}
@@ -112,15 +160,23 @@ export const NutritionScreen = () => {
               <Icon name="medical-services" size={20} color={theme.colors.onSurfaceVariant} />
               <TextInput 
                 style={[styles.proteinInput, { flex: 1, textAlign: 'left', marginLeft: 8 }]} 
-                placeholder="Örn. D Vitamini"
-                placeholderTextColor={theme.colors.onSurfaceVariant + '80'}
                 value={vitamin} 
                 onChangeText={setVitamin} 
               />
             </View>
-            <TouchableOpacity style={styles.saveBtn} onPress={() => { addRoutineItem(vitamin, 'Vitamin & Mineral', 'medical-services'); setVitamin(''); }}>
-              <Icon name="add" size={20} color={theme.colors.onPrimary} />
-              <Text style={styles.saveBtnText}>Ekle</Text>
+            <TouchableOpacity style={styles.saveBtn} onPress={() => { 
+              if (!vitamin.trim()) return;
+              if (editingRoutineId && editingRoutineType === 'vitamin') {
+                updateRoutineItem(editingRoutineId, vitamin);
+                setEditingRoutineId(null);
+                setEditingRoutineType(null);
+              } else {
+                addRoutineItem(vitamin, 'Vitamin & Mineral', 'medical-services'); 
+              }
+              setVitamin(''); 
+            }}>
+              <Icon name={editingRoutineId && editingRoutineType === 'vitamin' ? "edit" : "add"} size={20} color={theme.colors.onPrimary} />
+              <Text style={styles.saveBtnText}>{editingRoutineId && editingRoutineType === 'vitamin' ? "Güncelle" : "Ekle"}</Text>
             </TouchableOpacity>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
@@ -141,15 +197,23 @@ export const NutritionScreen = () => {
               <Icon name="science" size={20} color={theme.colors.onSurfaceVariant} />
               <TextInput 
                 style={[styles.proteinInput, { flex: 1, textAlign: 'left', marginLeft: 8 }]} 
-                placeholder="Örn. Kreatin"
-                placeholderTextColor={theme.colors.onSurfaceVariant + '80'}
                 value={supplement} 
                 onChangeText={setSupplement} 
               />
             </View>
-            <TouchableOpacity style={styles.saveBtn} onPress={() => { addRoutineItem(supplement, 'Supplement', 'science'); setSupplement(''); }}>
-              <Icon name="add" size={20} color={theme.colors.onPrimary} />
-              <Text style={styles.saveBtnText}>Ekle</Text>
+            <TouchableOpacity style={styles.saveBtn} onPress={() => { 
+              if (!supplement.trim()) return;
+              if (editingRoutineId && editingRoutineType === 'supplement') {
+                updateRoutineItem(editingRoutineId, supplement);
+                setEditingRoutineId(null);
+                setEditingRoutineType(null);
+              } else {
+                addRoutineItem(supplement, 'Supplement', 'science'); 
+              }
+              setSupplement(''); 
+            }}>
+              <Icon name={editingRoutineId && editingRoutineType === 'supplement' ? "edit" : "add"} size={20} color={theme.colors.onPrimary} />
+              <Text style={styles.saveBtnText}>{editingRoutineId && editingRoutineType === 'supplement' ? "Güncelle" : "Ekle"}</Text>
             </TouchableOpacity>
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
@@ -159,16 +223,7 @@ export const NutritionScreen = () => {
           </ScrollView>
         </View>
 
-        {/* Insight Banner */}
-        <View style={styles.banner}>
-          <View style={styles.bannerIcon}>
-            <Icon name="lightbulb" size={22} color={theme.colors.primary} />
-          </View>
-          <View style={styles.bannerTextContainer}>
-            <Text style={styles.bannerTitle}>Hidrasyon ve Emilim</Text>
-            <Text style={styles.bannerDesc}>Kreatin ve vitamin alımlarınızı günlük en az 2.5L su ile destekleyiniz.</Text>
-          </View>
-        </View>
+
 
       </ScrollView>
     </SafeAreaView>
@@ -242,9 +297,4 @@ const styles = StyleSheet.create({
   chip: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: theme.colors.surfaceContainerHigh },
   chipText: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
   
-  banner: { flexDirection: 'row', alignItems: 'center', gap: 12, backgroundColor: theme.colors.surfaceContainerLow, borderWidth: 1, borderColor: theme.colors.cardBorder, borderRadius: theme.rounded.md, padding: theme.spacing.md },
-  bannerIcon: { width: 40, height: 40, borderRadius: 20, backgroundColor: theme.colors.surfaceVariant, alignItems: 'center', justifyContent: 'center' },
-  bannerTextContainer: { flex: 1 },
-  bannerTitle: { ...theme.typography.labelMd, color: theme.colors.onSurface },
-  bannerDesc: { ...theme.typography.bodySm, color: theme.colors.onSurfaceVariant },
 });

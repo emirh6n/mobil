@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -11,16 +11,52 @@ import { useDateContext } from '../context/DateContext';
 
 export const TasksScreen = () => {
   const { selectedDate } = useDateContext();
-  const { tasks, loading, addTask, toggleTask, deleteTask } = useTasks(selectedDate);
+  const { tasks, loading, addTask, updateTask, toggleTask, deleteTask } = useTasks(selectedDate);
   
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
 
   const handleAddTask = () => {
     if (!title.trim()) return;
-    addTask(title, desc, selectedDate);
+    if (editingId) {
+      updateTask(editingId, title, desc);
+      setEditingId(null);
+    } else {
+      addTask(title, desc, selectedDate);
+    }
     setTitle('');
     setDesc('');
+  };
+
+  const confirmDeleteTask = (id: number) => {
+    Alert.alert('Görevi Sil', 'Bu görevi silmek istediğinize emin misiniz?', [
+      { text: 'İptal', style: 'cancel' },
+      { text: 'Sil', style: 'destructive', onPress: () => deleteTask(id) }
+    ]);
+  };
+
+  const handleLongPressTask = (task: any) => {
+    Alert.alert(
+      'İşlem Seçin',
+      'Bu görev için ne yapmak istiyorsunuz?',
+      [
+        { 
+          text: 'Düzenle', 
+          onPress: () => {
+            setEditingId(task.id);
+            setTitle(task.title);
+            setDesc(task.description || '');
+          }
+        },
+        { 
+          text: 'Sil', 
+          style: 'destructive', 
+          onPress: () => confirmDeleteTask(task.id) 
+        },
+        { text: 'İptal', style: 'cancel' }
+      ]
+    );
   };
 
   const pendingTasks = tasks.filter(t => !t.is_completed);
@@ -58,7 +94,7 @@ export const TasksScreen = () => {
                 <View style={styles.list}>
                   {pendingTasks.length === 0 && <Text style={styles.emptyText}>Bekleyen görev yok.</Text>}
                   {pendingTasks.map(t => (
-                    <TouchableOpacity key={t.id} style={styles.taskItem} onPress={() => toggleTask(t.id, t.is_completed)} onLongPress={() => deleteTask(t.id)}>
+                    <TouchableOpacity key={t.id} style={styles.taskItem} onPress={() => toggleTask(t.id, t.is_completed)} onLongPress={() => handleLongPressTask(t)}>
                       <View style={styles.checkbox} />
                       <View style={styles.taskTextContent}>
                         <Text style={styles.taskTitle}>{t.title}</Text>
@@ -78,7 +114,7 @@ export const TasksScreen = () => {
                 <View style={styles.list}>
                   {completedTasks.length === 0 && <Text style={styles.emptyText}>Henüz tamamlanan görev yok.</Text>}
                   {completedTasks.map(t => (
-                    <TouchableOpacity key={t.id} style={styles.taskItem} onPress={() => toggleTask(t.id, t.is_completed)} onLongPress={() => deleteTask(t.id)}>
+                    <TouchableOpacity key={t.id} style={styles.taskItem} onPress={() => toggleTask(t.id, t.is_completed)} onLongPress={() => handleLongPressTask(t)}>
                       <View style={[styles.checkbox, styles.checkboxChecked]}><Icon name="check" size={16} color={theme.colors.onPrimary} /></View>
                       <View style={styles.taskTextContent}>
                         <Text style={[styles.taskTitle, styles.taskTitleCompleted]}>{t.title}</Text>
@@ -96,9 +132,15 @@ export const TasksScreen = () => {
           <View style={styles.formHeader}>
             <View style={styles.formHeaderLeft}>
               <View style={styles.pulseDot} />
-              <Text style={styles.formTitle}>Hızlı Görev Ekle</Text>
+              <Text style={styles.formTitle}>{editingId ? 'Görevi Güncelle' : 'Hızlı Görev Ekle'}</Text>
             </View>
-            <Text style={styles.formSub}>Gelişmiş Form</Text>
+            {editingId ? (
+              <TouchableOpacity onPress={() => { setEditingId(null); setTitle(''); setDesc(''); }}>
+                <Icon name="close" size={20} color={theme.colors.error} />
+              </TouchableOpacity>
+            ) : (
+              <Text style={styles.formSub}>Gelişmiş Form</Text>
+            )}
           </View>
           
           <View style={styles.inputGroup}>
@@ -125,8 +167,8 @@ export const TasksScreen = () => {
           </View>
 
           <TouchableOpacity style={styles.submitBtn} onPress={handleAddTask} disabled={loading}>
-            <Icon name="add-task" size={20} color={theme.colors.onPrimaryContainer} />
-            <Text style={styles.submitBtnText}>Görevi Kaydet</Text>
+            <Icon name={editingId ? "edit" : "add-task"} size={20} color={theme.colors.onPrimaryContainer} />
+            <Text style={styles.submitBtnText}>{editingId ? 'Görevi Güncelle' : 'Görevi Kaydet'}</Text>
           </TouchableOpacity>
         </View>
 

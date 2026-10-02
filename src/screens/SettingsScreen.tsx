@@ -122,14 +122,9 @@ export const SettingsScreen = () => {
         </TouchableOpacity>
         <View style={styles.headerCenter}>
           <Text style={styles.headerTitle}>Ayarlar</Text>
-          <View style={styles.statusRow}>
-            <View style={styles.pulseDot} />
-            <Text style={styles.statusText}>Sistem Senkronize</Text>
-          </View>
         </View>
         <View style={styles.headerRight}>
           <TouchableOpacity style={styles.iconBtn}><Icon name="help-outline" size={22} color={theme.colors.onSurfaceVariant} /></TouchableOpacity>
-          <TouchableOpacity style={styles.iconBtn}><Icon name="qr-code-scanner" size={22} color={theme.colors.onSurfaceVariant} /></TouchableOpacity>
         </View>
       </View>
 
@@ -175,8 +170,12 @@ export const SettingsScreen = () => {
                   <View style={styles.gridItem}>
                     <Text style={styles.gridItemTitle}>Biyolojik Cinsiyet</Text>
                     <View style={styles.toggleRow}>
-                      <TouchableOpacity style={[styles.toggleBtn, gender === 'male' && styles.toggleBtnActive]} onPress={() => setGender('male')}><Text style={[styles.toggleBtnText, gender === 'male' && styles.toggleBtnTextActive]}>Erkek</Text></TouchableOpacity>
-                      <TouchableOpacity style={[styles.toggleBtn, gender === 'female' && styles.toggleBtnActiveSecondary]} onPress={() => setGender('female')}><Text style={[styles.toggleBtnText, gender === 'female' && styles.toggleBtnTextActive]}>Kadın</Text></TouchableOpacity>
+                      <TouchableOpacity style={[styles.toggleBtn, gender === 'male' && { backgroundColor: 'rgba(59, 130, 246, 0.15)' }]} onPress={() => setGender('male')}>
+                        <Icon name="male" size={24} color={gender === 'male' ? '#3b82f6' : theme.colors.onSurfaceVariant} />
+                      </TouchableOpacity>
+                      <TouchableOpacity style={[styles.toggleBtn, gender === 'female' && { backgroundColor: 'rgba(236, 72, 153, 0.15)' }]} onPress={() => setGender('female')}>
+                        <Icon name="female" size={24} color={gender === 'female' ? '#ec4899' : theme.colors.onSurfaceVariant} />
+                      </TouchableOpacity>
                     </View>
                   </View>
                 </View>
@@ -315,9 +314,6 @@ const styles = StyleSheet.create({
   backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center' },
   headerCenter: { alignItems: 'center' },
   headerTitle: { ...theme.typography.headlineLgMobile, color: theme.colors.onSurface, fontSize: 24 },
-  statusRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 2 },
-  pulseDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: theme.colors.primary },
-  statusText: { ...theme.typography.labelSm, color: theme.colors.primary, fontWeight: 'bold' },
   headerRight: { flexDirection: 'row', gap: 8 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center' },
   
@@ -348,8 +344,8 @@ const styles = StyleSheet.create({
   formRowLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   formRowTitle: { ...theme.typography.titleMd, fontSize: 14, color: theme.colors.onSurface },
   formRowSub: { ...theme.typography.bodySm, fontSize: 11, color: theme.colors.onSurfaceVariant },
-  inputWrapper: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: theme.colors.surfaceContainerLowest, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 4, borderWidth: 1, borderColor: 'rgba(64, 74, 55, 0.5)' },
-  miniInput: { color: theme.colors.primary, fontWeight: 'bold', fontSize: 14, textAlign: 'right', minWidth: 40, padding: 0 },
+  inputWrapper: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: theme.colors.surfaceContainerLowest, paddingHorizontal: 12, paddingVertical: 8, borderRadius: 6, borderWidth: 1, borderColor: 'rgba(64, 74, 55, 0.5)' },
+  miniInput: { color: theme.colors.primary, fontWeight: 'bold', fontSize: 18, textAlign: 'right', minWidth: 50, padding: 0 },
   inputUnit: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
   
   actionRow: { flexDirection: 'row', justifyContent: 'flex-end', gap: 12, marginTop: 8 },
