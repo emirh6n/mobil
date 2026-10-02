@@ -18,7 +18,7 @@ export const NutritionScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <Header subtitle="Besin" />
+      <Header subtitle="Besin" hideBackButton />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Date Selector */}
@@ -79,7 +79,7 @@ export const NutritionScreen = () => {
                   <View key={item.id} style={styles.listItem}>
                     <View style={styles.listItemLeft}>
                       <View style={styles.listItemIconWrapper}>
-                        <Icon name={item.icon} size={20} color={theme.colors.primary} />
+                        <Icon name={item.icon as any} size={20} color={theme.colors.primary} />
                       </View>
                       <View style={styles.listItemTextContent}>
                         <Text style={[styles.listItemTitle, item.checked && styles.listItemTitleChecked]} numberOfLines={1}>{item.title}</Text>

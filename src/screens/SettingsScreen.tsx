@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, ActivityIndicator, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -258,7 +258,9 @@ export const SettingsScreen = () => {
           <View style={styles.card}>
             <View style={styles.listItem}>
               <View style={styles.listItemLeft}>
-                <View style={styles.cardIconBox}><Icon name="terminal" size={22} color={theme.colors.primary} /></View>
+                <View style={[styles.cardIconBox, { backgroundColor: 'transparent', padding: 0 }]}>
+                  <Image source={require('../../assets/logo.jpg')} style={{ width: 40, height: 40, borderRadius: 8 }} />
+                </View>
                 <View><Text style={styles.listItemTitle}>TRKN Studio</Text></View>
               </View>
             </View>

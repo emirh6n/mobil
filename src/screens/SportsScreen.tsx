@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Modal, FlatList, Alert } from 'react-native';
+import { Pedometer } from 'expo-sensors';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -7,6 +8,16 @@ import { Header } from '../components/Header';
 import { useWorkouts } from '../hooks/useWorkouts';
 import { useNavigation } from '@react-navigation/native';
 import { useDateContext } from '../context/DateContext';
+
+const EXERCISE_DATA = {
+  'Göğüs': ['Machine Pec Deck / Cable Fly', 'Dips', 'Bench Press (Incline, Seated)', 'Seated Chest Press'],
+  'Sırt': ['Dumbbell Shrugs', 'Pull Up', 'Pull Down', 'Barbell Row / Machine Row'],
+  'Omuz': ['Lateral Raise (Cable/Dumbbell)', 'Shoulder Press / Overhead', 'Reverse Fly Machine', 'Cable Face Pull'],
+  'Kol': ['Dumbbell Wrist Curls / Extensions', 'Bayesian Cable Curl', 'Preacher Curl', '(Seated) Tricep Extension', 'Skull Crusher'],
+  'Bacak & Kalça': ['Standing Calf Raise', 'Deadlift (+Romanian)', 'Seated Leg Curl / Extension', 'Squat (Barbell, Bulgarian)', 'Barbell Hip Thrust', 'Walking Lunge', 'Glute Bridge'],
+  'Boyun': ['Neck Curls / Extensions'],
+  'Karın': ['Cable Crunch']
+};
 
 export const SportsScreen = () => {
   const navigation = useNavigation();
@@ -19,6 +30,55 @@ export const SportsScreen = () => {
   const [reps, setReps] = useState('');
   const [weight, setWeight] = useState('');
   
+  const [muscleModalVisible, setMuscleModalVisible] = useState(false);
+  const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
+  
+  // Pedometer State
+  const [isPedometerAvailable, setIsPedometerAvailable] = useState('checking');
+  const [pastStepCount, setPastStepCount] = useState(0);
+  const [currentStepCount, setCurrentStepCount] = useState(0);
+  const [isSyncEnabled, setIsSyncEnabled] = useState(false);
+  const pedometerSub = React.useRef<any>(null);
+  
+  const currentExercises = muscleGroup && EXERCISE_DATA[muscleGroup as keyof typeof EXERCISE_DATA] ? EXERCISE_DATA[muscleGroup as keyof typeof EXERCISE_DATA] : [];
+  
+  // Cleanup for pedometer subscription
+  React.useEffect(() => {
+    return () => {
+      if (pedometerSub.current) {
+        pedometerSub.current.remove();
+      }
+    };
+  }, []);
+
+  const enablePedometer = async () => {
+    try {
+      const isAvailable = await Pedometer.isAvailableAsync();
+      setIsPedometerAvailable(String(isAvailable));
+
+      if (isAvailable) {
+        const end = new Date();
+        const start = new Date();
+        start.setHours(0, 0, 0, 0);
+
+        const pastResult = await Pedometer.getStepCountAsync(start, end);
+        if (pastResult) {
+          setPastStepCount(pastResult.steps);
+        }
+
+        pedometerSub.current = Pedometer.watchStepCount(result => {
+          setCurrentStepCount(result.steps);
+        });
+
+        setIsSyncEnabled(true);
+      } else {
+        Alert.alert('Hata', 'Cihazınızda adım sayar sensörü bulunmuyor veya desteklenmiyor.');
+      }
+    } catch (e) {
+      Alert.alert('İzin Reddedildi', 'Adım sayar verilerine erişim izni vermeniz gerekiyor.');
+    }
+  };
+
   const calculatedCalories = React.useMemo(() => {
     const s = parseFloat(sets) || 0;
     const r = parseFloat(reps) || 0;
@@ -28,6 +88,21 @@ export const SportsScreen = () => {
     }
     return 0;
   }, [sets, reps, weight]);
+
+  const totalCaloriesBurned = React.useMemo(() => {
+    let total = 0;
+    workouts.forEach(workout => {
+      workout.exercises?.forEach(ex => {
+        const s = ex.sets || 0;
+        const r = parseFloat(ex.reps) || 0;
+        const w = parseFloat(ex.weight) || 0;
+        if (s > 0 && r > 0) {
+          total += Math.max(1, Math.round((s * r * (w > 0 ? w * 0.04 : 1.2)) + (s * 3)));
+        }
+      });
+    });
+    return total;
+  }, [workouts]);
 
   const handleSubmit = () => {
     if (!muscleGroup.trim() || !exerciseName.trim() || !sets.trim() || !reps.trim()) return;
@@ -40,7 +115,7 @@ export const SportsScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <Header subtitle="Spor Merkezi" />
+      <Header subtitle="Spor Merkezi" hideBackButton />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Date Selector */}
@@ -69,16 +144,25 @@ export const SportsScreen = () => {
 
           <View style={styles.formGroup}>
             <Text style={styles.inputLabel}>Hedef kas grubu</Text>
-            <View style={styles.selectBox}>
-              <TextInput style={styles.selectText} placeholder="Örn: Göğüs, Sırt" placeholderTextColor={theme.colors.onSurfaceVariant} value={muscleGroup} onChangeText={setMuscleGroup} />
-            </View>
+            <TouchableOpacity style={styles.selectBox} onPress={() => setMuscleModalVisible(true)}>
+              <Text style={[styles.selectText, !muscleGroup && { color: theme.colors.onSurfaceVariant }]}>
+                {muscleGroup || 'Seçiniz'}
+              </Text>
+              <Icon name="arrow-drop-down" size={24} color={theme.colors.onSurfaceVariant} />
+            </TouchableOpacity>
           </View>
 
           <View style={styles.formGroup}>
             <Text style={styles.inputLabel}>Egzersiz</Text>
-            <View style={styles.selectBox}>
-              <TextInput style={styles.selectText} placeholder="Örn: Bench Press" placeholderTextColor={theme.colors.onSurfaceVariant} value={exerciseName} onChangeText={setExerciseName} />
-            </View>
+            <TouchableOpacity 
+              style={styles.selectBox} 
+              onPress={() => muscleGroup ? setExerciseModalVisible(true) : alert('Lütfen önce hedef kas grubu seçin.')}
+            >
+              <Text style={[styles.selectText, !exerciseName && { color: theme.colors.onSurfaceVariant }]}>
+                {exerciseName || 'Seçiniz'}
+              </Text>
+              <Icon name="arrow-drop-down" size={24} color={theme.colors.onSurfaceVariant} />
+            </TouchableOpacity>
           </View>
 
           <View style={styles.telemetryMatrix}>
@@ -140,6 +224,23 @@ export const SportsScreen = () => {
           </TouchableOpacity>
         </View>
 
+        {/* Total Calories Card */}
+        <View style={styles.totalCaloriesCard}>
+          <View style={styles.totalCaloriesLeft}>
+            <View style={styles.totalCaloriesIconWrapper}>
+              <Icon name="whatshot" size={24} color={theme.colors.primary} />
+            </View>
+            <View>
+              <Text style={styles.totalCaloriesTitle}>Toplam Yakılan</Text>
+              <Text style={styles.totalCaloriesSub}>Bugünkü antrenmanlardan</Text>
+            </View>
+          </View>
+          <View style={styles.totalCaloriesRight}>
+            <Text style={styles.totalCaloriesValue}>{totalCaloriesBurned}</Text>
+            <Text style={styles.totalCaloriesUnit}>kcal</Text>
+          </View>
+        </View>
+
         {/* History Card */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>
@@ -182,7 +283,107 @@ export const SportsScreen = () => {
           )}
         </View>
 
+        {/* Pedometer Card */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <View style={styles.cardHeaderLeft}>
+              <Icon name="directions-run" size={20} color={theme.colors.primary} />
+              <Text style={styles.cardTitle}>Günlük Aktivite</Text>
+            </View>
+            {isSyncEnabled && (
+              <View style={[styles.badge, { backgroundColor: 'rgba(159, 253, 80, 0.15)' }]}>
+                <Text style={styles.badgeText}>Senkronize Edildi</Text>
+              </View>
+            )}
+          </View>
+
+          {!isSyncEnabled ? (
+            <View style={styles.pedometerPromo}>
+              <View style={styles.pedometerPromoIcon}>
+                <Icon name="sync" size={28} color={theme.colors.onSurfaceVariant} />
+              </View>
+              <Text style={styles.pedometerPromoText}>Adım, mesafe ve yakılan kalori verilerinizi takip etmek için cihazınızın adım sayar sensörüne erişim izni verin.</Text>
+              <TouchableOpacity style={styles.syncBtn} onPress={enablePedometer}>
+                <Icon name="check-circle" size={18} color={theme.colors.onPrimary} />
+                <Text style={styles.syncBtnText}>Telefon Senkronizasyonunu Aç</Text>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={styles.pedometerGrid}>
+              <View style={styles.pedometerBox}>
+                <Icon name="do-not-step" size={24} color={theme.colors.primary} />
+                <Text style={styles.pedometerValue}>{pastStepCount + currentStepCount}</Text>
+                <Text style={styles.pedometerLabel}>Adım</Text>
+              </View>
+              <View style={styles.pedometerBox}>
+                <Icon name="map" size={24} color={theme.colors.primary} />
+                <Text style={styles.pedometerValue}>{((pastStepCount + currentStepCount) * 0.762 / 1000).toFixed(2)}</Text>
+                <Text style={styles.pedometerLabel}>Mesafe (km)</Text>
+              </View>
+              <View style={styles.pedometerBox}>
+                <Icon name="local-fire-department" size={24} color={theme.colors.primary} />
+                <Text style={styles.pedometerValue}>{Math.round((pastStepCount + currentStepCount) * 0.04)}</Text>
+                <Text style={styles.pedometerLabel}>Kalori (kcal)</Text>
+              </View>
+            </View>
+          )}
+        </View>
+
       </ScrollView>
+
+      {/* Muscle Group Modal */}
+      <Modal visible={muscleModalVisible} transparent animationType="fade" onRequestClose={() => setMuscleModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Kas Grubu Seçin</Text>
+            <ScrollView style={{ maxHeight: 400 }}>
+              {Object.keys(EXERCISE_DATA).map(mg => (
+                <TouchableOpacity 
+                  key={mg} 
+                  style={styles.modalItem}
+                  onPress={() => {
+                    setMuscleGroup(mg);
+                    setExerciseName(''); // Reset exercise when muscle changes
+                    setMuscleModalVisible(false);
+                  }}
+                >
+                  <Text style={[styles.modalItemText, muscleGroup === mg && { color: theme.colors.primary, fontWeight: 'bold' }]}>{mg}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setMuscleModalVisible(false)}>
+              <Text style={styles.modalCloseText}>İptal</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Exercise Modal */}
+      <Modal visible={exerciseModalVisible} transparent animationType="fade" onRequestClose={() => setExerciseModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Egzersiz Seçin</Text>
+            <ScrollView style={{ maxHeight: 400 }}>
+              {currentExercises.map(ex => (
+                <TouchableOpacity 
+                  key={ex} 
+                  style={styles.modalItem}
+                  onPress={() => {
+                    setExerciseName(ex);
+                    setExerciseModalVisible(false);
+                  }}
+                >
+                  <Text style={[styles.modalItemText, exerciseName === ex && { color: theme.colors.primary, fontWeight: 'bold' }]}>{ex}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            <TouchableOpacity style={styles.modalCloseBtn} onPress={() => setExerciseModalVisible(false)}>
+              <Text style={styles.modalCloseText}>İptal</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
     </SafeAreaView>
   );
 };
@@ -255,4 +456,32 @@ const styles = StyleSheet.create({
   emptyStateIcon: { width: 48, height: 48, borderRadius: 24, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
   emptyStateTitle: { ...theme.typography.bodyMd, color: theme.colors.onSurface, fontWeight: '500' },
   emptyStateDesc: { ...theme.typography.bodySm, color: theme.colors.onSurfaceVariant },
+  
+  totalCaloriesCard: { backgroundColor: theme.colors.surfaceContainerLow, borderRadius: theme.rounded.md, padding: theme.spacing.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderWidth: 1, borderColor: theme.colors.surfaceBorder },
+  totalCaloriesLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  totalCaloriesIconWrapper: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(159, 253, 80, 0.1)', alignItems: 'center', justifyContent: 'center' },
+  totalCaloriesTitle: { ...theme.typography.titleMd, color: theme.colors.onSurface },
+  totalCaloriesSub: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
+  totalCaloriesRight: { flexDirection: 'row', alignItems: 'baseline', gap: 4 },
+  totalCaloriesValue: { ...theme.typography.headlineMd, color: theme.colors.primary, fontWeight: 'bold' },
+  totalCaloriesUnit: { ...theme.typography.labelMd, color: theme.colors.primary },
+  
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)', justifyContent: 'flex-end' },
+  modalContent: { backgroundColor: theme.colors.surfaceContainer, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: 20, paddingBottom: 40, maxHeight: '80%' },
+  modalTitle: { ...theme.typography.titleLg, color: theme.colors.onSurface, fontWeight: 'bold', marginBottom: 16, textAlign: 'center' },
+  modalItem: { paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: 'rgba(255,255,255,0.05)' },
+  modalItemText: { ...theme.typography.bodyLg, color: theme.colors.onSurfaceVariant, textAlign: 'center' },
+  modalCloseBtn: { marginTop: 16, paddingVertical: 14, backgroundColor: theme.colors.surfaceContainerHigh, borderRadius: 12, alignItems: 'center' },
+  modalCloseText: { ...theme.typography.labelLg, color: theme.colors.onSurface, fontWeight: 'bold' },
+  
+  pedometerPromo: { alignItems: 'center', backgroundColor: theme.colors.surfaceContainerLowest, padding: 20, borderRadius: theme.rounded.md, gap: 12 },
+  pedometerPromoIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center' },
+  pedometerPromoText: { ...theme.typography.bodySm, color: theme.colors.onSurfaceVariant, textAlign: 'center', lineHeight: 20 },
+  syncBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.primary, paddingHorizontal: 20, paddingVertical: 12, borderRadius: 24, gap: 8, marginTop: 4 },
+  syncBtnText: { ...theme.typography.labelMd, color: theme.colors.onPrimary, fontWeight: 'bold' },
+  
+  pedometerGrid: { flexDirection: 'row', gap: 12, marginTop: 4 },
+  pedometerBox: { flex: 1, backgroundColor: theme.colors.surfaceContainerLowest, padding: 16, borderRadius: theme.rounded.md, alignItems: 'center', gap: 6, borderWidth: 1, borderColor: theme.colors.surfaceBorder },
+  pedometerValue: { ...theme.typography.titleLg, color: theme.colors.onSurface, fontWeight: 'bold' },
+  pedometerLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
 });

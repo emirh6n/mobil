@@ -3,7 +3,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { theme } from '../theme/theme';
 
 interface IconProps {
-  name: string;
+  name: keyof typeof MaterialIcons.glyphMap;
   size?: number;
   color?: string;
   style?: any;

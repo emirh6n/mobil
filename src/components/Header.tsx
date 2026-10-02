@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import { theme } from '../theme/theme';
 import { Icon } from './Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -7,9 +7,10 @@ import { useDateContext } from '../context/DateContext';
 
 interface HeaderProps {
   subtitle: string;
+  hideBackButton?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ subtitle }) => {
+export const Header: React.FC<HeaderProps> = ({ subtitle, hideBackButton }) => {
   const navigation = useNavigation<any>();
   const { selectedDate, setSelectedDate } = useDateContext();
   
@@ -67,13 +68,13 @@ export const Header: React.FC<HeaderProps> = ({ subtitle }) => {
     <>
       <View style={styles.header}>
         <View style={styles.headerLeft}>
-          {navigation.canGoBack() && (
+          {!hideBackButton && navigation.canGoBack() && (
             <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }}>
               <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
             </TouchableOpacity>
           )}
           <View style={styles.iconBox}>
-            <Icon name="bolt" size={28} color={theme.colors.primary} />
+            <Image source={require('../../assets/logo.jpg')} style={{ width: 40, height: 40, borderRadius: 12 }} />
           </View>
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle}>TRKN</Text>
@@ -147,13 +148,11 @@ const styles = StyleSheet.create({
   iconBox: {
     width: 40,
     height: 40,
-    borderRadius: theme.rounded.xl,
-    backgroundColor: theme.colors.surfaceContainerLow,
-    borderWidth: 1,
-    borderColor: theme.colors.surfaceBorder,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8
+    marginRight: 8,
+    overflow: 'hidden'
   },
   headerTextContainer: {
     justifyContent: 'center'

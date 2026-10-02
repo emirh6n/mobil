@@ -101,7 +101,7 @@ export const StatisticsScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <Header subtitle="İstatistik" />
+      <Header subtitle="İstatistik" hideBackButton />
 
       <ScrollView contentContainerStyle={styles.scrollContent}>
         {/* Date Row */}
