@@ -59,13 +59,13 @@ export const FocusScreen = () => {
 
   const liveTotalFocus = totalFocusSeconds + swSeconds + (cdIntended > 0 ? cdIntended - cdSeconds : 0);
 
-  let ecoImageSource = require('../../assets/focus/focus_0_empty_1790938213723.jpg');
+  let ecoImageSource = require('../../assets/focus/user_focus_0_empty.jpg');
   if (liveTotalFocus >= 18000) ecoImageSource = require('../../assets/focus/user_focus_5_hours.jpg'); // 5 saat
   else if (liveTotalFocus >= 14400) ecoImageSource = require('../../assets/focus/user_focus_4_hours.jpg'); // 4 saat
   else if (liveTotalFocus >= 10800) ecoImageSource = require('../../assets/focus/user_focus_3_hours.jpg'); // 3 saat
   else if (liveTotalFocus >= 7200) ecoImageSource = require('../../assets/focus/user_focus_2_hours.jpg'); // 2 saat
-  else if (liveTotalFocus >= 3600) ecoImageSource = require('../../assets/focus/user_focus_1_hour.jpg'); // 1 saat
-  else if (liveTotalFocus >= 1800) ecoImageSource = require('../../assets/focus/user_focus_30_min.jpg'); // 30 dk
+  else if (liveTotalFocus >= 3600) ecoImageSource = require('../../assets/focus/user_focus_30_min.jpg'); // 1 saat (Swapped)
+  else if (liveTotalFocus >= 1800) ecoImageSource = require('../../assets/focus/user_focus_1_hour.jpg'); // 30 dk (Swapped)
   else if (liveTotalFocus >= 60) ecoImageSource = require('../../assets/focus/user_focus_1_min.jpg'); // 1 dk
 
   // --- Stopwatch Logic ---
