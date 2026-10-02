@@ -821,3 +821,8 @@
 {"_e":"metro:client_log","_t":1790954073746,"level":"log","data":["Database schema and tables initialized successfully."]}
 {"_e":"metro:client_log","_t":1790954617947,"level":"log","data":["Database schema and tables initialized successfully."]}
 {"_e":"metro:client_log","_t":1790955159086,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790955493034,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790955887555,"id":"s","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790955887555,"id":"s","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790955887597,"id":"s","total":1,"ms":42.0179}
+{"_e":"metro:client_log","_t":1790955893591,"level":"log","data":["Database schema and tables initialized successfully."]}

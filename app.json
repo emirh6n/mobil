@@ -1,16 +1,38 @@
 {
-  "name": "TRKN",
-  "displayName": "TRKN",
+  "name": "TRKN Mobil",
+  "displayName": "TRKN Mobil",
   "expo": {
-    "name": "TRKN",
-    "slug": "mobil",
+    "name": "TRKN Mobil",
+    "slug": "trkn-mobil",
     "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.jpg",
+    "splash": {
+      "image": "./assets/logo.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#000000"
+    },
+    "android": {
+      "package": "com.trkn.mobil",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.jpg",
+        "backgroundColor": "#000000"
+      },
+      "permissions": [
+        "ACTIVITY_RECOGNITION"
+      ]
+    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "plugins": [
       "@react-native-community/datetimepicker",
       "expo-sharing"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "b19047a5-b937-4d41-8707-8611c92830a4"
+      }
+    }
   }
 }
