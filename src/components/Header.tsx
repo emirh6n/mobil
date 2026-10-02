@@ -30,17 +30,31 @@ export const Header: React.FC<HeaderProps> = ({ subtitle, hideBackButton }) => {
   const firstDay = new Date(year, month, 1).getDay();
   const startOffset = firstDay === 0 ? 6 : firstDay - 1;
 
+  const today = new Date();
+  const todayYear = today.getFullYear();
+  const todayMonth = today.getMonth();
+  const todayAbsMonth = todayYear * 12 + todayMonth;
+  const currentAbsMonth = year * 12 + month;
+
+  const canGoPrev = currentAbsMonth > todayAbsMonth - 1;
+  const canGoNext = currentAbsMonth < todayAbsMonth + 1;
+
   const handlePrevMonth = () => {
-    setCalDate(new Date(year, month - 1, 1));
+    if (canGoPrev) setCalDate(new Date(year, month - 1, 1));
   };
   const handleNextMonth = () => {
-    setCalDate(new Date(year, month + 1, 1));
+    if (canGoNext) setCalDate(new Date(year, month + 1, 1));
   };
 
   const handleSelectDay = (d: number) => {
     const dStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
     setSelectedDate(dStr);
     setModalVisible(false);
+  };
+
+  const handleLongPressDate = () => {
+    const dStr = `${todayYear}-${String(todayMonth + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    setSelectedDate(dStr);
   };
 
   const renderCalendar = () => {
@@ -82,10 +96,14 @@ export const Header: React.FC<HeaderProps> = ({ subtitle, hideBackButton }) => {
           </View>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.dateBtn} onPress={() => {
-            setCalDate(new Date(selectedDate));
-            setModalVisible(true);
-          }}>
+          <TouchableOpacity 
+            style={styles.dateBtn} 
+            onPress={() => {
+              setCalDate(new Date(selectedDate));
+              setModalVisible(true);
+            }}
+            onLongPress={handleLongPressDate}
+          >
             <Icon name="calendar-today" size={18} color={theme.colors.primary} />
             <Text style={styles.dateBtnText}>{dateText}</Text>
           </TouchableOpacity>
@@ -111,9 +129,13 @@ export const Header: React.FC<HeaderProps> = ({ subtitle, hideBackButton }) => {
             </View>
             
             <View style={styles.monthSelector}>
-              <TouchableOpacity onPress={handlePrevMonth} style={styles.navBtn}><Icon name="chevron-left" size={24} color={theme.colors.onSurface} /></TouchableOpacity>
+              <TouchableOpacity onPress={handlePrevMonth} style={[styles.navBtn, !canGoPrev && { opacity: 0.3 }]} disabled={!canGoPrev}>
+                <Icon name="chevron-left" size={24} color={theme.colors.onSurface} />
+              </TouchableOpacity>
               <Text style={styles.monthText}>{monthNames[month]} {year}</Text>
-              <TouchableOpacity onPress={handleNextMonth} style={styles.navBtn}><Icon name="chevron-right" size={24} color={theme.colors.onSurface} /></TouchableOpacity>
+              <TouchableOpacity onPress={handleNextMonth} style={[styles.navBtn, !canGoNext && { opacity: 0.3 }]} disabled={!canGoNext}>
+                <Icon name="chevron-right" size={24} color={theme.colors.onSurface} />
+              </TouchableOpacity>
             </View>
 
             <View style={styles.calendarGrid}>

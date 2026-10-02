@@ -104,6 +104,24 @@ export const SportsScreen = () => {
     return total;
   }, [workouts]);
 
+  const { totalSets, muscleDistribution } = React.useMemo(() => {
+    let tSets = 0;
+    const distribution: Record<string, number> = {};
+
+    workouts.forEach(workout => {
+      const mg = workout.muscle_group || 'Diğer';
+      if (!distribution[mg]) distribution[mg] = 0;
+      
+      workout.exercises?.forEach(ex => {
+        const s = ex.sets || 0;
+        distribution[mg] += s;
+        tSets += s;
+      });
+    });
+
+    return { totalSets: tSets, muscleDistribution: distribution };
+  }, [workouts]);
+
   const handleSubmit = () => {
     if (!muscleGroup.trim() || !exerciseName.trim() || !sets.trim() || !reps.trim()) return;
     addWorkoutExercise(muscleGroup, exerciseName, parseInt(sets, 10) || 0, reps, weight);
@@ -282,6 +300,38 @@ export const SportsScreen = () => {
             ))
           )}
         </View>
+
+        {/* Regional Set Distribution Card */}
+        {totalSets > 0 && (
+          <View style={styles.card}>
+            <View style={styles.cardHeader}>
+              <View style={styles.cardHeaderLeft}>
+                <Icon name="pie-chart" size={20} color={theme.colors.primary} />
+                <Text style={styles.cardTitle}>Bölgesel Set Dağılımı</Text>
+              </View>
+              <View style={[styles.badge, { backgroundColor: theme.colors.surfaceContainerHigh }]}>
+                <Text style={[styles.badgeText, { color: theme.colors.onSurfaceVariant }]}>Toplam {totalSets} Set</Text>
+              </View>
+            </View>
+            
+            <View style={{ gap: 12, marginTop: 8 }}>
+              {Object.entries(muscleDistribution).sort((a, b) => b[1] - a[1]).map(([mg, count]) => {
+                const percent = Math.round((count / totalSets) * 100);
+                return (
+                  <View key={mg}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 }}>
+                      <Text style={{ ...theme.typography.labelMd, color: theme.colors.onSurface }}>{mg}</Text>
+                      <Text style={{ ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant }}>{count} set (%{percent})</Text>
+                    </View>
+                    <View style={{ height: 8, backgroundColor: theme.colors.surfaceContainerHigh, borderRadius: 4, overflow: 'hidden' }}>
+                      <View style={{ width: `${percent}%`, height: '100%', backgroundColor: theme.colors.primary, borderRadius: 4 }} />
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+        )}
 
         {/* Pedometer Card */}
         <View style={styles.card}>

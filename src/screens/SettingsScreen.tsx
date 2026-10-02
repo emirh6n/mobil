@@ -13,14 +13,10 @@ export const SettingsScreen = () => {
   const [userName, setUserName] = useState(settings.userName);
   
   // Accordion states
-  const [goalsExpanded, setGoalsExpanded] = useState(false);
+
   const [personalExpanded, setPersonalExpanded] = useState(false);
   
-  // Goals form
-  const [calories, setCalories] = useState(settings.target_calories);
-  const [protein, setProtein] = useState(settings.target_protein);
-  const [water, setWater] = useState(settings.target_water);
-  const [steps, setSteps] = useState(settings.target_steps);
+
 
   // Personal form
   const [age, setAge] = useState(settings.age);
@@ -31,16 +27,20 @@ export const SettingsScreen = () => {
   const [neck, setNeck] = useState(settings.neck);
   const [hip, setHip] = useState(settings.hip);
 
+  const ageRef = React.useRef<TextInput>(null);
+  const heightRef = React.useRef<TextInput>(null);
+  const weightRef = React.useRef<TextInput>(null);
+  const waistRef = React.useRef<TextInput>(null);
+  const neckRef = React.useRef<TextInput>(null);
+  const hipRef = React.useRef<TextInput>(null);
+
   const [restoreModalVisible, setRestoreModalVisible] = useState(false);
 
   // Sync state when loaded
   useEffect(() => {
     if (!loading) {
       setUserName(settings.userName);
-      setCalories(settings.target_calories);
-      setProtein(settings.target_protein);
-      setWater(settings.target_water);
-      setSteps(settings.target_steps);
+
       setAge(settings.age);
       setGender(settings.gender as 'male' | 'female');
       setHeight(settings.height);
@@ -52,14 +52,59 @@ export const SettingsScreen = () => {
   }, [loading, settings]);
 
   const handleSaveGeneral = () => updateSetting('userName', userName);
-  const handleSaveGoals = () => {
-    updateMultipleSettings({ target_calories: calories, target_protein: protein, target_water: water, target_steps: steps });
-    setGoalsExpanded(false);
-  };
+
   const handleSavePersonal = () => {
-    updateMultipleSettings({ age, gender, height, weight, waist, neck, hip });
+    updateMultipleSettings({ 
+      age: String(age), 
+      gender, 
+      height: String(height), 
+      weight: String(weight), 
+      waist: String(waist), 
+      neck: String(neck), 
+      hip: String(hip) 
+    });
     setPersonalExpanded(false);
   };
+
+  const metrics = React.useMemo(() => {
+    const w = parseFloat(String(weight)) || 0;
+    const h = parseFloat(String(height)) || 0;
+    const a = parseFloat(String(age)) || 0;
+    const wa = parseFloat(String(waist)) || 0;
+    const n = parseFloat(String(neck)) || 0;
+    const hi = parseFloat(String(hip)) || 0;
+
+    let bmi = 0;
+    if (h > 0 && w > 0) {
+      bmi = w / Math.pow(h / 100, 2);
+    }
+
+    let bmr = 0;
+    if (w > 0 && h > 0 && a > 0) {
+      if (gender === 'male') {
+        bmr = (10 * w) + (6.25 * h) - (5 * a) + 5;
+      } else {
+        bmr = (10 * w) + (6.25 * h) - (5 * a) - 161;
+      }
+    }
+
+    let bodyFat = 0;
+    if (gender === 'male') {
+      if (wa > n && h > 0) {
+        bodyFat = 495 / (1.0324 - 0.19077 * Math.log10(wa - n) + 0.15456 * Math.log10(h)) - 450;
+      }
+    } else {
+      if (wa + hi > n && h > 0) {
+        bodyFat = 495 / (1.29579 - 0.35004 * Math.log10(wa + hi - n) + 0.22100 * Math.log10(h)) - 450;
+      }
+    }
+
+    return {
+      bmi: bmi > 0 ? bmi.toFixed(1) : '-',
+      bmr: bmr > 0 ? Math.round(bmr).toString() : '-',
+      bodyFat: bodyFat > 0 && bodyFat < 100 ? bodyFat.toFixed(1) : '-'
+    };
+  }, [weight, height, age, waist, neck, hip, gender]);
 
   if (loading) {
     return (
@@ -97,7 +142,7 @@ export const SettingsScreen = () => {
               <View style={styles.cardIconBox}><Icon name="badge" size={22} color={theme.colors.primary} /></View>
               <View style={styles.inputContainer}>
                 <Text style={styles.inputLabel}>Kullanıcı Adı</Text>
-                <TextInput style={styles.inputField} value={userName} onChangeText={setUserName} />
+                <TextInput style={styles.inputField} value={String(userName)} onChangeText={setUserName} />
               </View>
               <TouchableOpacity style={styles.saveBtnSmall} onPress={handleSaveGeneral}>
                 <Icon name="check" size={18} color={theme.colors.primary} />
@@ -107,63 +152,6 @@ export const SettingsScreen = () => {
           </View>
         </View>
 
-        {/* GÜNLÜK HEDEFLER */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>GÜNLÜK HEDEFLER</Text>
-          <View style={styles.card}>
-            <TouchableOpacity style={styles.accordionHeader} onPress={() => setGoalsExpanded(!goalsExpanded)}>
-              <View style={styles.accordionHeaderLeft}>
-                <View style={styles.cardIconBox}><Icon name="flag-circle" size={22} color={theme.colors.primary} /></View>
-                <View>
-                  <Text style={styles.accordionTitle}>Hedef Değerleri</Text>
-                  <View style={styles.badgeRow}>
-                    <Text style={[styles.badge, { color: theme.colors.primary }]}>{settings.target_calories} kcal</Text>
-                    <Text style={[styles.badge, { color: theme.colors.secondary }]}>{settings.target_protein} g</Text>
-                    <Text style={[styles.badge, { color: theme.colors.onSurfaceVariant }]}>{settings.target_water} L</Text>
-                  </View>
-                </View>
-              </View>
-              <Icon name={goalsExpanded ? "expand-less" : "expand-more"} size={24} color={theme.colors.onSurfaceVariant} />
-            </TouchableOpacity>
-
-            {goalsExpanded && (
-              <View style={styles.accordionContent}>
-                <View style={styles.formRow}>
-                  <View style={styles.formRowLeft}>
-                    <Icon name="local-fire-department" size={20} color={theme.colors.primary} />
-                    <View><Text style={styles.formRowTitle}>Enerji / Kalori</Text><Text style={styles.formRowSub}>Günlük aktif kalori hedefi</Text></View>
-                  </View>
-                  <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={calories} onChangeText={setCalories} /><Text style={styles.inputUnit}>kcal</Text></View>
-                </View>
-                <View style={styles.formRow}>
-                  <View style={styles.formRowLeft}>
-                    <Icon name="egg-alt" size={20} color={theme.colors.secondary} />
-                    <View><Text style={styles.formRowTitle}>Protein</Text><Text style={styles.formRowSub}>Kas koruma & onarım</Text></View>
-                  </View>
-                  <View style={styles.inputWrapper}><TextInput style={[styles.miniInput, { color: theme.colors.secondary }]} keyboardType="numeric" value={protein} onChangeText={setProtein} /><Text style={styles.inputUnit}>g</Text></View>
-                </View>
-                <View style={styles.formRow}>
-                  <View style={styles.formRowLeft}>
-                    <Icon name="water-drop" size={20} color="#3b82f6" />
-                    <View><Text style={styles.formRowTitle}>Su Tüketimi</Text><Text style={styles.formRowSub}>Optimum hidrasyon</Text></View>
-                  </View>
-                  <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={water} onChangeText={setWater} /><Text style={styles.inputUnit}>L</Text></View>
-                </View>
-                <View style={styles.formRow}>
-                  <View style={styles.formRowLeft}>
-                    <Icon name="directions-walk" size={20} color={theme.colors.primary} />
-                    <View><Text style={styles.formRowTitle}>Günlük Adım</Text><Text style={styles.formRowSub}>Genel hareketlilik</Text></View>
-                  </View>
-                  <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={steps} onChangeText={setSteps} /><Text style={styles.inputUnit}>adım</Text></View>
-                </View>
-                <View style={styles.actionRow}>
-                  <TouchableOpacity style={styles.btnSecondary} onPress={() => setGoalsExpanded(false)}><Text style={styles.btnSecondaryText}>Vazgeç</Text></TouchableOpacity>
-                  <TouchableOpacity style={styles.btnPrimary} onPress={handleSaveGoals}><Icon name="check-circle" size={18} color={theme.colors.onPrimaryContainer} /><Text style={styles.btnPrimaryText}>Kaydet</Text></TouchableOpacity>
-                </View>
-              </View>
-            )}
-          </View>
-        </View>
 
         {/* KİŞİSEL BİLGİLER */}
         <View style={styles.section}>
@@ -180,10 +168,10 @@ export const SettingsScreen = () => {
             {personalExpanded && (
               <View style={styles.accordionContent}>
                 <View style={styles.grid2}>
-                  <View style={styles.gridItem}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => ageRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Yaş</Text>
-                    <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={age} onChangeText={setAge} /><Text style={styles.inputUnit}>yıl</Text></View>
-                  </View>
+                    <View style={styles.inputWrapper}><TextInput ref={ageRef} style={styles.miniInput} keyboardType="numeric" value={String(age)} onChangeText={setAge} /><Text style={styles.inputUnit}>yıl</Text></View>
+                  </TouchableOpacity>
                   <View style={styles.gridItem}>
                     <Text style={styles.gridItemTitle}>Biyolojik Cinsiyet</Text>
                     <View style={styles.toggleRow}>
@@ -193,33 +181,30 @@ export const SettingsScreen = () => {
                   </View>
                 </View>
                 <View style={styles.grid2}>
-                  <View style={styles.gridItem}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => heightRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Boy (cm)</Text>
-                    <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={height} onChangeText={setHeight} /><Text style={styles.inputUnit}>cm</Text></View>
-                  </View>
-                  <View style={styles.gridItem}>
+                    <View style={styles.inputWrapper}><TextInput ref={heightRef} style={styles.miniInput} keyboardType="numeric" value={String(height)} onChangeText={setHeight} /><Text style={styles.inputUnit}>cm</Text></View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => weightRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Kilo (kg)</Text>
-                    <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={weight} onChangeText={setWeight} /><Text style={styles.inputUnit}>kg</Text></View>
-                  </View>
+                    <View style={styles.inputWrapper}><TextInput ref={weightRef} style={styles.miniInput} keyboardType="numeric" value={String(weight)} onChangeText={setWeight} /><Text style={styles.inputUnit}>kg</Text></View>
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.grid2}>
-                  <View style={styles.gridItem}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => waistRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Bel Çevresi</Text>
-                    <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={waist} onChangeText={setWaist} /><Text style={styles.inputUnit}>cm</Text></View>
-                  </View>
-                  <View style={styles.gridItem}>
+                    <View style={styles.inputWrapper}><TextInput ref={waistRef} style={styles.miniInput} keyboardType="numeric" value={String(waist)} onChangeText={setWaist} /><Text style={styles.inputUnit}>cm</Text></View>
+                  </TouchableOpacity>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => neckRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Boyun Çevresi</Text>
-                    <View style={styles.inputWrapper}><TextInput style={styles.miniInput} keyboardType="numeric" value={neck} onChangeText={setNeck} /><Text style={styles.inputUnit}>cm</Text></View>
-                  </View>
+                    <View style={styles.inputWrapper}><TextInput ref={neckRef} style={styles.miniInput} keyboardType="numeric" value={String(neck)} onChangeText={setNeck} /><Text style={styles.inputUnit}>cm</Text></View>
+                  </TouchableOpacity>
                 </View>
                 {gender === 'female' && (
-                  <View style={[styles.gridItem, { borderColor: theme.colors.secondary, borderWidth: 1, backgroundColor: 'rgba(66, 232, 178, 0.1)' }]}>
-                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <Text style={[styles.gridItemTitle, { color: theme.colors.onSurface }]}>Kalça Çevresi (cm)</Text>
-                        <Text style={{ fontSize: 10, color: theme.colors.secondary, fontWeight: 'bold' }}>KADINLARDA GEREKLİ</Text>
-                     </View>
-                     <View style={styles.inputWrapper}><TextInput style={[styles.miniInput, { color: theme.colors.secondary }]} keyboardType="numeric" value={hip} onChangeText={setHip} /><Text style={styles.inputUnit}>cm</Text></View>
-                  </View>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => hipRef.current?.focus()}>
+                    <Text style={styles.gridItemTitle}>Kalça Çevresi (cm)</Text>
+                    <View style={styles.inputWrapper}><TextInput ref={hipRef} style={styles.miniInput} keyboardType="numeric" value={String(hip)} onChangeText={setHip} /><Text style={styles.inputUnit}>cm</Text></View>
+                  </TouchableOpacity>
                 )}
                 <View style={styles.actionRow}>
                   <TouchableOpacity style={styles.btnSecondary} onPress={() => setPersonalExpanded(false)}><Text style={styles.btnSecondaryText}>Vazgeç</Text></TouchableOpacity>
@@ -227,6 +212,30 @@ export const SettingsScreen = () => {
                 </View>
               </View>
             )}
+          </View>
+        </View>
+
+        {/* VÜCUT ANALİZİ */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>VÜCUT ANALİZİ</Text>
+          <View style={styles.card}>
+            <View style={styles.analysisGrid}>
+              <View style={styles.analysisBox}>
+                <Icon name="monitor-weight" size={24} color={theme.colors.primary} />
+                <Text style={styles.analysisValue}>{metrics.bmi}</Text>
+                <Text style={styles.analysisLabel}>Vücut Kitle İndeksi</Text>
+              </View>
+              <View style={styles.analysisBox}>
+                <Icon name="local-fire-department" size={24} color={theme.colors.secondary} />
+                <Text style={styles.analysisValue}>{metrics.bmr} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>kcal</Text></Text>
+                <Text style={styles.analysisLabel}>Bazal Metabolizma</Text>
+              </View>
+              <View style={styles.analysisBox}>
+                <Icon name="water-drop" size={24} color="#3b82f6" />
+                <Text style={styles.analysisValue}>{metrics.bodyFat !== '-' ? `%${metrics.bodyFat}` : '-'}</Text>
+                <Text style={styles.analysisLabel}>Vücut Yağ Oranı</Text>
+              </View>
+            </View>
           </View>
         </View>
 
@@ -376,4 +385,9 @@ const styles = StyleSheet.create({
   modalActions: { flexDirection: 'row', gap: 12, marginTop: 16 },
   btnDanger: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, height: 44, borderRadius: 12, backgroundColor: theme.colors.errorContainer },
   btnDangerText: { ...theme.typography.labelMd, color: theme.colors.onErrorContainer, fontWeight: 'bold' },
+  
+  analysisGrid: { flexDirection: 'row', gap: 12 },
+  analysisBox: { flex: 1, backgroundColor: 'rgba(41, 42, 45, 0.6)', padding: 12, borderRadius: 8, alignItems: 'center', gap: 8, borderWidth: 1, borderColor: 'rgba(64, 74, 55, 0.3)' },
+  analysisValue: { ...theme.typography.titleLg, color: theme.colors.onSurface, fontWeight: 'bold' },
+  analysisLabel: { ...theme.typography.labelSm, fontSize: 10, color: theme.colors.onSurfaceVariant, textAlign: 'center' },
 });
