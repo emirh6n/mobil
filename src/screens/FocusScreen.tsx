@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image, AppState } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header } from '../components/Header';
 import { theme } from '../theme/theme';
@@ -22,6 +23,7 @@ export const FocusScreen = () => {
   const { totalFocusSeconds, addFocusTime } = useFocus(selectedDate);
 
   const [activeTab, setActiveTab] = useState<'stopwatch' | 'countdown'>('stopwatch');
+  const [isReady, setIsReady] = useState(false);
 
   // Stopwatch state
   const [swIsRunning, setSwIsRunning] = useState(false);
@@ -34,27 +36,62 @@ export const FocusScreen = () => {
   const [cdIsRunning, setCdIsRunning] = useState(false);
   const [cdSeconds, setCdSeconds] = useState(0);
   const [cdIntended, setCdIntended] = useState(0);
-  const cdInterval = useRef<NodeJS.Timeout | null>(null);
+
+  const swStartTime = useRef(0);
+  const swAccumulated = useRef(0);
+  
+  const cdStartTime = useRef(0);
+  const cdStartRemaining = useRef(0);
+  
+  const currentState = useRef({
+    activeTab,
+    swIsRunning, swAccumulated: swAccumulated.current, swStartTime: swStartTime.current, swSeconds,
+    cdIsRunning, cdIntended, cdStartRemaining: cdStartRemaining.current, cdStartTime: cdStartTime.current, cdSeconds
+  });
+
+  useEffect(() => {
+    currentState.current = {
+      activeTab,
+      swIsRunning, swAccumulated: swAccumulated.current, swStartTime: swStartTime.current, swSeconds,
+      cdIsRunning, cdIntended, cdStartRemaining: cdStartRemaining.current, cdStartTime: cdStartTime.current, cdSeconds
+    };
+  }, [activeTab, swIsRunning, swSeconds, cdIsRunning, cdIntended, cdSeconds]);
 
   const liveTotalFocus = totalFocusSeconds + swSeconds + (cdIntended > 0 ? cdIntended - cdSeconds : 0);
 
+  let ecoImageSource = require('../../assets/focus/focus_0_empty_1790938213723.jpg');
+  if (liveTotalFocus >= 18000) ecoImageSource = require('../../assets/focus/user_focus_5_hours.jpg'); // 5 saat
+  else if (liveTotalFocus >= 14400) ecoImageSource = require('../../assets/focus/user_focus_4_hours.jpg'); // 4 saat
+  else if (liveTotalFocus >= 10800) ecoImageSource = require('../../assets/focus/user_focus_3_hours.jpg'); // 3 saat
+  else if (liveTotalFocus >= 7200) ecoImageSource = require('../../assets/focus/user_focus_2_hours.jpg'); // 2 saat
+  else if (liveTotalFocus >= 3600) ecoImageSource = require('../../assets/focus/user_focus_1_hour.jpg'); // 1 saat
+  else if (liveTotalFocus >= 1800) ecoImageSource = require('../../assets/focus/user_focus_30_min.jpg'); // 30 dk
+  else if (liveTotalFocus >= 60) ecoImageSource = require('../../assets/focus/user_focus_1_min.jpg'); // 1 dk
+
   // --- Stopwatch Logic ---
   const startStopwatch = () => {
+    swStartTime.current = Date.now();
+    swAccumulated.current = swSeconds;
     setSwIsRunning(true);
-    swInterval.current = setInterval(() => {
-      setSwSeconds(prev => prev + 1);
-    }, 1000);
   };
 
   const pauseStopwatch = () => {
-    setSwIsRunning(false);
-    if (swInterval.current) clearInterval(swInterval.current);
+    if (swIsRunning) {
+      const elapsed = Math.floor((Date.now() - swStartTime.current) / 1000);
+      swAccumulated.current += elapsed;
+      setSwSeconds(swAccumulated.current);
+      setSwIsRunning(false);
+    }
   };
 
   const resetStopwatch = () => {
-    pauseStopwatch();
-    if (swSeconds > 0) addFocusTime(swSeconds);
+    const finalSeconds = swIsRunning ? swAccumulated.current + Math.floor((Date.now() - swStartTime.current) / 1000) : swSeconds;
+    if (finalSeconds > 0) {
+      addFocusTime(finalSeconds);
+    }
+    swAccumulated.current = 0;
     setSwSeconds(0);
+    setSwIsRunning(false);
   };
 
   // --- Countdown Logic ---
@@ -66,46 +103,170 @@ export const FocusScreen = () => {
       secs = (h * 3600) + (m * 60);
       if (secs <= 0) return;
       setCdIntended(secs);
-      setCdSeconds(secs);
     }
     
+    cdStartTime.current = Date.now();
+    cdStartRemaining.current = secs;
+    setCdSeconds(secs);
     setCdIsRunning(true);
-    cdInterval.current = setInterval(() => {
-      setCdSeconds(prev => {
-        if (prev <= 1) {
-          if (cdInterval.current) clearInterval(cdInterval.current);
-          setCdIsRunning(false);
-          addFocusTime(secs); // add the initial target since it completed
-          setCdIntended(0);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
   };
 
   const pauseCd = () => {
-    setCdIsRunning(false);
-    if (cdInterval.current) clearInterval(cdInterval.current);
+    if (cdIsRunning) {
+      const elapsed = Math.floor((Date.now() - cdStartTime.current) / 1000);
+      const remaining = Math.max(0, cdStartRemaining.current - elapsed);
+      setCdSeconds(remaining);
+      setCdIsRunning(false);
+    }
   };
 
   const resetCd = () => {
-    pauseCd();
-    const focused = cdIntended - cdSeconds;
+    const finalSeconds = cdIsRunning ? Math.max(0, cdStartRemaining.current - Math.floor((Date.now() - cdStartTime.current) / 1000)) : cdSeconds;
+    const focused = cdIntended - finalSeconds;
     if (focused > 0) {
       addFocusTime(focused);
     }
+    cdStartRemaining.current = 0;
     setCdSeconds(0);
     setCdIntended(0);
+    setCdIsRunning(false);
   };
 
-  // Cleanup intervals on unmount
+  // Load state on mount
   useEffect(() => {
-    return () => {
-      if (swInterval.current) clearInterval(swInterval.current);
-      if (cdInterval.current) clearInterval(cdInterval.current);
+    const loadState = async () => {
+      try {
+        const data = await AsyncStorage.getItem('@focus_timer_state');
+        if (data) {
+          const saved = JSON.parse(data);
+          
+          if (saved.activeTab) setActiveTab(saved.activeTab);
+
+          const now = Date.now();
+
+          // Stopwatch
+          if (saved.stopwatch) {
+            swAccumulated.current = saved.stopwatch.accumulated;
+            if (saved.stopwatch.isRunning) {
+              swStartTime.current = saved.stopwatch.startTimestamp;
+              const elapsed = Math.floor((now - swStartTime.current) / 1000);
+              setSwSeconds(swAccumulated.current + elapsed);
+              setSwIsRunning(true);
+            } else {
+              setSwSeconds(swAccumulated.current);
+            }
+          }
+
+          // Countdown
+          if (saved.countdown) {
+            setCdIntended(saved.countdown.intended);
+            if (saved.countdown.isRunning) {
+              cdStartTime.current = saved.countdown.startTimestamp;
+              cdStartRemaining.current = saved.countdown.startRemaining;
+              
+              const elapsed = Math.floor((now - cdStartTime.current) / 1000);
+              const remaining = cdStartRemaining.current - elapsed;
+              
+              if (remaining <= 0) {
+                // Finished while away
+                addFocusTime(saved.countdown.intended);
+                setCdSeconds(0);
+                setCdIntended(0);
+                setCdIsRunning(false);
+              } else {
+                setCdSeconds(remaining);
+                setCdIsRunning(true);
+              }
+            } else {
+              setCdSeconds(saved.countdown.seconds);
+            }
+          }
+        }
+      } catch (e) {
+        console.error('Error loading timer state', e);
+      }
+      setIsReady(true);
     };
+
+    loadState();
   }, []);
+
+  // Save state on unmount or background
+  useEffect(() => {
+    const saveTimer = async () => {
+      if (!isReady) return;
+      const state = currentState.current;
+      const dataToSave = {
+        activeTab: state.activeTab,
+        stopwatch: {
+          isRunning: state.swIsRunning,
+          startTimestamp: state.swStartTime,
+          accumulated: state.swAccumulated,
+        },
+        countdown: {
+          isRunning: state.cdIsRunning,
+          startTimestamp: state.cdStartTime,
+          intended: state.cdIntended,
+          startRemaining: state.cdStartRemaining,
+          seconds: state.cdSeconds,
+        }
+      };
+      await AsyncStorage.setItem('@focus_timer_state', JSON.stringify(dataToSave));
+    };
+
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (nextAppState.match(/inactive|background/)) {
+        saveTimer();
+      }
+    });
+
+    return () => {
+      saveTimer();
+      subscription.remove();
+    };
+  }, [isReady]);
+
+  // Tick interval
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    
+    if (isReady && (swIsRunning || cdIsRunning)) {
+      interval = setInterval(() => {
+        const now = Date.now();
+        
+        if (swIsRunning) {
+          const elapsed = Math.floor((now - swStartTime.current) / 1000);
+          setSwSeconds(swAccumulated.current + elapsed);
+        }
+        
+        if (cdIsRunning) {
+          const elapsed = Math.floor((now - cdStartTime.current) / 1000);
+          const remaining = cdStartRemaining.current - elapsed;
+          
+          if (remaining <= 0) {
+            setCdIsRunning(false);
+            setCdSeconds(0);
+            addFocusTime(currentState.current.cdIntended); 
+            setCdIntended(0);
+          } else {
+            setCdSeconds(remaining);
+          }
+        }
+      }, 1000);
+    }
+    
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [isReady, swIsRunning, cdIsRunning]);
+
+  if (!isReady) {
+    return (
+      <SafeAreaView style={styles.safeArea} edges={['top']}>
+        <Header subtitle="Odaklanma" />
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -258,14 +419,7 @@ export const FocusScreen = () => {
             <Text style={styles.ecoTitle}>Canlı Odak Ekosistemi</Text>
           </View>
           <View style={styles.ecoContent}>
-            <View style={styles.ecoImagePlaceholder}>
-              <Icon name="image" size={48} color={theme.colors.surfaceBorder} />
-              <Text style={styles.ecoPlaceholderText}>
-                {totalFocusSeconds === 0 
-                  ? "Henüz odaklanmadınız. Ekosistem uyuyor." 
-                  : `Ekosistem seviyesi (Süre: ${formatTime(totalFocusSeconds)})`}
-              </Text>
-            </View>
+            <Image source={ecoImageSource} style={{ width: '100%', height: '100%', resizeMode: 'cover' }} />
           </View>
         </View>
 

@@ -509,3 +509,36 @@
 {"_e":"metro:bundling:progress","_t":1790929980185,"id":"3","progress":0,"total":1,"current":0}
 {"_e":"metro:bundling:done","_t":1790929980211,"id":"3","total":1,"ms":26.4924}
 {"_e":"metro:client_log","_t":1790929983435,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"root:init","_t":1790930349271,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790930349271,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790930349273,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790930349412,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790930349599,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790930349730,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790930352973,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790930358425,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790930358425,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790930358427,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790930358527,"id":"1","progress":0.25289852651274686,"total":346,"current":174}
+{"_e":"metro:bundling:progress","_t":1790930358627,"id":"1","progress":0.518888250502729,"total":708,"current":510}
+{"_e":"metro:bundling:progress","_t":1790930358727,"id":"1","progress":0.819261561125642,"total":1033,"current":935}
+{"_e":"metro:bundling:progress","_t":1790930358828,"id":"1","progress":0.9982676486578219,"total":1154,"current":1153}
+{"_e":"metro:bundling:progress","_t":1790930358948,"id":"1","progress":0.999,"total":1154,"current":1154}
+{"_e":"metro:bundling:done","_t":1790930359005,"id":"1","total":1154,"ms":580.2297}
+{"_e":"metro:client_log","_t":1790930362931,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"root:init","_t":1790937347607,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790937347608,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790937347609,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790937347762,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790937347972,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790937348105,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790937351399,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790937393664,"id":"1","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790937393665,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790937393668,"id":"1","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790937393768,"id":"1","progress":0.15811581623163248,"total":254,"current":101}
+{"_e":"metro:bundling:progress","_t":1790937393868,"id":"1","progress":0.31188228880178115,"total":573,"current":320}
+{"_e":"metro:bundling:progress","_t":1790937393968,"id":"1","progress":0.6740675452959908,"total":866,"current":711}
+{"_e":"metro:bundling:progress","_t":1790937394068,"id":"1","progress":0.8623632365966096,"total":1121,"current":1041}
+{"_e":"metro:bundling:done","_t":1790937394151,"id":"1","total":1121,"ms":486.0429}
+{"_e":"metro:client_log","_t":1790937398711,"level":"log","data":["Database schema and tables initialized successfully."]}
