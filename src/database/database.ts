@@ -200,6 +200,31 @@ export const initDatabase = async () => {
       );`
     );
 
+    // Focus Sessions / Odaklanma
+    await db.execute(
+      `CREATE TABLE IF NOT EXISTS FocusSessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL, -- YYYY-MM-DD
+        duration_minutes INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );`
+    );
+
+    // Body Measurements / Vücut Analiz Geçmişi
+    await db.execute(
+      `CREATE TABLE IF NOT EXISTS BodyMeasurements (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        date TEXT NOT NULL, -- YYYY-MM-DD
+        weight REAL,
+        height REAL,
+        waist REAL,
+        neck REAL,
+        hip REAL,
+        body_fat REAL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );`
+    );
+
     console.log('Database schema and tables initialized successfully.');
   } catch (error) {
     console.error('Database initialization failed:', error);

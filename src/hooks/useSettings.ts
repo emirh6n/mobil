@@ -76,13 +76,25 @@ export const useSettings = () => {
   const updateMultipleSettings = async (updates: Partial<AppSettings>) => {
     try {
       const keys = Object.keys(updates);
+      let hasBodyParams = false;
       for (const key of keys) {
+        if (['weight', 'height', 'waist', 'neck', 'hip'].includes(key)) hasBodyParams = true;
         await db.execute(
           'INSERT INTO Settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP',
           [key, (updates as any)[key]]
         );
       }
-      setSettings(prev => ({ ...prev, ...updates }));
+      setSettings(prev => {
+        const next = { ...prev, ...updates };
+        if (hasBodyParams) {
+           const today = new Date().toISOString().split('T')[0];
+           db.execute(`
+             INSERT INTO BodyMeasurements (date, weight, height, waist, neck, hip)
+             VALUES (?, ?, ?, ?, ?, ?)
+           `, [today, next.weight, next.height, next.waist, next.neck, next.hip]);
+        }
+        return next;
+      });
     } catch (error) {
       console.error('Error updating multiple settings:', error);
     }

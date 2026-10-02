@@ -820,3 +820,4 @@
 {"_e":"metro:client_log","_t":1790954054247,"level":"error","data":["[ReferenceError: Property 'renderVerimlilik' doesn't exist]"]}
 {"_e":"metro:client_log","_t":1790954073746,"level":"log","data":["Database schema and tables initialized successfully."]}
 {"_e":"metro:client_log","_t":1790954617947,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790955159086,"level":"log","data":["Database schema and tables initialized successfully."]}

@@ -28,7 +28,7 @@ export const FocusScreen = () => {
   // Stopwatch state
   const [swIsRunning, setSwIsRunning] = useState(false);
   const [swSeconds, setSwSeconds] = useState(0);
-  const swInterval = useRef<NodeJS.Timeout | null>(null);
+  const swInterval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Countdown state
   const [cdHours, setCdHours] = useState('');
@@ -228,7 +228,7 @@ export const FocusScreen = () => {
 
   // Tick interval
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     
     if (isReady && (swIsRunning || cdIsRunning)) {
       interval = setInterval(() => {

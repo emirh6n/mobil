@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, ActivityIndicator, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Modal, ActivityIndicator, Image, Alert } from 'react-native';
+import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as DocumentPicker from 'expo-document-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -64,6 +67,42 @@ export const SettingsScreen = () => {
       hip: String(hip) 
     });
     setPersonalExpanded(false);
+  };
+
+  const exportDB = async () => {
+    try {
+      const dbFile = `${FileSystem.documentDirectory}SQLite/trkn_app.sqlite`;
+      const fileInfo = await FileSystem.getInfoAsync(dbFile);
+      if (!fileInfo.exists) {
+        Alert.alert('Hata', 'Veritabanı dosyası bulunamadı.');
+        return;
+      }
+      if (await Sharing.isAvailableAsync()) {
+        await Sharing.shareAsync(dbFile, { dialogTitle: 'Yedeği Dışa Aktar' });
+      } else {
+        Alert.alert('Hata', 'Cihazınız dosya paylaşımını desteklemiyor.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Hata', 'Dışa aktarma başarısız oldu.');
+    }
+  };
+
+  const importDB = async () => {
+    try {
+      setRestoreModalVisible(false);
+      const res = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: true });
+      if (res.canceled) return;
+      
+      const fileUri = res.assets[0].uri;
+      const dbFile = `${FileSystem.documentDirectory}SQLite/trkn_app.sqlite`;
+      
+      await FileSystem.copyAsync({ from: fileUri, to: dbFile });
+      Alert.alert('Başarılı', 'Yedek başarıyla yüklendi. Değişikliklerin uygulanması için lütfen uygulamayı tamamen kapatıp yeniden açın.');
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Hata', 'İçe aktarma başarısız oldu.');
+    }
   };
 
   const metrics = React.useMemo(() => {
@@ -242,10 +281,10 @@ export const SettingsScreen = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>YEDEKLEME</Text>
           <View style={styles.card}>
-            <TouchableOpacity style={styles.listItem}>
+            <TouchableOpacity style={styles.listItem} onPress={exportDB}>
               <View style={styles.listItemLeft}>
                 <View style={styles.cardIconBox}><Icon name="download-for-offline" size={22} color={theme.colors.primary} /></View>
-                <View><Text style={styles.listItemTitle}>Yedeği Dışa Aktar</Text><Text style={styles.listItemSub}>JSON / CSV formatında</Text></View>
+                <View><Text style={styles.listItemTitle}>Yedeği Dışa Aktar</Text><Text style={styles.listItemSub}>.sqlite formatında</Text></View>
               </View>
               <View style={styles.btnSmall}><Icon name="file-download" size={18} color={theme.colors.primary} /><Text style={styles.btnSmallText}>İndir</Text></View>
             </TouchableOpacity>
@@ -299,7 +338,7 @@ export const SettingsScreen = () => {
             <Text style={styles.modalText}>Dikkat: Yedekten geri yükleme işlemi yapıldığında mevcut tüm verileriniz silinip değiştirilecektir. Bu işlem geri alınamaz.</Text>
             <View style={styles.modalActions}>
               <TouchableOpacity style={styles.btnSecondary} onPress={() => setRestoreModalVisible(false)}><Text style={styles.btnSecondaryText}>Vazgeç</Text></TouchableOpacity>
-              <TouchableOpacity style={styles.btnDanger} onPress={() => setRestoreModalVisible(false)}><Icon name="restore" size={18} color={theme.colors.onErrorContainer} /><Text style={styles.btnDangerText}>Onayla</Text></TouchableOpacity>
+              <TouchableOpacity style={styles.btnDanger} onPress={importDB}><Icon name="restore" size={18} color={theme.colors.onErrorContainer} /><Text style={styles.btnDangerText}>Onayla</Text></TouchableOpacity>
             </View>
           </View>
         </View>

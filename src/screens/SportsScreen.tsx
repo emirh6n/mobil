@@ -8,6 +8,7 @@ import { Header } from '../components/Header';
 import { useWorkouts } from '../hooks/useWorkouts';
 import { useNavigation } from '@react-navigation/native';
 import { useDateContext } from '../context/DateContext';
+import db from '../database/database';
 
 const EXERCISE_DATA = {
   'Göğüs': ['Machine Pec Deck / Cable Fly', 'Dips', 'Bench Press (Incline, Seated)', 'Seated Chest Press'],
@@ -50,6 +51,28 @@ export const SportsScreen = () => {
       }
     };
   }, []);
+
+  // Save steps to DB
+  React.useEffect(() => {
+    const saveSteps = async () => {
+      const totalSteps = pastStepCount + currentStepCount;
+      if (totalSteps > 0 && selectedDate) {
+        try {
+          await db.execute(
+            'INSERT INTO Steps (date, count, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(date) DO UPDATE SET count = excluded.count, updated_at = CURRENT_TIMESTAMP',
+            [selectedDate, totalSteps]
+          );
+        } catch (e) {
+          console.error("Adım kaydetme hatası", e);
+        }
+      }
+    };
+    
+    // Yalnızca sync açıksa kaydet
+    if (isSyncEnabled) {
+      saveSteps();
+    }
+  }, [pastStepCount, currentStepCount, selectedDate, isSyncEnabled]);
 
   const enablePedometer = async () => {
     try {

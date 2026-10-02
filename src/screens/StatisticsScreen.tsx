@@ -11,23 +11,23 @@ import { useDateContext } from '../context/DateContext';
 export const StatisticsScreen = () => {
   const navigation = useNavigation();
   const { selectedDate } = useDateContext();
-  const { loading, tasksCompleted, tasksTotal, calories, stepAvg, prs, libraryTotal, libraryCategories } = useStatistics(selectedDate);
+  const { loading, tasksCompleted, tasksTotal, calories, stepAvg, prs, libraryTotal, libraryCategories, noteDays, focusTimeStr, taskWeeks, bodyHistory } = useStatistics(selectedDate);
 
   const [activeCategory, setActiveCategory] = useState('verimlilik');
   const [activeMuscle, setActiveMuscle] = useState('göğüs');
   const [activeExercise, setActiveExercise] = useState<string | null>(null);
+  const [bodyHistoryExpanded, setBodyHistoryExpanded] = useState(false);
 
-  const tasksPercent = tasksTotal > 0 ? Math.round((tasksCompleted / tasksTotal) * 100) : 0;
   const calPercent = Math.min(100, Math.round((calories / 2400) * 100));
 
 
 
   const renderTamamlamaGrafigi = () => {
     const weeks = [
-      { label: '3H Önce', val: 0 },
-      { label: '2H Önce', val: 0 },
-      { label: 'Gçn H', val: 0 },
-      { label: 'Bu H', val: tasksPercent },
+      { label: '3H Önce', val: taskWeeks[0] },
+      { label: '2H Önce', val: taskWeeks[1] },
+      { label: 'Gçn H', val: taskWeeks[2] },
+      { label: 'Bu H', val: taskWeeks[3] },
     ];
 
     return (
@@ -49,12 +49,17 @@ export const StatisticsScreen = () => {
     );
   };
 
-  const renderVerimlilik = () => (
+  const renderVerimlilik = () => {
+    const currentMonthPrefix = selectedDate.substring(0, 7);
+    const [yearStr, monthStr] = currentMonthPrefix.split('-');
+    const daysInMonth = new Date(parseInt(yearStr, 10), parseInt(monthStr, 10), 0).getDate(); 
+    
+    return (
     <>
       <View style={styles.section}>
         <Text style={[styles.sectionTitle, { marginLeft: 4 }]}>Odaklanma Süresi</Text>
         <View style={styles.odakCard}>
-          <Text style={styles.odakValue}>0 dakika</Text>
+          <Text style={styles.odakValue}>{focusTimeStr}</Text>
           <Text style={styles.odakLabel}>Toplam Süre</Text>
         </View>
       </View>
@@ -64,15 +69,19 @@ export const StatisticsScreen = () => {
       <View style={styles.section}>
         <View style={styles.sectionHeaderRow}>
           <Text style={[styles.sectionTitle, { marginLeft: 4 }]}>Not Takvim Tablosu</Text>
-          <Text style={styles.sectionSubtitleSmall}>2026-09</Text>
+          <Text style={styles.sectionSubtitleSmall}>{currentMonthPrefix}</Text>
         </View>
         <View style={styles.chartCard}>
           <View style={styles.calendarGrid}>
-            {Array.from({length: 30}).map((_, i) => (
-               <View key={i} style={styles.calDayBox}>
-                 <Text style={styles.calDayText}>{i + 1}</Text>
-               </View>
-            ))}
+            {Array.from({length: daysInMonth}).map((_, i) => {
+               const day = i + 1;
+               const hasNote = noteDays?.includes(day);
+               return (
+                 <View key={i} style={[styles.calDayBox, hasNote && { backgroundColor: theme.colors.primary }]}>
+                   <Text style={[styles.calDayText, hasNote && { color: theme.colors.onPrimary, fontWeight: 'bold' }]}>{day}</Text>
+                 </View>
+               );
+            })}
           </View>
         </View>
       </View>
@@ -109,7 +118,8 @@ export const StatisticsScreen = () => {
         </View>
       </View>
     </>
-  );
+    );
+  };
 
   const renderSpor = () => {
     const muscles = ['Göğüs', 'Sırt', 'Omuz', 'Kol', 'Bacak', 'Karın'];
@@ -211,6 +221,49 @@ export const StatisticsScreen = () => {
               Kayıtlı rekor bulunamadı.
             </Text>
           )}
+
+          {/* Body Analysis History Section */}
+          <View style={[styles.chartCard, { padding: 0, marginTop: 16 }]}>
+            <TouchableOpacity 
+              style={[styles.accordionHeader, { padding: 20 }]} 
+              onPress={() => setBodyHistoryExpanded(!bodyHistoryExpanded)}
+            >
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+                <Icon name="monitor-weight" size={20} color={theme.colors.primary} />
+                <Text style={styles.sectionTitle}>Vücut Analizi Geçmişi</Text>
+              </View>
+              <Icon name={bodyHistoryExpanded ? "expand-less" : "expand-more"} size={24} color={theme.colors.onSurfaceVariant} />
+            </TouchableOpacity>
+
+            {bodyHistoryExpanded && (
+              <View style={{ padding: 20, paddingTop: 0 }}>
+                {bodyHistory.length > 0 ? (
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingBottom: 8 }}>
+                    {bodyHistory.map((item, idx) => (
+                      <View key={idx} style={styles.bodyHistoryCard}>
+                        <View style={styles.bodyHistoryHeader}>
+                          <Icon name="event" size={14} color={theme.colors.onSurfaceVariant} />
+                          <Text style={styles.bodyHistoryDate}>{item.date}</Text>
+                        </View>
+                        <View style={styles.bodyHistoryRow}>
+                          <Icon name="monitor-weight" size={20} color={theme.colors.primary} />
+                          <Text style={styles.bodyHistoryValue}>{item.weight} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>kg</Text></Text>
+                        </View>
+                        <View style={styles.bodyHistoryRow}>
+                          <Icon name="height" size={20} color={theme.colors.secondary} />
+                          <Text style={styles.bodyHistoryValue}>{item.height} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>cm</Text></Text>
+                        </View>
+                      </View>
+                    ))}
+                  </ScrollView>
+                ) : (
+                  <Text style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center', fontSize: 12, marginBottom: 8 }}>
+                    Henüz kaydedilmiş vücut analizi yok. Ayarlar menüsünden boy ve kilonuzu güncelleyerek ölçüm kaydedebilirsiniz.
+                  </Text>
+                )}
+              </View>
+            )}
+          </View>
         </View>
       </>
     );
@@ -347,4 +400,11 @@ const styles = StyleSheet.create({
   prValue: { ...theme.typography.titleLg, color: theme.colors.primary, fontWeight: 'bold' },
   prUnit: { ...theme.typography.labelSm, color: theme.colors.onSurface, fontWeight: 'normal' },
   prSubRight: { ...theme.typography.labelSm, color: theme.colors.secondary },
+  
+  bodyHistoryCard: { backgroundColor: theme.colors.surfaceContainerLowest, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: theme.colors.surfaceBorderLight, minWidth: 140, gap: 12 },
+  bodyHistoryHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4, borderBottomWidth: 1, borderBottomColor: theme.colors.surfaceContainerHigh, paddingBottom: 8 },
+  bodyHistoryDate: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
+  bodyHistoryRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  bodyHistoryValue: { ...theme.typography.titleMd, color: theme.colors.onSurface, fontWeight: 'bold' },
+  accordionHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
 });
