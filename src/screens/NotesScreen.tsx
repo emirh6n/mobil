@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
   dateBadgeText: { ...theme.typography.labelSm, color: theme.colors.primary, fontWeight: 'bold' },
   iconBtn: { padding: 8 },
   
-  scrollContent: { padding: theme.spacing.margin, paddingBottom: 100, gap: 16 },
+  scrollContent: { padding: theme.spacing.margin, paddingBottom: 24, gap: 16 },
   
   subheadRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 },
   subheadLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },

@@ -430,7 +430,7 @@ export const FocusScreen = () => {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: theme.colors.background },
-  scrollContent: { padding: theme.spacing.margin, paddingBottom: 120, gap: theme.spacing.md },
+  scrollContent: { padding: theme.spacing.margin, paddingBottom: 24, gap: theme.spacing.md },
   
   subheadRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 },
   subheadLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },

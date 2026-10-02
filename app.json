@@ -7,6 +7,9 @@
     "version": "1.0.0",
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "plugins": [
+      "@react-native-community/datetimepicker"
     ]
   }
 }

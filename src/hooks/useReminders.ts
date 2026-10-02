@@ -72,5 +72,17 @@ export const useReminders = () => {
     }
   };
 
-  return { reminders, loading, addReminder, toggleReminder, deleteReminder, refresh: fetchReminders };
+  const updateReminder = async (id: number, time: string, label: string, is_hard_mode: boolean = false, days: string = '[]') => {
+    try {
+      await db.execute(
+        'UPDATE Reminders SET time = ?, label = ?, is_hard_mode = ?, days = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
+        [time, label, is_hard_mode ? 1 : 0, days, id]
+      );
+      await fetchReminders();
+    } catch (error) {
+      console.error('Error updating reminder:', error);
+    }
+  };
+
+  return { reminders, loading, addReminder, toggleReminder, deleteReminder, updateReminder, refresh: fetchReminders };
 };

@@ -51,5 +51,17 @@ export const useLibrary = () => {
     }
   };
 
-  return { resources, loading, addResource, deleteResource, refresh: fetchResources };
+  const updateResource = async (id: number, title: string, category: string, url: string, notes: string) => {
+    try {
+      await db.execute(
+        'UPDATE LibraryResources SET title = ?, category = ?, url = ?, notes = ? WHERE id = ?',
+        [title, category, url, notes, id]
+      );
+      await fetchResources();
+    } catch (error) {
+      console.error('Error updating library resource:', error);
+    }
+  };
+
+  return { resources, loading, addResource, updateResource, deleteResource, refresh: fetchResources };
 };

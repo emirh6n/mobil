@@ -50,5 +50,17 @@ export const useImportantDates = () => {
     }
   };
 
-  return { dates, loading, addDate, deleteDate, refresh: fetchDates };
+  const updateDate = async (id: number, title: string, target_date: string, target_time: string, note: string) => {
+    try {
+      await db.execute(
+        'UPDATE ImportantDates SET title = ?, target_date = ?, target_time = ?, note = ? WHERE id = ?',
+        [title, target_date, target_time, note, id]
+      );
+      await fetchDates();
+    } catch (error) {
+      console.error('Error updating important date:', error);
+    }
+  };
+
+  return { dates, loading, addDate, deleteDate, updateDate, refresh: fetchDates };
 };

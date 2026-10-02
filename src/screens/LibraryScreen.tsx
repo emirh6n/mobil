@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Linking } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Linking, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -10,8 +10,9 @@ import { Header } from '../components/Header';
 
 export const LibraryScreen = () => {
   const navigation = useNavigation();
-  const { resources, loading, addResource, deleteResource } = useLibrary();
+  const { resources, loading, addResource, updateResource, deleteResource } = useLibrary();
 
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [url, setUrl] = useState('');
@@ -21,11 +22,50 @@ export const LibraryScreen = () => {
 
   const handleAddResource = () => {
     if (!title.trim()) return;
-    addResource(title, category, url, notes);
+    if (editingId) {
+      updateResource(editingId, title, category, url, notes);
+      setEditingId(null);
+    } else {
+      addResource(title, category, url, notes);
+    }
     setTitle('');
     setCategory('');
     setUrl('');
     setNotes('');
+  };
+
+  const handleLongPress = (r: any) => {
+    Alert.alert(
+      'İşlem Seçin',
+      'Bu kaynak için ne yapmak istiyorsunuz?',
+      [
+        {
+          text: 'Düzenle',
+          onPress: () => {
+            setEditingId(r.id);
+            setTitle(r.title);
+            setCategory(r.category || '');
+            setUrl(r.url || '');
+            setNotes(r.notes || '');
+          }
+        },
+        {
+          text: 'Sil',
+          style: 'destructive',
+          onPress: () => {
+            Alert.alert(
+              'Silme Onayı',
+              'Bu kaynağı silmek istediğininize emin misiniz?',
+              [
+                { text: 'İptal', style: 'cancel' },
+                { text: 'Sil', style: 'destructive', onPress: () => deleteResource(r.id) }
+              ]
+            );
+          }
+        },
+        { text: 'İptal', style: 'cancel' }
+      ]
+    );
   };
 
   const filteredResources = resources.filter(r => {
@@ -68,8 +108,8 @@ export const LibraryScreen = () => {
           </View>
           
           <TouchableOpacity style={styles.submitBtn} onPress={handleAddResource} disabled={loading}>
-            <Icon name="add" size={20} color={theme.colors.onPrimaryContainer} />
-            <Text style={styles.submitBtnText}>Kütüphaneye ekle</Text>
+            <Icon name={editingId ? "edit" : "add"} size={20} color={theme.colors.onPrimaryContainer} />
+            <Text style={styles.submitBtnText}>{editingId ? 'Kaynağı güncelle' : 'Kütüphaneye ekle'}</Text>
           </TouchableOpacity>
         </View>
 
@@ -100,23 +140,48 @@ export const LibraryScreen = () => {
               <Text style={styles.emptyText}>Kaynak bulunamadı.</Text>
             ) : (
               filteredResources.map(r => (
-                <TouchableOpacity key={r.id} style={styles.listItem} onLongPress={() => deleteResource(r.id)} onPress={() => r.url ? Linking.openURL(r.url) : null}>
-                  <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <Text style={styles.listItemTitle}>{r.title}</Text>
-                    {r.url ? <Icon name="link" size={16} color={theme.colors.primary} /> : null}
+                <TouchableOpacity 
+                  key={r.id} 
+                  style={styles.listItem} 
+                  onLongPress={() => handleLongPress(r)} 
+                  onPress={() => {
+                    if (r.url) {
+                      const finalUrl = r.url.toLowerCase().startsWith('http') ? r.url : `https://${r.url}`;
+                      Linking.openURL(finalUrl).catch(err => console.log('Invalid URL', err));
+                    }
+                  }}
+                >
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {/* Sol Kısım */}
+                    <View style={{ flex: 1, paddingRight: 8, justifyContent: 'center' }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', gap: 6 }}>
+                        <Text style={styles.listItemTitle}>{r.title}</Text>
+                        {r.category ? (
+                          <View style={styles.catBadge}>
+                            <Text style={styles.catBadgeText}>{r.category}</Text>
+                          </View>
+                        ) : null}
+                      </View>
+                    </View>
+
+                    {/* Sağ Kısım */}
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', borderLeftWidth: 1, borderLeftColor: theme.colors.surfaceBorder, paddingLeft: 8 }}>
+                      {!!r.notes ? (
+                        <Text style={[styles.listItemNotes, { flex: 1, marginRight: r.url ? 8 : 0 }]} numberOfLines={3}>
+                          {r.notes}
+                        </Text>
+                      ) : (
+                        <View style={{ flex: 1 }} />
+                      )}
+                      {r.url ? <Icon name="link" size={18} color={theme.colors.primary} /> : null}
+                    </View>
                   </View>
-                  {r.category ? <Text style={styles.listItemCat}>{r.category}</Text> : null}
-                  {!!r.notes && <Text style={styles.listItemNotes}>{r.notes}</Text>}
                 </TouchableOpacity>
               ))
             )}
           </View>
           
-          <View style={styles.pagination}>
-            <TouchableOpacity style={styles.pageBtn}><Text style={styles.pageBtnText}>Önceki</Text></TouchableOpacity>
-            <Text style={styles.pageText}>1 / 1</Text>
-            <TouchableOpacity style={styles.pageBtn}><Text style={styles.pageBtnText}>Sonraki</Text></TouchableOpacity>
-          </View>
+
         </View>
 
       </ScrollView>
@@ -135,7 +200,7 @@ const styles = StyleSheet.create({
   dateBadgeText: { ...theme.typography.labelSm, color: theme.colors.primary, fontWeight: 'bold' },
   iconBtn: { padding: 8 },
   
-  scrollContent: { padding: theme.spacing.margin, paddingBottom: 100, gap: 16 },
+  scrollContent: { padding: theme.spacing.margin, paddingBottom: 24, gap: 16 },
   
   card: { backgroundColor: theme.colors.surfaceContainer, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: theme.colors.surfaceBorder, gap: 12 },
   cardHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
@@ -160,13 +225,9 @@ const styles = StyleSheet.create({
   
   list: { gap: 8, marginTop: 8 },
   emptyText: { ...theme.typography.bodySm, color: theme.colors.onSurfaceVariant, textAlign: 'center', paddingVertical: 16 },
-  listItem: { backgroundColor: theme.colors.surfaceContainerLowest, padding: 12, borderRadius: 12, borderWidth: 1, borderColor: theme.colors.surfaceBorder },
+  listItem: { backgroundColor: theme.colors.surfaceContainerLowest, padding: 12, borderRadius: 12, borderWidth: 1, borderColor: theme.colors.surfaceBorder, minHeight: 64, justifyContent: 'center' },
   listItemTitle: { ...theme.typography.labelMd, color: theme.colors.onSurface, fontWeight: 'bold' },
-  listItemCat: { fontSize: 10, color: theme.colors.primary, marginTop: 2 },
-  listItemNotes: { ...theme.typography.bodySm, color: theme.colors.onSurfaceVariant, marginTop: 6 },
-  
-  pagination: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 8 },
-  pageBtn: { backgroundColor: theme.colors.surfaceContainerLowest, borderWidth: 1, borderColor: theme.colors.surfaceBorder, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 12 },
-  pageBtnText: { fontSize: 12, color: theme.colors.onSurfaceVariant, fontWeight: '500' },
-  pageText: { fontSize: 12, color: theme.colors.onSurfaceVariant, fontWeight: 'bold' },
+  catBadge: { backgroundColor: 'rgba(255, 152, 0, 0.1)', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, borderWidth: 1, borderColor: 'rgba(255, 152, 0, 0.2)' },
+  catBadgeText: { fontSize: 9, color: '#ff9800', fontWeight: 'bold', textTransform: 'uppercase' },
+  listItemNotes: { fontSize: 11, color: theme.colors.onSurfaceVariant, lineHeight: 16 },
 });

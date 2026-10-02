@@ -49,11 +49,12 @@ export const TasksScreen = () => {
           ) : (
             <>
               {/* Pending */}
-              <View style={styles.listSection}>
+              <View style={styles.taskCard}>
                 <View style={styles.listHeader}>
                   <Text style={styles.listTitle}>Bekleyen Görevler</Text>
                   <Text style={styles.listSub}>Bugün</Text>
                 </View>
+                <View style={styles.divider} />
                 <View style={styles.list}>
                   {pendingTasks.length === 0 && <Text style={styles.emptyText}>Bekleyen görev yok.</Text>}
                   {pendingTasks.map(t => (
@@ -68,13 +69,12 @@ export const TasksScreen = () => {
                 </View>
               </View>
 
-              <View style={styles.divider} />
-
               {/* Completed */}
-              <View style={styles.listSection}>
+              <View style={styles.taskCard}>
                 <View style={styles.listHeader}>
                   <Text style={[styles.listTitle, { color: theme.colors.onSurfaceVariant }]}>Tamamlanan Görevler</Text>
                 </View>
+                <View style={styles.divider} />
                 <View style={styles.list}>
                   {completedTasks.length === 0 && <Text style={styles.emptyText}>Henüz tamamlanan görev yok.</Text>}
                   {completedTasks.map(t => (
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
   dateBadgeText: { ...theme.typography.labelSm, color: theme.colors.primary, fontWeight: 'bold' },
   iconBtn: { padding: 8 },
   
-  scrollContent: { padding: theme.spacing.margin, paddingBottom: 100, gap: 16 },
+  scrollContent: { padding: theme.spacing.margin, paddingBottom: 24, gap: 16 },
   
   subheadRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 },
   subheadLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
   subheadDateText: { ...theme.typography.labelMd, color: theme.colors.onSurface },
   
   taskListContainer: { gap: 16 },
+  taskCard: { backgroundColor: theme.colors.surfaceContainer, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: theme.colors.surfaceBorder, gap: 12 },
   listSection: { gap: 12 },
   listHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 4 },
   listTitle: { ...theme.typography.labelMd, color: theme.colors.onSurface, fontWeight: 'bold', textTransform: 'uppercase' },

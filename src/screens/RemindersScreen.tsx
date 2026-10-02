@@ -1,46 +1,151 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Switch, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Switch, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { useReminders } from '../hooks/useReminders';
 import { useImportantDates } from '../hooks/useImportantDates';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { Header } from '../components/Header';
 
 export const RemindersScreen = () => {
   const navigation = useNavigation();
-  const { reminders, loading: remindersLoading, addReminder, toggleReminder, deleteReminder } = useReminders();
-  const { dates, loading: datesLoading, addDate, deleteDate } = useImportantDates();
+  const { reminders, loading: remindersLoading, addReminder, toggleReminder, deleteReminder, updateReminder } = useReminders();
+  const { dates, loading: datesLoading, addDate, deleteDate, updateDate } = useImportantDates();
 
-  const [alarmTime, setAlarmTime] = useState('07:30');
-  const [alarmLabel, setAlarmLabel] = useState('Sabah Koşusu');
+  const [editingAlarmId, setEditingAlarmId] = useState<number | null>(null);
+  const [alarmTimeDate, setAlarmTimeDate] = useState(new Date());
+  const [alarmDate, setAlarmDate] = useState(new Date());
+  const [showTimePicker, setShowTimePicker] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [alarmLabel, setAlarmLabel] = useState('');
+  const [frequency, setFrequency] = useState<'once' | 'daily' | 'custom'>('daily');
+  const [selectedDays, setSelectedDays] = useState<number[]>([]);
   const [isHardMode, setIsHardMode] = useState(false);
   
+  const [editingDateId, setEditingDateId] = useState<number | null>(null);
   const [dateTitle, setDateTitle] = useState('');
-  const [dateVal, setDateVal] = useState('01.10.2026');
-  const [timeVal, setTimeVal] = useState('19:59');
-  const [dateNote, setDateNote] = useState('');
+  const [dateTargetDate, setDateTargetDate] = useState(new Date());
+  const [dateTargetTime, setDateTargetTime] = useState(new Date());
+  const [showDateTargetDatePicker, setShowDateTargetDatePicker] = useState(false);
+  const [showDateTargetTimePicker, setShowDateTargetTimePicker] = useState(false);
+
+  const formatTime = (d: Date) => {
+    const hh = d.getHours().toString().padStart(2, '0');
+    const mm = d.getMinutes().toString().padStart(2, '0');
+    return `${hh}:${mm}`;
+  };
+
+  const formatDate = (d: Date) => {
+    const yyyy = d.getFullYear();
+    const mm = (d.getMonth() + 1).toString().padStart(2, '0');
+    const dd = d.getDate().toString().padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
 
   const handleAddAlarm = () => {
-    if (!alarmTime.trim() || !alarmLabel.trim()) return;
-    addReminder(alarmTime, alarmLabel, isHardMode, '[]');
-    setAlarmTime('07:30');
-    setAlarmLabel('Sabah Koşusu');
+    if (!alarmLabel.trim()) return;
+    const timeStr = formatTime(alarmTimeDate);
+    
+    let daysStr = '[]';
+    if (frequency === 'once') daysStr = JSON.stringify([formatDate(alarmDate)]);
+    else if (frequency === 'daily') daysStr = JSON.stringify(['all']);
+    else if (frequency === 'custom') daysStr = JSON.stringify(selectedDays);
+
+    if (editingAlarmId) {
+      updateReminder(editingAlarmId, timeStr, alarmLabel, isHardMode, daysStr);
+      setEditingAlarmId(null);
+    } else {
+      addReminder(timeStr, alarmLabel, isHardMode, daysStr);
+    }
+    
+    setAlarmLabel('');
     setIsHardMode(false);
+    setFrequency('daily');
+    setSelectedDays([]);
   };
 
   const handleAddDate = () => {
-    if (!dateTitle.trim() || !dateVal.trim()) return;
-    addDate(dateTitle, dateVal, timeVal, dateNote);
+    if (!dateTitle.trim()) return;
+    const dVal = formatDate(dateTargetDate);
+    const tVal = formatTime(dateTargetTime);
+    if (editingDateId) {
+      updateDate(editingDateId, dateTitle, dVal, tVal, '');
+      setEditingDateId(null);
+    } else {
+      addDate(dateTitle, dVal, tVal, '');
+    }
     setDateTitle('');
-    setDateVal('');
-    setTimeVal('');
-    setDateNote('');
+    setDateTargetDate(new Date());
+    setDateTargetTime(new Date());
+  };
+
+  const handleEditAlarm = (alarm: any) => {
+    setEditingAlarmId(alarm.id);
+    setAlarmLabel(alarm.label);
+    setIsHardMode(alarm.is_hard_mode);
+    
+    const [hh, mm] = alarm.time.split(':');
+    const d = new Date();
+    d.setHours(parseInt(hh, 10));
+    d.setMinutes(parseInt(mm, 10));
+    setAlarmTimeDate(d);
+    
+    try {
+      const parsedDays = JSON.parse(alarm.days || '[]');
+      if (parsedDays.length === 1 && parsedDays[0] === 'all') {
+        setFrequency('daily');
+      } else if (parsedDays.length === 1 && typeof parsedDays[0] === 'string' && parsedDays[0].includes('-')) {
+        setFrequency('once');
+        setAlarmDate(new Date(parsedDays[0]));
+      } else {
+        setFrequency('custom');
+        setSelectedDays(parsedDays);
+      }
+    } catch {
+      setFrequency('daily');
+    }
+  };
+
+  const handleEditDate = (date: any) => {
+    setEditingDateId(date.id);
+    setDateTitle(date.title);
+    setDateTargetDate(new Date(date.target_date));
+    
+    const [hh, mm] = (date.target_time || '12:00').split(':');
+    const d = new Date();
+    d.setHours(parseInt(hh, 10) || 12);
+    d.setMinutes(parseInt(mm, 10) || 0);
+    setDateTargetTime(d);
+  };
+
+  const confirmDeleteAlarm = (id: number) => {
+    Alert.alert('Alarmı Sil', 'Bu alarmı silmek istediğinize emin misiniz?', [
+      { text: 'İptal', style: 'cancel' },
+      { text: 'Sil', style: 'destructive', onPress: () => deleteReminder(id) }
+    ]);
+  };
+
+  const confirmDeleteDate = (id: number) => {
+    Alert.alert('Tarihi Sil', 'Bu tarihi silmek istediğinize emin misiniz?', [
+      { text: 'İptal', style: 'cancel' },
+      { text: 'Sil', style: 'destructive', onPress: () => deleteDate(id) }
+    ]);
   };
 
   const activeRemindersCount = reminders.filter(r => r.is_active).length;
+
+  const toggleDay = (dayIndex: number) => {
+    if (selectedDays.includes(dayIndex)) {
+      setSelectedDays(selectedDays.filter(d => d !== dayIndex));
+    } else {
+      setSelectedDays([...selectedDays, dayIndex]);
+    }
+  };
+
+  const WEEKDAYS = ['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Paz'];
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -61,7 +166,7 @@ export const RemindersScreen = () => {
             <Text style={{ color: theme.colors.onSurfaceVariant, fontSize: 12 }}>Kayıtlı alarm yok.</Text>
           ) : (
             reminders.map(alarm => (
-              <TouchableOpacity key={alarm.id} style={[styles.alarmItem, { marginBottom: 8 }]} onLongPress={() => deleteReminder(alarm.id)}>
+              <TouchableOpacity key={alarm.id} style={[styles.alarmItem, { marginBottom: 8 }]} onPress={() => handleEditAlarm(alarm)} onLongPress={() => confirmDeleteAlarm(alarm.id)}>
                 <View style={styles.alarmLeft}>
                   <View style={styles.alarmIconBox}>
                     <Icon name="alarm" size={20} color={theme.colors.primary} />
@@ -89,20 +194,91 @@ export const RemindersScreen = () => {
 
         {/* Yeni Alarm */}
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Yeni Alarm</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text style={styles.cardTitle}>{editingAlarmId ? 'Alarmı Güncelle' : 'Yeni Alarm'}</Text>
+            {editingAlarmId && (
+              <TouchableOpacity onPress={() => { setEditingAlarmId(null); setAlarmLabel(''); setIsHardMode(false); setFrequency('daily'); }}>
+                <Icon name="close" size={20} color={theme.colors.error} />
+              </TouchableOpacity>
+            )}
+          </View>
+
           <View style={styles.grid2}>
-            <View style={styles.inputBox}>
+            <TouchableOpacity style={styles.inputBox} onPress={() => setShowTimePicker(true)}>
               <Text style={styles.inputLabel}>Saat</Text>
               <View style={styles.inputRow}>
-                <TextInput style={styles.inputField} value={alarmTime} onChangeText={setAlarmTime} />
+                <Text style={styles.inputField}>{formatTime(alarmTimeDate)}</Text>
                 <Icon name="schedule" size={18} color={theme.colors.primary} />
               </View>
-            </View>
+            </TouchableOpacity>
             <View style={styles.inputBox}>
               <Text style={styles.inputLabel}>Etiket</Text>
-              <TextInput style={styles.inputField} value={alarmLabel} onChangeText={setAlarmLabel} />
+              <TextInput style={styles.inputField} placeholder="Yazınız" placeholderTextColor={theme.colors.onSurfaceVariant} value={alarmLabel} onChangeText={setAlarmLabel} />
             </View>
           </View>
+
+          {showTimePicker && (
+            <DateTimePicker
+              value={alarmTimeDate}
+              mode="time"
+              is24Hour={true}
+              display="spinner"
+              onChange={(event, selectedDate) => {
+                setShowTimePicker(false);
+                if (selectedDate) setAlarmTimeDate(selectedDate);
+              }}
+            />
+          )}
+
+          <View style={{ gap: 8 }}>
+            <Text style={styles.inputLabel}>Sıklık</Text>
+            <View style={styles.freqRow}>
+              <TouchableOpacity style={[styles.freqBtn, frequency === 'once' && styles.freqBtnActive]} onPress={() => setFrequency('once')}>
+                <Text style={[styles.freqBtnText, frequency === 'once' && styles.freqBtnTextActive]}>Tek Seferlik</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.freqBtn, frequency === 'daily' && styles.freqBtnActive]} onPress={() => setFrequency('daily')}>
+                <Text style={[styles.freqBtnText, frequency === 'daily' && styles.freqBtnTextActive]}>Günlük</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={[styles.freqBtn, frequency === 'custom' && styles.freqBtnActive]} onPress={() => setFrequency('custom')}>
+                <Text style={[styles.freqBtnText, frequency === 'custom' && styles.freqBtnTextActive]}>Seçili Günler</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {frequency === 'once' && (
+            <TouchableOpacity style={styles.inputBox} onPress={() => setShowDatePicker(true)}>
+              <Text style={styles.inputLabel}>Tarih</Text>
+              <View style={styles.inputRow}>
+                <Text style={styles.inputField}>{formatDate(alarmDate)}</Text>
+                <Icon name="event" size={18} color={theme.colors.primary} />
+              </View>
+            </TouchableOpacity>
+          )}
+
+          {showDatePicker && (
+            <DateTimePicker
+              value={alarmDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setShowDatePicker(false);
+                if (selectedDate) setAlarmDate(selectedDate);
+              }}
+            />
+          )}
+
+          {frequency === 'custom' && (
+            <View style={styles.weekRow}>
+              {WEEKDAYS.map((day, i) => {
+                const isActive = selectedDays.includes(i);
+                return (
+                  <TouchableOpacity key={day} style={[styles.dayCircle, isActive && styles.dayCircleActive]} onPress={() => toggleDay(i)}>
+                    <Text style={[styles.dayText, isActive && styles.dayTextActive]}>{day}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          )}
 
           <View style={styles.hardModeBox}>
             <View>
@@ -112,22 +288,11 @@ export const RemindersScreen = () => {
             <Switch value={isHardMode} onValueChange={setIsHardMode} trackColor={{ false: theme.colors.surfaceVariant, true: theme.colors.error }} thumbColor={isHardMode ? theme.colors.onPrimary : '#fff'} />
           </View>
 
-          {isHardMode && (
-            <View style={styles.challengeRow}>
-              <TouchableOpacity style={styles.challengeBtnActive}>
-                <Icon name="calculate" size={16} color={theme.colors.primary} />
-                <Text style={styles.challengeBtnTextActive}>Matematik</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.challengeBtn}>
-                <Icon name="vibration" size={16} color={theme.colors.onSurfaceVariant} />
-                <Text style={styles.challengeBtnText}>Sallama</Text>
-              </TouchableOpacity>
-            </View>
-          )}
+
 
           <TouchableOpacity style={styles.submitBtn} onPress={handleAddAlarm} disabled={remindersLoading}>
-            <Icon name="add-alarm" size={20} color={theme.colors.onPrimaryContainer} />
-            <Text style={styles.submitBtnText}>Alarm Ekle</Text>
+            <Icon name={editingAlarmId ? "edit" : "add-alarm"} size={20} color={theme.colors.onPrimaryContainer} />
+            <Text style={styles.submitBtnText}>{editingAlarmId ? 'Alarmı Güncelle' : 'Alarm Ekle'}</Text>
           </TouchableOpacity>
         </View>
 
@@ -148,7 +313,7 @@ export const RemindersScreen = () => {
             </View>
           ) : (
             dates.map(date => (
-              <TouchableOpacity key={date.id} style={[styles.alarmItem, { marginBottom: 8 }]} onLongPress={() => deleteDate(date.id)}>
+              <TouchableOpacity key={date.id} style={[styles.alarmItem, { marginBottom: 8 }]} onPress={() => handleEditDate(date)} onLongPress={() => confirmDeleteDate(date.id)}>
                 <View style={styles.alarmLeft}>
                   <View style={[styles.alarmIconBox, { backgroundColor: 'rgba(59, 130, 246, 0.1)', borderColor: 'rgba(59, 130, 246, 0.2)' }]}>
                     <Icon name="event" size={20} color="#3b82f6" />
@@ -166,30 +331,65 @@ export const RemindersScreen = () => {
             ))
           )}
 
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 8 }}>
+            <Text style={[styles.cardTitle, { fontSize: 14 }]}>{editingDateId ? 'Tarihi Güncelle' : 'Yeni Tarih Ekle'}</Text>
+            {editingDateId && (
+              <TouchableOpacity onPress={() => { setEditingDateId(null); setDateTitle(''); setDateTargetDate(new Date()); setDateTargetTime(new Date()); }}>
+                <Icon name="close" size={20} color={theme.colors.error} />
+              </TouchableOpacity>
+            )}
+          </View>
+
           <View style={styles.inputBox}>
             <Text style={styles.inputLabel}>Başlık</Text>
-            <TextInput style={styles.inputFieldFull} placeholder="Örn: Doktor Randevusu" placeholderTextColor={theme.colors.onSurfaceVariant} value={dateTitle} onChangeText={setDateTitle} />
+            <TextInput style={styles.inputFieldFull} placeholder="Yazınız" placeholderTextColor={theme.colors.onSurfaceVariant} value={dateTitle} onChangeText={setDateTitle} />
           </View>
 
           <View style={styles.grid2}>
-            <View style={styles.inputBox}>
+            <TouchableOpacity style={styles.inputBox} onPress={() => setShowDateTargetDatePicker(true)}>
               <Text style={styles.inputLabel}>Tarih</Text>
-              <TextInput style={styles.inputFieldFull} placeholder="YYYY-MM-DD" placeholderTextColor={theme.colors.onSurfaceVariant} value={dateVal} onChangeText={setDateVal} />
-            </View>
-            <View style={styles.inputBox}>
+              <View style={styles.inputRow}>
+                <Text style={styles.inputFieldFull}>{formatDate(dateTargetDate)}</Text>
+                <Icon name="event" size={18} color={theme.colors.primary} />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.inputBox} onPress={() => setShowDateTargetTimePicker(true)}>
               <Text style={styles.inputLabel}>Saat</Text>
-              <TextInput style={styles.inputFieldFull} placeholder="HH:MM" placeholderTextColor={theme.colors.onSurfaceVariant} value={timeVal} onChangeText={setTimeVal} />
-            </View>
+              <View style={styles.inputRow}>
+                <Text style={styles.inputFieldFull}>{formatTime(dateTargetTime)}</Text>
+                <Icon name="schedule" size={18} color={theme.colors.primary} />
+              </View>
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.inputBox}>
-            <Text style={styles.inputLabel}>Not</Text>
-            <TextInput style={[styles.inputFieldFull, { height: 60, textAlignVertical: 'top' }]} placeholder="Ek not..." placeholderTextColor={theme.colors.onSurfaceVariant} multiline value={dateNote} onChangeText={setDateNote} />
-          </View>
+          {showDateTargetDatePicker && (
+            <DateTimePicker
+              value={dateTargetDate}
+              mode="date"
+              display="default"
+              onChange={(event, selectedDate) => {
+                setShowDateTargetDatePicker(false);
+                if (selectedDate) setDateTargetDate(selectedDate);
+              }}
+            />
+          )}
+
+          {showDateTargetTimePicker && (
+            <DateTimePicker
+              value={dateTargetTime}
+              mode="time"
+              is24Hour={true}
+              display="spinner"
+              onChange={(event, selectedDate) => {
+                setShowDateTargetTimePicker(false);
+                if (selectedDate) setDateTargetTime(selectedDate);
+              }}
+            />
+          )}
 
           <TouchableOpacity style={styles.submitBtn} onPress={handleAddDate} disabled={datesLoading}>
-            <Icon name="calendar-month" size={20} color={theme.colors.onPrimaryContainer} />
-            <Text style={styles.submitBtnText}>Tarih Ekle</Text>
+            <Icon name={editingDateId ? "edit" : "calendar-month"} size={20} color={theme.colors.onPrimaryContainer} />
+            <Text style={styles.submitBtnText}>{editingDateId ? 'Tarihi Güncelle' : 'Tarih Ekle'}</Text>
           </TouchableOpacity>
         </View>
 
@@ -209,7 +409,7 @@ const styles = StyleSheet.create({
   dateBadgeText: { ...theme.typography.labelSm, color: theme.colors.primary, fontWeight: 'bold' },
   iconBtn: { padding: 8 },
   
-  scrollContent: { padding: theme.spacing.margin, paddingBottom: 100, gap: 16 },
+  scrollContent: { padding: theme.spacing.margin, paddingBottom: 24, gap: 16 },
   
   card: { backgroundColor: theme.colors.surfaceContainer, borderRadius: 16, padding: 16, borderWidth: 1, borderColor: theme.colors.surfaceBorder, gap: 16 },
   cardHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
@@ -249,4 +449,16 @@ const styles = StyleSheet.create({
   emptyIcon: { width: 48, height: 48, borderRadius: 24, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center', marginBottom: 8 },
   emptyTitle: { ...theme.typography.labelMd, color: theme.colors.onSurface, fontWeight: 'bold' },
   emptyDesc: { fontSize: 12, color: theme.colors.onSurfaceVariant, marginTop: 4 },
+  
+  freqRow: { flexDirection: 'row', gap: 8 },
+  freqBtn: { flex: 1, alignItems: 'center', justifyContent: 'center', paddingVertical: 8, borderRadius: 8, backgroundColor: theme.colors.surfaceContainerLowest, borderWidth: 1, borderColor: theme.colors.surfaceBorder },
+  freqBtnActive: { backgroundColor: 'rgba(159, 253, 80, 0.1)', borderColor: theme.colors.primary },
+  freqBtnText: { fontSize: 12, color: theme.colors.onSurfaceVariant, fontWeight: '500' },
+  freqBtnTextActive: { color: theme.colors.primary, fontWeight: 'bold' },
+  
+  weekRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 4 },
+  dayCircle: { width: 32, height: 32, borderRadius: 16, backgroundColor: theme.colors.surfaceContainerLowest, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: theme.colors.surfaceBorder },
+  dayCircleActive: { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary },
+  dayText: { fontSize: 11, color: theme.colors.onSurfaceVariant, fontWeight: '500' },
+  dayTextActive: { color: theme.colors.onPrimary, fontWeight: 'bold' },
 });

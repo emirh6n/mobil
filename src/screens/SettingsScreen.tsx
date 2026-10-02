@@ -321,7 +321,7 @@ const styles = StyleSheet.create({
   headerRight: { flexDirection: 'row', gap: 8 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center' },
   
-  scrollContent: { padding: theme.spacing.margin, gap: 24, paddingBottom: 100 },
+  scrollContent: { padding: theme.spacing.margin, gap: 24, paddingBottom: 24 },
   
   section: { gap: 8 },
   sectionTitle: { ...theme.typography.labelMd, color: theme.colors.primary, fontWeight: 'bold', marginLeft: 4 },

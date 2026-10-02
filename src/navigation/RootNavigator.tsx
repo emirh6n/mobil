@@ -99,9 +99,12 @@ const TabNavigator = () => (
   </Tab.Navigator>
 );
 
+import { AlarmManager } from '../components/AlarmManager';
+
 export const RootNavigator = () => {
   return (
     <NavigationContainer>
+      <AlarmManager />
       <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
         <Stack.Screen name="MainTabs" component={TabNavigator} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
