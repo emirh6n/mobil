@@ -11,93 +11,212 @@ import { useDateContext } from '../context/DateContext';
 export const StatisticsScreen = () => {
   const navigation = useNavigation();
   const { selectedDate } = useDateContext();
-  const { loading, tasksCompleted, tasksTotal, calories, prs } = useStatistics(selectedDate);
+  const { loading, tasksCompleted, tasksTotal, calories, stepAvg, prs, libraryTotal, libraryCategories } = useStatistics(selectedDate);
 
-  const [activeCategory, setActiveCategory] = useState('hepsi');
-  const [activePeriod, setActivePeriod] = useState('bu-hafta');
-  const [activeMuscle, setActiveMuscle] = useState('gogus');
+  const [activeCategory, setActiveCategory] = useState('verimlilik');
+  const [activeMuscle, setActiveMuscle] = useState('göğüs');
+  const [activeExercise, setActiveExercise] = useState<string | null>(null);
 
   const tasksPercent = tasksTotal > 0 ? Math.round((tasksCompleted / tasksTotal) * 100) : 0;
   const calPercent = Math.min(100, Math.round((calories / 2400) * 100));
 
-  const renderEnerji = () => (
-    <View style={styles.section}>
-      <View style={styles.sectionHeader}>
-        <View style={styles.sectionTitleRow}>
-          <View style={styles.pulseDot} />
-          <Text style={styles.sectionTitle}>Enerji & Görev</Text>
+
+
+  const renderTamamlamaGrafigi = () => {
+    const weeks = [
+      { label: '3H Önce', val: 0 },
+      { label: '2H Önce', val: 0 },
+      { label: 'Gçn H', val: 0 },
+      { label: 'Bu H', val: tasksPercent },
+    ];
+
+    return (
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { marginLeft: 4 }]}>Tamamlama Grafiği (Son 4 Hafta)</Text>
+        <View style={styles.chartCard}>
+          <View style={styles.chartContainer}>
+            {weeks.map((w, idx) => (
+              <View key={idx} style={styles.barCol}>
+                <View style={styles.barBg}>
+                  <View style={[styles.barFill, { height: `${w.val}%` }]} />
+                </View>
+                <Text style={styles.barLabel}>{w.label}</Text>
+              </View>
+            ))}
+          </View>
         </View>
-        <Text style={styles.sectionSubtitle}>Özet Telemetri</Text>
       </View>
-      {loading ? (
-        <ActivityIndicator size="small" color={theme.colors.primary} />
-      ) : (
-        <View style={styles.grid2}>
-          <View style={styles.telemetryCard}>
-            <View style={styles.telemetryTop}>
-              <View>
-                <Text style={styles.telemetryLabel}>Kalori Dengesi</Text>
-                <Text style={styles.telemetryValue}>{calories} <Text style={styles.telemetryUnit}>kcal</Text></Text>
-              </View>
-              <View style={styles.telemetryIconBox}>
-                <Icon name="favorite" size={20} color={theme.colors.primary} />
-              </View>
-            </View>
-            <View style={styles.telemetryBottom}>
-              <View style={styles.telemetryBottomLeft}>
-                <Icon name="trending-flat" size={14} color={theme.colors.primary} />
-                <Text style={styles.telemetrySubLabel}>Hedef: 2,400</Text>
-              </View>
-              <View style={styles.progressBarBg}><View style={[styles.progressBarFill, { width: `${calPercent}%` }]} /></View>
-            </View>
-          </View>
-          <View style={styles.telemetryCard}>
-            <View style={styles.telemetryTop}>
-              <View>
-                <Text style={styles.telemetryLabel}>Görev Başarısı</Text>
-                <Text style={styles.telemetryValue}>%{tasksPercent} <Text style={styles.telemetryUnit}>tamam</Text></Text>
-              </View>
-              <View style={styles.telemetryIconBox}>
-                <Icon name="check-box" size={20} color={theme.colors.primary} />
-              </View>
-            </View>
-            <View style={styles.telemetryBottom}>
-              <View style={styles.telemetryBottomLeft}>
-                <Icon name={tasksPercent === 100 ? "flag" : "flag"} size={14} color={tasksPercent === 100 ? theme.colors.primary : theme.colors.error} />
-                <Text style={styles.telemetrySubLabel}>{tasksCompleted}/{tasksTotal} Görev</Text>
-              </View>
-              <View style={styles.progressBarBg}><View style={[styles.progressBarFill, { width: `${tasksPercent}%` }]} /></View>
-            </View>
-          </View>
-        </View>
-      )}
-    </View>
-  );
+    );
+  };
 
   const renderVerimlilik = () => (
-    <View style={styles.grid2}>
-      <View style={styles.verimlilikCard}>
-        <View style={styles.verimlilikTop}>
-          <Text style={styles.verimlilikTitle}>Odaklanma Süresi</Text>
-          <View style={styles.verimlilikIconBox}><Icon name="timer" size={18} color={theme.colors.primary} /></View>
-        </View>
-        <View style={styles.verimlilikContent}>
-          <Text style={styles.verimlilikValue}>0 <Text style={styles.verimlilikUnit}>dakika</Text></Text>
-          <Text style={styles.verimlilikDesc}>Bugün kaydedilen toplam oturum</Text>
+    <>
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { marginLeft: 4 }]}>Odaklanma Süresi</Text>
+        <View style={styles.odakCard}>
+          <Text style={styles.odakValue}>0 dakika</Text>
+          <Text style={styles.odakLabel}>Toplam Süre</Text>
         </View>
       </View>
-      <View style={styles.verimlilikCard}>
-        <View style={styles.verimlilikTop}>
-          <Text style={styles.verimlilikTitle}>Hareket & Telemetri</Text>
-          <View style={styles.verimlilikIconBox}><Icon name="directions-walk" size={18} color={theme.colors.primary} /></View>
+      
+      {renderTamamlamaGrafigi()}
+      
+      <View style={styles.section}>
+        <View style={styles.sectionHeaderRow}>
+          <Text style={[styles.sectionTitle, { marginLeft: 4 }]}>Not Takvim Tablosu</Text>
+          <Text style={styles.sectionSubtitleSmall}>2026-09</Text>
         </View>
-        <View style={styles.verimlilikContent}>
-          <Text style={[styles.verimlilikValue, { color: theme.colors.onSurface }]}>0 <Text style={[styles.verimlilikUnit, { color: theme.colors.primary }]}>Adım</Text></Text>
-          <Text style={styles.verimlilikDesc}>Günlük Adım</Text>
+        <View style={styles.chartCard}>
+          <View style={styles.calendarGrid}>
+            {Array.from({length: 30}).map((_, i) => (
+               <View key={i} style={styles.calDayBox}>
+                 <Text style={styles.calDayText}>{i + 1}</Text>
+               </View>
+            ))}
+          </View>
         </View>
       </View>
-    </View>
+
+      <View style={styles.section}>
+        <Text style={[styles.sectionTitle, { marginLeft: 4 }]}>Kütüphane</Text>
+        <View style={styles.chartCard}>
+          <View style={[styles.telemetryCardNew, { minHeight: 0, padding: 16 }]}>
+            <Icon name="smartphone" size={24} color={theme.colors.primary} />
+            <View style={{ marginTop: 24 }}>
+               <Text style={styles.telemetryLabelNew}>Toplam İçerik</Text>
+               <Text style={styles.telemetryValueNew}>{libraryTotal}</Text>
+            </View>
+          </View>
+          
+          {libraryCategories.length > 0 && (
+            <View style={{ marginTop: 24, gap: 16 }}>
+              {libraryCategories.slice(0, 4).map((cat, idx) => {
+                const percentage = libraryTotal > 0 ? (cat.count / libraryTotal) * 100 : 0;
+                return (
+                  <View key={idx}>
+                    <View style={styles.libBarTop}>
+                      <Text style={styles.libBarLabel}>{cat.category}</Text>
+                      <Text style={styles.libBarValue}>{cat.count}</Text>
+                    </View>
+                    <View style={styles.libBarBg}>
+                       <View style={[styles.libBarFill, { width: `${percentage}%` }]} />
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          )}
+        </View>
+      </View>
+    </>
   );
+
+  const renderSpor = () => {
+    const muscles = ['Göğüs', 'Sırt', 'Omuz', 'Kol', 'Bacak', 'Karın'];
+    
+    const muscleExercises: Record<string, string[]> = {
+      göğüs: ['Bench Press', 'Incline Press', 'Dumbbell Press', 'Cable Fly'],
+      sırt: ['Pull Up', 'Lat Pulldown', 'Barbell Row', 'Deadlift'],
+      omuz: ['Overhead Press', 'Lateral Raise', 'Front Raise', 'Shrug'],
+      kol: ['Barbell Curl', 'Hammer Curl', 'Triceps Extension', 'Dips'],
+      bacak: ['Squat', 'Leg Press', 'Lunge', 'Leg Extension'],
+      karın: ['Crunch', 'Plank', 'Leg Raise']
+    };
+
+    const currentExercises = muscleExercises[activeMuscle] || [];
+
+    const filteredPrs = prs.filter(pr => {
+      if (activeExercise) return pr.exercise_name === activeExercise;
+      return currentExercises.includes(pr.exercise_name);
+    });
+
+    const handleMuscleSelect = (m: string) => {
+      setActiveMuscle(m);
+      setActiveExercise(null);
+    };
+
+    const handleExerciseSelect = (e: string) => {
+      if (activeExercise === e) setActiveExercise(null);
+      else setActiveExercise(e);
+    };
+
+    return (
+      <>
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { marginLeft: 4 }]}>Hareket</Text>
+          <View style={[styles.telemetryCardNew, { minHeight: 0 }]}>
+            <Icon name="show-chart" size={24} color={theme.colors.primary} />
+            <View style={{ marginTop: 24 }}>
+              <Text style={styles.telemetryLabelNew}>Adım Ortalaması</Text>
+              <Text style={styles.telemetryValueNew}>{stepAvg}</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={[styles.chartCard, { padding: 20, marginTop: 16 }]}>
+          <Text style={[styles.sectionTitle, { marginBottom: 16 }]}>Kişisel Rekorlar (PR)</Text>
+          
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingBottom: 16 }}>
+            {muscles.map(m => (
+              <TouchableOpacity 
+                key={m} 
+                style={[styles.prChip, activeMuscle === m.toLowerCase() && styles.prChipActive]}
+                onPress={() => handleMuscleSelect(m.toLowerCase())}
+              >
+                <Text style={[styles.prChipText, activeMuscle === m.toLowerCase() && styles.prChipTextActive]}>{m}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingBottom: 8 }}>
+            {currentExercises.map(e => (
+              <TouchableOpacity 
+                key={e} 
+                style={[styles.prChip, activeExercise === e && styles.prChipActive]}
+                onPress={() => handleExerciseSelect(e)}
+              >
+                <Text style={[styles.prChipText, activeExercise === e && styles.prChipTextActive]}>{e}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+          
+          {filteredPrs.length > 0 ? (
+            <View style={[styles.prList, { marginTop: 16 }]}>
+              {filteredPrs.map((pr, idx) => {
+                const getMonthName = (m: string) => {
+                  if (!m) return '';
+                  const months = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+                  const i = parseInt(m, 10) - 1;
+                  return months[i] || m;
+                };
+                return (
+                  <View key={idx} style={styles.prItem}>
+                    <View style={styles.prItemLeft}>
+                      <View style={styles.prIconBox}><Icon name="fitness-center" size={20} color={theme.colors.primary} /></View>
+                      <View>
+                        <Text style={styles.prTitle}>{pr.exercise_name}</Text>
+                        {pr.month && <Text style={styles.prSub}>{getMonthName(pr.month)} - {pr.date}</Text>}
+                      </View>
+                    </View>
+                    <View style={styles.prItemRight}>
+                      <Text style={styles.prValue}>{pr.max_weight} <Text style={styles.prUnit}>kg</Text></Text>
+                      <Text style={styles.prSubRight}>{pr.sets} x {pr.reps} Tekrar</Text>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          ) : (
+            <Text style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center', marginTop: 24, marginBottom: 8 }}>
+              Kayıtlı rekor bulunamadı.
+            </Text>
+          )}
+        </View>
+      </>
+    );
+  };
+
+
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
@@ -116,75 +235,25 @@ export const StatisticsScreen = () => {
           </View>
         </View>
 
-        {/* Period Chips */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipRow}>
-          {['bu-hafta', 'gecen-hafta', '2-hafta', '3-hafta'].map(period => (
-            <TouchableOpacity 
-              key={period} 
-              style={[styles.periodChip, activePeriod === period && styles.periodChipActive]}
-              onPress={() => setActivePeriod(period)}
-            >
-              <Text style={[styles.periodChipText, activePeriod === period && styles.periodChipTextActive]}>
-                {period.replace('-', ' ').toUpperCase()}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-
         {/* Category Tabs */}
-        <View style={styles.tabContainer}>
-          {['giris', 'verimlilik', 'spor', 'hepsi'].map(cat => (
+        <View style={[styles.tabContainer, { marginTop: 16 }]}>
+          {['verimlilik', 'spor'].map(cat => (
             <TouchableOpacity 
               key={cat} 
               style={[styles.tabBtn, activeCategory === cat && styles.tabBtnActive]}
               onPress={() => setActiveCategory(cat)}
             >
               <Text style={[styles.tabBtnText, activeCategory === cat && styles.tabBtnTextActive]}>
-                {cat === 'hepsi' ? 'Tümü' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+                {cat === 'verimlilik' ? 'Verimlilik' : 'Spor'}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
 
         {/* Dynamic Sections */}
-        {(activeCategory === 'hepsi' || activeCategory === 'giris') && renderEnerji()}
-        {(activeCategory === 'hepsi' || activeCategory === 'verimlilik') && renderVerimlilik()}
+        {activeCategory === 'verimlilik' && renderVerimlilik()}
 
-        {/* PR Section */}
-        {(activeCategory === 'hepsi' || activeCategory === 'spor') && (
-          <View style={styles.card}>
-            <View style={styles.cardHeader}>
-              <View style={styles.cardHeaderLeft}>
-                <View style={[styles.pulseDot, { backgroundColor: theme.colors.secondary }]} />
-                <Text style={[styles.cardTitle, { color: theme.colors.primary }]}>Kişisel Rekorlar (PR)</Text>
-              </View>
-              <Text style={{ ...theme.typography.labelSm, color: theme.colors.secondary }}>Spor Merkezi</Text>
-            </View>
-            
-            <View style={styles.prList}>
-              {loading ? (
-                 <ActivityIndicator size="small" color={theme.colors.primary} />
-              ) : prs.length === 0 ? (
-                <Text style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center', padding: 12 }}>Henüz kaydedilmiş ağırlık rekoru yok.</Text>
-              ) : (
-                prs.map((pr, idx) => (
-                  <View key={idx} style={styles.prItem}>
-                    <View style={styles.prItemLeft}>
-                      <View style={styles.prIconBox}><Icon name="fitness-center" size={20} color={theme.colors.primary} /></View>
-                      <View>
-                        <Text style={styles.prTitle}>{pr.exercise_name}</Text>
-                      </View>
-                    </View>
-                    <View style={styles.prItemRight}>
-                      <Text style={styles.prValue}>{pr.max_weight} <Text style={styles.prUnit}>kg</Text></Text>
-                      <Text style={styles.prSubRight}>{pr.sets} x {pr.reps} Tekrar</Text>
-                    </View>
-                  </View>
-                ))
-              )}
-            </View>
-          </View>
-        )}
+        {activeCategory === 'spor' && renderSpor()}
 
       </ScrollView>
     </SafeAreaView>
@@ -220,12 +289,6 @@ const styles = StyleSheet.create({
   subheadRight: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: theme.colors.surfaceContainerHigh, paddingHorizontal: 12, paddingVertical: 4, borderRadius: 16 },
   subheadDateText: { ...theme.typography.labelMd, color: theme.colors.onSurface },
   
-  chipRow: { gap: 8, paddingVertical: 4 },
-  periodChip: { height: 36, paddingHorizontal: 16, borderRadius: 18, backgroundColor: theme.colors.surfaceContainerHigh, justifyContent: 'center', alignItems: 'center' },
-  periodChipActive: { backgroundColor: theme.colors.primary },
-  periodChipText: { ...theme.typography.labelMd, color: theme.colors.onSurfaceVariant },
-  periodChipTextActive: { color: theme.colors.onPrimary, fontWeight: 'bold' },
-  
   tabContainer: { flexDirection: 'row', backgroundColor: theme.colors.surfaceContainerLowest, padding: 4, borderRadius: 12 },
   tabBtn: { flex: 1, paddingVertical: 8, borderRadius: 8, alignItems: 'center', justifyContent: 'center' },
   tabBtnActive: { backgroundColor: theme.colors.primary },
@@ -240,31 +303,39 @@ const styles = StyleSheet.create({
   sectionSubtitle: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
   
   grid2: { flexDirection: 'row', gap: 12 },
-  telemetryCard: { flex: 1, backgroundColor: theme.colors.cardBg, borderWidth: 1, borderColor: theme.colors.cardBorder, borderRadius: 12, padding: 12, justifyContent: 'space-between', minHeight: 110 },
-  telemetryTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  telemetryLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
-  telemetryValue: { ...theme.typography.titleLg, color: theme.colors.onSurface, fontWeight: 'bold', marginTop: 4 },
-  telemetryUnit: { ...theme.typography.labelMd, color: theme.colors.onSurfaceVariant, fontWeight: 'normal' },
-  telemetryIconBox: { width: 32, height: 32, borderRadius: 8, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center' },
-  telemetryBottom: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderTopWidth: 1, borderTopColor: 'rgba(38, 40, 46, 0.5)', paddingTop: 8, marginTop: 12 },
-  telemetryBottomLeft: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  telemetrySubLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
-  progressBarBg: { width: 48, height: 6, backgroundColor: theme.colors.surfaceContainerLowest, borderRadius: 3, overflow: 'hidden' },
-  progressBarFill: { height: '100%', backgroundColor: theme.colors.primary, borderRadius: 3 },
+  telemetryCardNew: { flex: 1, backgroundColor: theme.colors.surfaceContainer, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 16, padding: 16, justifyContent: 'space-between' },
+  telemetryLabelNew: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, marginBottom: 4, fontWeight: 'bold' },
+  telemetryValueNew: { ...theme.typography.headlineLgMobile, color: theme.colors.onSurface, fontWeight: 'bold' },
   
-  verimlilikCard: { flex: 1, backgroundColor: theme.colors.surfaceContainer, borderRadius: 12, padding: 12, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 4 },
-  verimlilikTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 },
-  verimlilikTitle: { ...theme.typography.titleMd, color: theme.colors.primary, fontSize: 14 },
-  verimlilikIconBox: { width: 32, height: 32, borderRadius: 8, backgroundColor: theme.colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center' },
-  verimlilikContent: { backgroundColor: theme.colors.surfaceContainerLowest, borderRadius: 8, padding: 16, alignItems: 'center' },
-  verimlilikValue: { ...theme.typography.headlineLgMobile, color: theme.colors.primary },
-  verimlilikUnit: { ...theme.typography.titleMd, fontWeight: '500' },
-  verimlilikDesc: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, marginTop: 4, textAlign: 'center' },
+  chartCard: { backgroundColor: theme.colors.surfaceContainer, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 16, padding: 24, marginTop: 8 },
+  chartContainer: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', height: 160 },
+  barCol: { alignItems: 'center' },
+  barBg: { width: 28, height: 120, borderRadius: 14, backgroundColor: 'rgba(159, 253, 80, 0.15)', justifyContent: 'flex-end', overflow: 'hidden' },
+  barFill: { width: '100%', backgroundColor: theme.colors.primary, borderRadius: 14 },
+  barLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, marginTop: 12, fontSize: 10 },
   
-  card: { backgroundColor: theme.colors.cardBg, borderWidth: 1, borderColor: theme.colors.cardBorder, borderRadius: theme.rounded.md, padding: theme.spacing.md, gap: theme.spacing.md },
-  cardHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  cardHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 6 },
-  cardTitle: { ...theme.typography.titleMd, color: theme.colors.onSurface },
+  odakCard: { backgroundColor: theme.colors.surfaceContainer, borderWidth: 1, borderColor: theme.colors.surfaceBorder, borderRadius: 16, padding: 32, alignItems: 'center', justifyContent: 'center', marginTop: 8 },
+  odakValue: { ...theme.typography.headlineLg, color: theme.colors.primary, fontWeight: 'bold', fontSize: 36 },
+  odakLabel: { ...theme.typography.labelMd, color: theme.colors.onSurfaceVariant, marginTop: 8 },
+
+  sectionHeaderRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  sectionSubtitleSmall: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
+
+  calendarGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: 12 },
+  calDayBox: { width: 36, height: 36, borderRadius: 18, backgroundColor: theme.colors.surfaceContainerHighest, alignItems: 'center', justifyContent: 'center' },
+  calDayText: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
+
+  libBarTop: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 },
+  libBarLabel: { ...theme.typography.labelMd, color: theme.colors.onSurfaceVariant },
+  libBarValue: { ...theme.typography.labelMd, color: theme.colors.onSurfaceVariant },
+  libBarBg: { height: 8, backgroundColor: 'rgba(159, 253, 80, 0.15)', borderRadius: 4, overflow: 'hidden' },
+  libBarFill: { height: '100%', backgroundColor: theme.colors.primary, borderRadius: 4 },
+  
+
+  prChip: { paddingHorizontal: 16, paddingVertical: 8, borderRadius: 20, backgroundColor: theme.colors.surfaceContainerHigh, borderWidth: 1, borderColor: theme.colors.surfaceBorder },
+  prChipActive: { backgroundColor: theme.colors.primary, borderColor: theme.colors.primary },
+  prChipText: { ...theme.typography.labelMd, color: theme.colors.onSurfaceVariant },
+  prChipTextActive: { color: theme.colors.onPrimary, fontWeight: 'bold' },
   
   prList: { gap: 8 },
   prItem: { backgroundColor: theme.colors.surfaceContainerLowest, borderRadius: 8, padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },

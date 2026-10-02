@@ -191,6 +191,15 @@ export const initDatabase = async () => {
       );`
     );
 
+    // Steps / Adımsayar
+    await db.execute(
+      `CREATE TABLE IF NOT EXISTS Steps (
+        date TEXT PRIMARY KEY, -- YYYY-MM-DD
+        count INTEGER DEFAULT 0,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );`
+    );
+
     console.log('Database schema and tables initialized successfully.');
   } catch (error) {
     console.error('Database initialization failed:', error);

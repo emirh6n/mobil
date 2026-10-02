@@ -788,3 +788,35 @@
 {"_e":"metro:bundling:done","_t":1790947887347,"id":"d","total":1,"ms":23.8427}
 {"_e":"metro:client_log","_t":1790947890560,"level":"log","data":["Database schema and tables initialized successfully."]}
 {"_e":"metro:client_log","_t":1790951196555,"level":"warn","data":["DateTimePicker: `onChange` is deprecated. Use `onValueChange`, `onDismiss`, and `onNeutralButtonPress` instead."]}
+{"_e":"metro:bundling:started","_t":1790951520073,"id":"i","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790951520073,"id":"i","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790951520075,"id":"i","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790951520175,"id":"i","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790951520275,"id":"i","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790951520375,"id":"i","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790951520513,"id":"i","total":1,"ms":440.0238}
+{"_e":"metro:client_log","_t":1790951524881,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790951670189,"id":"j","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790951670190,"id":"j","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790951670233,"id":"j","total":1,"ms":43.6301}
+{"_e":"metro:client_log","_t":1790951677130,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790952476193,"id":"k","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790952476193,"id":"k","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790952476234,"id":"k","total":1,"ms":40.9112}
+{"_e":"metro:client_log","_t":1790952480514,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790952494792,"id":"l","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790952494792,"id":"l","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790952494836,"id":"l","total":1,"ms":43.8616}
+{"_e":"metro:client_log","_t":1790952498812,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790952521620,"id":"m","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790952521620,"id":"m","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790952521667,"id":"m","total":1,"ms":47.1441}
+{"_e":"metro:client_log","_t":1790952525750,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790952566763,"level":"warn","data":["DateTimePicker: `onChange` is deprecated. Use `onValueChange`, `onDismiss`, and `onNeutralButtonPress` instead."]}
+{"_e":"metro:bundling:started","_t":1790953526215,"id":"p","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790953526215,"id":"p","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790953526251,"id":"p","total":1,"ms":36.2437}
+{"_e":"metro:client_log","_t":1790953529933,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790954054247,"level":"error","data":["[ReferenceError: Property 'renderVerimlilik' doesn't exist]"]}
+{"_e":"metro:client_log","_t":1790954073746,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790954617947,"level":"log","data":["Database schema and tables initialized successfully."]}
