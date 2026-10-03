@@ -834,3 +834,39 @@
 {"_e":"metro:bundling:progress","_t":1790956581064,"id":"w","progress":0,"total":1,"current":0}
 {"_e":"metro:bundling:done","_t":1790956581184,"id":"w","total":1,"ms":422.2444}
 {"_e":"metro:client_log","_t":1790956588006,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"root:init","_t":1790974167757,"format":"v0-jsonl","version":"57.0.27"}
+{"_e":"env:mode","_t":1790974167758,"nodeEnv":"development","babelEnv":"development","mode":"development"}
+{"_e":"env:load","_t":1790974167759,"mode":"development","files":[],"env":{}}
+{"_e":"devserver:start","_t":1790974168036,"mode":"development","web":true,"baseUrl":"","asyncRoutes":false,"routerRoot":"../..\\..\\app","serverComponents":false,"serverActions":false,"serverRendering":false,"apiRoutes":false,"exporting":false}
+{"_e":"metro:config","_t":1790974168357,"serverRoot":"../..\\..","projectRoot":"../..\\..","exporting":false,"flags":{"autolinkingModuleResolution":false,"serverActions":false,"serverComponents":false,"reactCompiler":false,"optimizeGraph":false,"treeshaking":false,"logbox":false}}
+{"_e":"expo:dev-tools-plugin:load","_t":1790974168538,"plugins":[{"packageName":"expo-sqlite","bannerTitle":"expo-sqlite","cliBanner":false,"webpageEndpoint":"/_expo/plugins/expo-sqlite"}]}
+{"_e":"metro:instantiate","_t":1790974171973,"atlas":false,"workers":12,"host":"::","port":8081}
+{"_e":"metro:bundling:started","_t":1790974177602,"id":"3","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790974177602,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790974177606,"id":"3","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:progress","_t":1790974177706,"id":"3","progress":0.19190222798258505,"total":331,"current":145}
+{"_e":"metro:bundling:progress","_t":1790974177806,"id":"3","progress":0.390625,"total":744,"current":465}
+{"_e":"metro:bundling:progress","_t":1790974177909,"id":"3","progress":0.6445378434774429,"total":989,"current":794}
+{"_e":"metro:bundling:progress","_t":1790974178009,"id":"3","progress":0.8316012018591457,"total":1124,"current":1025}
+{"_e":"metro:bundling:progress","_t":1790974178109,"id":"3","progress":0.99163533577048,"total":1193,"current":1188}
+{"_e":"metro:bundling:progress","_t":1790974178209,"id":"3","progress":0.9933884478750932,"total":1208,"current":1204}
+{"_e":"metro:bundling:progress","_t":1790974178319,"id":"3","progress":0.9983572898050016,"total":1217,"current":1216}
+{"_e":"metro:bundling:progress","_t":1790974178548,"id":"3","progress":0.999,"total":1217,"current":1217}
+{"_e":"metro:bundling:done","_t":1790974178596,"id":"3","total":1217,"ms":993.4539}
+{"_e":"metro:client_log","_t":1790974183057,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:client_log","_t":1790974301129,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790974304248,"id":"5","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790974304248,"id":"5","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790974304274,"id":"5","total":1,"ms":26.1953}
+{"_e":"metro:client_log","_t":1790974309443,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790974320448,"id":"8","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790974320448,"id":"8","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790974320473,"id":"8","total":1,"ms":24.963}
+{"_e":"metro:bundling:started","_t":1790974323368,"id":"9","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790974323368,"id":"9","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790974323392,"id":"9","total":1,"ms":23.9645}
+{"_e":"metro:client_log","_t":1790974327971,"level":"log","data":["Database schema and tables initialized successfully."]}
+{"_e":"metro:bundling:started","_t":1790974349687,"id":"a","platform":"android","environment":null,"entry":"node_modules\\expo\\AppEntry.js"}
+{"_e":"metro:bundling:progress","_t":1790974349687,"id":"a","progress":0,"total":1,"current":0}
+{"_e":"metro:bundling:done","_t":1790974349711,"id":"a","total":1,"ms":24.4499}
+{"_e":"metro:client_log","_t":1790974355234,"level":"log","data":["Database schema and tables initialized successfully."]}
