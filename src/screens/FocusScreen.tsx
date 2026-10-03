@@ -43,11 +43,7 @@ export const FocusScreen = () => {
   const cdStartTime = useRef(0);
   const cdStartRemaining = useRef(0);
   
-  const currentState = useRef({
-    activeTab,
-    swIsRunning, swAccumulated: swAccumulated.current, swStartTime: swStartTime.current, swSeconds,
-    cdIsRunning, cdIntended, cdStartRemaining: cdStartRemaining.current, cdStartTime: cdStartTime.current, cdSeconds
-  });
+  const currentState = useRef<any>({});
 
   useEffect(() => {
     currentState.current = {
@@ -55,7 +51,7 @@ export const FocusScreen = () => {
       swIsRunning, swAccumulated: swAccumulated.current, swStartTime: swStartTime.current, swSeconds,
       cdIsRunning, cdIntended, cdStartRemaining: cdStartRemaining.current, cdStartTime: cdStartTime.current, cdSeconds
     };
-  }, [activeTab, swIsRunning, swSeconds, cdIsRunning, cdIntended, cdSeconds]);
+  });
 
   const liveTotalFocus = totalFocusSeconds + swSeconds + (cdIntended > 0 ? cdIntended - cdSeconds : 0);
 
@@ -258,7 +254,7 @@ export const FocusScreen = () => {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isReady, swIsRunning, cdIsRunning]);
+  }, [isReady, swIsRunning, cdIsRunning, addFocusTime]);
 
   if (!isReady) {
     return (

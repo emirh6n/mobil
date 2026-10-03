@@ -17,18 +17,18 @@ export interface AppSettings {
 }
 
 const defaultSettings: AppSettings = {
-  userName: 'Emirhan',
+  userName: '',
   target_calories: '2000',
   target_protein: '120',
   target_water: '3.0',
   target_steps: '10000',
-  age: '24',
+  age: '',
   gender: 'male',
-  height: '182',
-  weight: '78',
-  waist: '82',
-  neck: '39',
-  hip: '95',
+  height: '',
+  weight: '',
+  waist: '',
+  neck: '',
+  hip: '',
 };
 
 export const useSettings = () => {

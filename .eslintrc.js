@@ -1,4 +1,7 @@
 module.exports = {
   root: true,
-  extends: '@react-native',
+  extends: 'expo',
+  rules: {
+    // any custom rules can go here
+  }
 };

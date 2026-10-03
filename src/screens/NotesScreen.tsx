@@ -3,7 +3,6 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Activi
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
-import { useNavigation } from '@react-navigation/native';
 import { useNotes } from '../hooks/useNotes';
 
 import { Header } from '../components/Header';
@@ -17,6 +16,7 @@ export const NotesScreen = () => {
 
   useEffect(() => {
     if (!loading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setLocalNote(note);
     }
   }, [loading, note]);

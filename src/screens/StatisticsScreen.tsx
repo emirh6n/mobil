@@ -1,17 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
 import { Header } from '../components/Header';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useStatistics } from '../hooks/useStatistics';
 import { useDateContext } from '../context/DateContext';
 
 export const StatisticsScreen = () => {
   const navigation = useNavigation();
   const { selectedDate } = useDateContext();
-  const { loading, tasksCompleted, tasksTotal, calories, stepAvg, prs, libraryTotal, libraryCategories, noteDays, focusTimeStr, taskWeeks, bodyHistory } = useStatistics(selectedDate);
+  const { loading, tasksCompleted, tasksTotal, calories, stepAvg, prs, libraryTotal, libraryCategories, noteDays, focusTimeStr, taskWeeks, bodyHistory, refresh } = useStatistics(selectedDate);
+
+  useFocusEffect(
+    useCallback(() => {
+      refresh();
+    }, [refresh])
+  );
 
   const [activeCategory, setActiveCategory] = useState('verimlilik');
   const [activeMuscle, setActiveMuscle] = useState('göğüs');
@@ -122,18 +128,19 @@ export const StatisticsScreen = () => {
   };
 
   const renderSpor = () => {
-    const muscles = ['Göğüs', 'Sırt', 'Omuz', 'Kol', 'Bacak', 'Karın'];
+    const muscles = ['Göğüs', 'Sırt', 'Omuz', 'Kol', 'Bacak & Kalça', 'Boyun', 'Karın'];
     
     const muscleExercises: Record<string, string[]> = {
-      göğüs: ['Bench Press', 'Incline Press', 'Dumbbell Press', 'Cable Fly'],
-      sırt: ['Pull Up', 'Lat Pulldown', 'Barbell Row', 'Deadlift'],
-      omuz: ['Overhead Press', 'Lateral Raise', 'Front Raise', 'Shrug'],
-      kol: ['Barbell Curl', 'Hammer Curl', 'Triceps Extension', 'Dips'],
-      bacak: ['Squat', 'Leg Press', 'Lunge', 'Leg Extension'],
-      karın: ['Crunch', 'Plank', 'Leg Raise']
+      göğüs: ['Machine Pec Deck / Cable Fly', 'Dips', 'Bench Press (Incline, Seated)', 'Seated Chest Press'],
+      sırt: ['Dumbbell Shrugs', 'Pull Up', 'Pull Down', 'Barbell Row / Machine Row'],
+      omuz: ['Lateral Raise (Cable/Dumbbell)', 'Shoulder Press / Overhead', 'Reverse Fly Machine', 'Cable Face Pull'],
+      kol: ['Dumbbell Wrist Curls / Extensions', 'Bayesian Cable Curl', 'Preacher Curl', '(Seated) Tricep Extension', 'Skull Crusher'],
+      'bacak & kalça': ['Standing Calf Raise', 'Deadlift (+Romanian)', 'Seated Leg Curl / Extension', 'Squat (Barbell, Bulgarian)', 'Barbell Hip Thrust', 'Walking Lunge', 'Glute Bridge'],
+      boyun: ['Neck Curls / Extensions'],
+      karın: ['Cable Crunch']
     };
 
-    const currentExercises = muscleExercises[activeMuscle] || [];
+    const currentExercises = muscleExercises[activeMuscle.toLowerCase()] || [];
 
     const filteredPrs = prs.filter(pr => {
       if (activeExercise) return pr.exercise_name === activeExercise;

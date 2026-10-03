@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Modal, View, Text, StyleSheet, TouchableOpacity, TextInput, Vibration } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
+import { useAudioPlayer } from 'expo-audio';
 import { theme } from '../theme/theme';
 import { Icon } from './Icon';
 
@@ -12,6 +13,8 @@ interface ActiveAlarmModalProps {
 
 export const ActiveAlarmModal: React.FC<ActiveAlarmModalProps> = ({ visible, alarm, onDismiss }) => {
   const [selectedTask, setSelectedTask] = useState<'math' | 'shake' | 'memory' | null>(null);
+  
+  const player = useAudioPlayer(require('../assets/alarm.mp3'));
 
   // Math State
   const [mathQuestions, setMathQuestions] = useState<any[]>([]);
@@ -21,7 +24,7 @@ export const ActiveAlarmModal: React.FC<ActiveAlarmModalProps> = ({ visible, ala
 
   // Shake State
   const [shakeCount, setShakeCount] = useState(0);
-  const [subscription, setSubscription] = useState<any>(null);
+  const subscriptionRef = useRef<any>(null);
 
   // Memory State
   const [memorySequence, setMemorySequence] = useState<string[]>([]);
@@ -34,14 +37,23 @@ export const ActiveAlarmModal: React.FC<ActiveAlarmModalProps> = ({ visible, ala
     if (visible) {
       // Loop vibration aggressively
       Vibration.vibrate([1000, 1000], true);
+      player.loop = true;
+      player.play();
     } else {
       Vibration.cancel();
+      player.pause();
       resetState();
     }
+    
     return () => {
       Vibration.cancel();
+      player.pause();
+      if (subscriptionRef.current) {
+        subscriptionRef.current.remove();
+        subscriptionRef.current = null;
+      }
     };
-  }, [visible]);
+  }, [visible, player]);
 
   const resetState = () => {
     setSelectedTask(null);
@@ -50,9 +62,9 @@ export const ActiveAlarmModal: React.FC<ActiveAlarmModalProps> = ({ visible, ala
     setMathInput('');
     setMathError(false);
     setShakeCount(0);
-    if (subscription) {
-      subscription.remove();
-      setSubscription(null);
+    if (subscriptionRef.current) {
+      subscriptionRef.current.remove();
+      subscriptionRef.current = null;
     }
     setMemorySequence([]);
     setUserSequence([]);
@@ -119,13 +131,13 @@ export const ActiveAlarmModal: React.FC<ActiveAlarmModalProps> = ({ visible, ala
           setShakeCount(localCount);
           if (localCount >= 20) {
             sub.remove();
-            setSubscription(null);
+            subscriptionRef.current = null;
             onDismiss(); // Success!
           }
         }
       }
     });
-    setSubscription(sub);
+    subscriptionRef.current = sub;
   };
 
   const generateMemory = async () => {

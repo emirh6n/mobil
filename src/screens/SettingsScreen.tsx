@@ -42,6 +42,7 @@ export const SettingsScreen = () => {
   // Sync state when loaded
   useEffect(() => {
     if (!loading) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUserName(settings.userName);
 
       setAge(settings.age);

@@ -76,6 +76,12 @@ export const SportsScreen = () => {
 
   const enablePedometer = async () => {
     try {
+      const { status } = await Pedometer.requestPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert('İzin Reddedildi', 'Adım sayar verilerine erişim izni vermeniz gerekiyor.');
+        return;
+      }
+
       const isAvailable = await Pedometer.isAvailableAsync();
       setIsPedometerAvailable(String(isAvailable));
 
@@ -98,7 +104,7 @@ export const SportsScreen = () => {
         Alert.alert('Hata', 'Cihazınızda adım sayar sensörü bulunmuyor veya desteklenmiyor.');
       }
     } catch (e) {
-      Alert.alert('İzin Reddedildi', 'Adım sayar verilerine erişim izni vermeniz gerekiyor.');
+      Alert.alert('Hata', 'Adım sayar başlatılamadı.');
     }
   };
 
