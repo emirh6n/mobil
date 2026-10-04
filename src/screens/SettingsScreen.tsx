@@ -187,6 +187,21 @@ export const SettingsScreen = () => {
           </View>
         </View>
 
+        {/* İZİNLER VE BATARYA */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>İZİNLER VE BATARYA</Text>
+          <View style={styles.card}>
+            <View style={{ gap: 8 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <View style={styles.cardIconBox}><Icon name="battery-alert" size={22} color={theme.colors.error} /></View>
+                <Text style={{ ...theme.typography.labelMd, color: theme.colors.error, flex: 1 }}>Sert Mod Alarmının Çalışması İçin Önemli</Text>
+              </View>
+              <Text style={{ ...theme.typography.bodySm, color: theme.colors.onSurfaceVariant, lineHeight: 20 }}>
+                Xiaomi, Samsung, Oppo gibi cihazlarda Sert Mod alarmlarının (ekran kilitliyken veya uygulama kapalıyken bile) sorunsuz çalabilmesi için telefon ayarlarından bu uygulama için "Pil Optimizasyonu"nu KAPATIN ve "Otomatik Başlatma" (AutoStart) iznini AÇIN. Aksi takdirde Android sistemi alarmı engelleyebilir.
+              </Text>
+            </View>
+          </View>
+        </View>
 
         {/* KİŞİSEL BİLGİLER */}
         <View style={styles.section}>
@@ -304,22 +319,16 @@ export const SettingsScreen = () => {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>SİSTEM & YASAL</Text>
           <View style={styles.card}>
-            <View style={styles.listItem}>
+            <TouchableOpacity style={styles.listItem} onPress={() => navigation.navigate('SystemLegal' as never)}>
               <View style={styles.listItemLeft}>
-                <View style={[styles.cardIconBox, { backgroundColor: 'transparent', padding: 0 }]}>
-                  <Image source={require('../../assets/logo.jpg')} style={{ width: 40, height: 40, borderRadius: 8 }} />
+                <View style={styles.cardIconBox}><Icon name="gavel" size={22} color={theme.colors.onSurfaceVariant} /></View>
+                <View>
+                  <Text style={styles.listItemTitle}>Sistem ve Yasal</Text>
+                  <Text style={styles.listItemSub}>Gizlilik, İzinler, Verilerim</Text>
                 </View>
-                <View><Text style={styles.listItemTitle}>TRKN Studio</Text></View>
               </View>
-            </View>
-            <View style={styles.divider} />
-            <View style={styles.listItem}>
-              <View style={styles.listItemLeft}>
-                <View style={styles.cardIconBox}><Icon name="policy" size={22} color={theme.colors.onSurfaceVariant} /></View>
-                <View><Text style={styles.listItemTitle}>Gizlilik Sözleşmesi</Text><Text style={styles.listItemSub}>Uçtan uca şifreleme</Text></View>
-              </View>
-              <Icon name="open-in-new" size={18} color={theme.colors.onSurfaceVariant} />
-            </View>
+              <Icon name="arrow-forward" size={18} color={theme.colors.onSurfaceVariant} />
+            </TouchableOpacity>
           </View>
         </View>
 

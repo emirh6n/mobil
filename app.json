@@ -9,8 +9,9 @@
     "icon": "./assets/logo.png",
     "android": {
       "package": "com.trkn.mobil",
+      "icon": "./assets/android-icon.png",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/android-icon.png",
         "backgroundColor": "#000000"
       },
       "permissions": [
@@ -24,14 +25,7 @@
       "@react-native-community/datetimepicker",
       "expo-sharing",
       "expo-font",
-      [
-        "expo-build-properties",
-        {
-          "android": {
-            "kotlinVersion": "2.1.20"
-          }
-        }
-      ],
+
       [
         "expo-splash-screen",
         {
@@ -40,7 +34,8 @@
           "backgroundColor": "#000000"
         }
       ],
-      "expo-audio"
+      "expo-audio",
+      "expo-localization"
     ],
     "extra": {
       "eas": {

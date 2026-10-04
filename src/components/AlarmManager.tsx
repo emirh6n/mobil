@@ -9,8 +9,40 @@ export const AlarmManager = () => {
 
   useEffect(() => {
     const checkAlarms = async () => {
+      // 1. Check Native Hard Mode Alarm First
+      try {
+        const { default: ExpoAlarmModule } = await import('../../modules/expo-alarm-module/src/ExpoAlarmModule');
+        const activeId = ExpoAlarmModule.getActiveAlarmId();
+        
+        // Also check if boot flag needs to clear active session
+        const booted = ExpoAlarmModule.checkAndClearBootFlag();
+        if (booted) {
+          // Device booted, we should clear the JS active alarm state if it's lingering
+          if (activeAlarm?.is_hard_mode) {
+             setActiveAlarm(null);
+             return;
+          }
+        }
+
+        if (activeId !== -1 && !activeAlarm) {
+          // Find alarm in DB
+          const result = await db.execute('SELECT * FROM Reminders WHERE id = ?', [activeId]);
+          if (result.rows && result.rows.length > 0) {
+            setActiveAlarm({
+              ...result.rows[0],
+              is_hard_mode: Boolean(result.rows[0].is_hard_mode),
+              is_active: Boolean(result.rows[0].is_active)
+            });
+            return;
+          }
+        }
+      } catch (e) {
+        // Native module might not be available
+      }
+
       if (activeAlarm) return;
 
+      // 2. Fallback to normal JS time check for normal alarms
       try {
         const result = await db.execute('SELECT * FROM Reminders WHERE is_active = 1');
         const activeAlarms = result.rows || [];
@@ -47,7 +79,11 @@ export const AlarmManager = () => {
               const lastRungDate = rungAlarmsRef.current[alarm.id];
               if (lastRungDate !== todayStr) {
                 rungAlarmsRef.current[alarm.id] = todayStr;
-                setActiveAlarm(alarm);
+                setActiveAlarm({
+                  ...alarm,
+                  is_hard_mode: Boolean(alarm.is_hard_mode),
+                  is_active: Boolean(alarm.is_active)
+                });
                 break;
               }
             }
@@ -58,11 +94,15 @@ export const AlarmManager = () => {
       }
     };
 
-    const interval = setInterval(checkAlarms, 5000);
+    const interval = setInterval(checkAlarms, 2000);
     return () => clearInterval(interval);
   }, [activeAlarm]);
 
-  const handleDismiss = () => {
+  const handleDismiss = async () => {
+    try {
+      const { default: ExpoAlarmModule } = await import('../../modules/expo-alarm-module/src/ExpoAlarmModule');
+      ExpoAlarmModule.stopAlarm();
+    } catch (e) {}
     setActiveAlarm(null);
   };
 

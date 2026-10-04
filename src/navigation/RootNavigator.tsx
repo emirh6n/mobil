@@ -100,6 +100,12 @@ const TabNavigator = () => (
 );
 
 import { AlarmManager } from '../components/AlarmManager';
+import { SystemLegalScreen } from '../screens/legal/SystemLegalScreen';
+import { PrivacyPolicyScreen, TermsScreen, KvkkScreen, SupportScreen } from '../screens/legal/TextScreens';
+import { MyDataScreen } from '../screens/legal/MyDataScreen';
+import { PermissionsScreen } from '../screens/legal/PermissionsScreen';
+import { AboutScreen } from '../screens/legal/AboutScreen';
+import { LicensesScreen } from '../screens/legal/LicensesScreen';
 
 export const RootNavigator = () => {
   return (
@@ -113,6 +119,17 @@ export const RootNavigator = () => {
         <Stack.Screen name="Library" component={LibraryScreen} />
         <Stack.Screen name="Notes" component={NotesScreen} />
         <Stack.Screen name="Focus" component={FocusScreen} />
+        
+        {/* System & Legal */}
+        <Stack.Screen name="SystemLegal" component={SystemLegalScreen} />
+        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+        <Stack.Screen name="Terms" component={TermsScreen} />
+        <Stack.Screen name="Kvkk" component={KvkkScreen} />
+        <Stack.Screen name="Permissions" component={PermissionsScreen} />
+        <Stack.Screen name="MyData" component={MyDataScreen} />
+        <Stack.Screen name="Licenses" component={LicensesScreen} />
+        <Stack.Screen name="About" component={AboutScreen} />
+        <Stack.Screen name="Support" component={SupportScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

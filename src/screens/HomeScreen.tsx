@@ -13,13 +13,13 @@ import Svg, { Circle } from 'react-native-svg';
 
 const getHeartColor = (heartIndex: number, currentRating: number) => {
   if (currentRating < heartIndex) return theme.colors.onSurfaceVariant;
-  if (currentRating === 1) return '#8B0000'; // Dark Red
+  if (currentRating === 1) return '#ef4444'; // Normal Red
   if (currentRating === 2) return theme.colors.secondary; // Orange
   return theme.colors.primary; // Green
 };
 
 const getMoodColor = (rating: number) => {
-  if (rating === 1) return '#8B0000'; // Dark Red
+  if (rating === 1) return '#ef4444'; // Normal Red
   if (rating === 2) return theme.colors.secondary; // Orange
   if (rating === 3) return theme.colors.primary; // Green
   return 'transparent'; // No color

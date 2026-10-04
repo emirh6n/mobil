@@ -207,17 +207,20 @@ export const StatisticsScreen = () => {
                   return months[i] || m;
                 };
                 return (
-                  <View key={idx} style={styles.prItem}>
+                  <View key={idx} style={styles.prItemCompact}>
                     <View style={styles.prItemLeft}>
-                      <View style={styles.prIconBox}><Icon name="fitness-center" size={20} color={theme.colors.primary} /></View>
+                      <View style={styles.prIconBoxSmall}><Icon name="event" size={16} color={theme.colors.primary} /></View>
                       <View>
-                        <Text style={styles.prTitle}>{pr.exercise_name}</Text>
-                        {pr.month && <Text style={styles.prSub}>{getMonthName(pr.month)} - {pr.date}</Text>}
+                        {pr.month ? (
+                          <Text style={styles.prTitleCompact}>{pr.date} {getMonthName(pr.month)}</Text>
+                        ) : (
+                          <Text style={styles.prTitleCompact}>Tarihsiz</Text>
+                        )}
+                        <Text style={styles.prSubCompact}>{pr.sets} Set x {pr.reps} Tekrar</Text>
                       </View>
                     </View>
                     <View style={styles.prItemRight}>
-                      <Text style={styles.prValue}>{pr.max_weight} <Text style={styles.prUnit}>kg</Text></Text>
-                      <Text style={styles.prSubRight}>{pr.sets} x {pr.reps} Tekrar</Text>
+                      <Text style={styles.prValueCompact}>{pr.max_weight} <Text style={styles.prUnitCompact}>kg</Text></Text>
                     </View>
                   </View>
                 );
@@ -398,15 +401,14 @@ const styles = StyleSheet.create({
   prChipTextActive: { color: theme.colors.onPrimary, fontWeight: 'bold' },
   
   prList: { gap: 8 },
-  prItem: { backgroundColor: theme.colors.surfaceContainerLowest, borderRadius: 8, padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  prItemLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
-  prIconBox: { width: 40, height: 40, borderRadius: 8, backgroundColor: theme.colors.cardBg, borderWidth: 1, borderColor: theme.colors.cardBorder, alignItems: 'center', justifyContent: 'center' },
-  prTitle: { ...theme.typography.titleMd, color: theme.colors.onSurface },
-  prSub: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
+  prItemCompact: { backgroundColor: theme.colors.surfaceContainerLowest, borderRadius: 8, padding: 12, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
+  prItemLeft: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  prIconBoxSmall: { width: 32, height: 32, borderRadius: 8, backgroundColor: theme.colors.cardBg, borderWidth: 1, borderColor: theme.colors.cardBorder, alignItems: 'center', justifyContent: 'center' },
+  prTitleCompact: { ...theme.typography.titleMd, color: theme.colors.onSurface, fontSize: 14, fontWeight: 'bold' },
+  prSubCompact: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, fontSize: 11, marginTop: 2 },
   prItemRight: { alignItems: 'flex-end' },
-  prValue: { ...theme.typography.titleLg, color: theme.colors.primary, fontWeight: 'bold' },
-  prUnit: { ...theme.typography.labelSm, color: theme.colors.onSurface, fontWeight: 'normal' },
-  prSubRight: { ...theme.typography.labelSm, color: theme.colors.secondary },
+  prValueCompact: { ...theme.typography.titleLg, color: theme.colors.primary, fontWeight: 'bold', fontSize: 18 },
+  prUnitCompact: { ...theme.typography.labelSm, color: theme.colors.onSurface, fontWeight: 'normal' },
   
   bodyHistoryCard: { backgroundColor: theme.colors.surfaceContainerLowest, padding: 16, borderRadius: 16, borderWidth: 1, borderColor: theme.colors.surfaceBorderLight, minWidth: 140, gap: 12 },
   bodyHistoryHeader: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 4, borderBottomWidth: 1, borderBottomColor: theme.colors.surfaceContainerHigh, paddingBottom: 8 },

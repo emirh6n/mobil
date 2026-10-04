@@ -35,10 +35,12 @@ export const ActiveAlarmModal: React.FC<ActiveAlarmModalProps> = ({ visible, ala
 
   useEffect(() => {
     if (visible) {
-      // Loop vibration aggressively
-      Vibration.vibrate([1000, 1000], true);
-      player.loop = true;
-      player.play();
+      if (!alarm?.is_hard_mode) {
+        // Loop vibration aggressively for normal alarms
+        Vibration.vibrate([1000, 1000], true);
+        player.loop = true;
+        player.play();
+      }
     } else {
       Vibration.cancel();
       player.pause();

@@ -90,9 +90,13 @@ export const SportsScreen = () => {
         const start = new Date();
         start.setHours(0, 0, 0, 0);
 
-        const pastResult = await Pedometer.getStepCountAsync(start, end);
-        if (pastResult) {
-          setPastStepCount(pastResult.steps);
+        try {
+          const pastResult = await Pedometer.getStepCountAsync(start, end);
+          if (pastResult) {
+            setPastStepCount(pastResult.steps);
+          }
+        } catch (stepErr) {
+          console.warn("Geçmiş adımlar alınamadı:", stepErr);
         }
 
         pedometerSub.current = Pedometer.watchStepCount(result => {
@@ -103,8 +107,9 @@ export const SportsScreen = () => {
       } else {
         Alert.alert('Hata', 'Cihazınızda adım sayar sensörü bulunmuyor veya desteklenmiyor.');
       }
-    } catch (e) {
-      Alert.alert('Hata', 'Adım sayar başlatılamadı.');
+    } catch (e: any) {
+      console.error(e);
+      Alert.alert('Hata', 'Adım sayar başlatılamadı: ' + (e.message || 'Bilinmeyen hata'));
     }
   };
 
@@ -388,21 +393,39 @@ export const SportsScreen = () => {
               </TouchableOpacity>
             </View>
           ) : (
-            <View style={styles.pedometerGrid}>
-              <View style={styles.pedometerBox}>
-                <Icon name="do-not-step" size={24} color={theme.colors.primary} />
-                <Text style={styles.pedometerValue}>{pastStepCount + currentStepCount}</Text>
-                <Text style={styles.pedometerLabel}>Adım</Text>
+            <View style={styles.compactPedometerContainer}>
+              <View style={styles.compactPedometerItem}>
+                <View style={[styles.compactIconWrapper, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
+                  <Icon name="do-not-step" size={20} color="#06b6d4" />
+                </View>
+                <View>
+                  <Text style={styles.compactPedometerValue}>{pastStepCount + currentStepCount}</Text>
+                  <Text style={styles.compactPedometerLabel}>Adım</Text>
+                </View>
               </View>
-              <View style={styles.pedometerBox}>
-                <Icon name="map" size={24} color={theme.colors.primary} />
-                <Text style={styles.pedometerValue}>{((pastStepCount + currentStepCount) * 0.762 / 1000).toFixed(2)}</Text>
-                <Text style={styles.pedometerLabel}>Mesafe (km)</Text>
+              
+              <View style={styles.compactDivider} />
+              
+              <View style={styles.compactPedometerItem}>
+                <View style={[styles.compactIconWrapper, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
+                  <Icon name="map" size={20} color="#06b6d4" />
+                </View>
+                <View>
+                  <Text style={styles.compactPedometerValue}>{((pastStepCount + currentStepCount) * 0.762 / 1000).toFixed(2)}</Text>
+                  <Text style={styles.compactPedometerLabel}>km</Text>
+                </View>
               </View>
-              <View style={styles.pedometerBox}>
-                <Icon name="local-fire-department" size={24} color={theme.colors.primary} />
-                <Text style={styles.pedometerValue}>{Math.round((pastStepCount + currentStepCount) * 0.04)}</Text>
-                <Text style={styles.pedometerLabel}>Kalori (kcal)</Text>
+              
+              <View style={styles.compactDivider} />
+              
+              <View style={styles.compactPedometerItem}>
+                <View style={[styles.compactIconWrapper, { backgroundColor: 'rgba(6, 182, 212, 0.15)' }]}>
+                  <Icon name="local-fire-department" size={20} color="#06b6d4" />
+                </View>
+                <View>
+                  <Text style={styles.compactPedometerValue}>{Math.round((pastStepCount + currentStepCount) * 0.04)}</Text>
+                  <Text style={styles.compactPedometerLabel}>kcal</Text>
+                </View>
               </View>
             </View>
           )}
@@ -559,8 +582,10 @@ const styles = StyleSheet.create({
   syncBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: theme.colors.primary, paddingHorizontal: 20, paddingVertical: 12, borderRadius: 24, gap: 8, marginTop: 4 },
   syncBtnText: { ...theme.typography.labelMd, color: theme.colors.onPrimary, fontWeight: 'bold' },
   
-  pedometerGrid: { flexDirection: 'row', gap: 12, marginTop: 4 },
-  pedometerBox: { flex: 1, backgroundColor: theme.colors.surfaceContainerLowest, padding: 16, borderRadius: theme.rounded.md, alignItems: 'center', gap: 6, borderWidth: 1, borderColor: theme.colors.surfaceBorder },
-  pedometerValue: { ...theme.typography.titleLg, color: theme.colors.onSurface, fontWeight: 'bold' },
-  pedometerLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant },
+  compactPedometerContainer: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: theme.colors.surfaceContainerLowest, padding: 16, borderRadius: theme.rounded.md, borderWidth: 1, borderColor: theme.colors.surfaceBorder, marginTop: 4 },
+  compactPedometerItem: { flexDirection: 'row', alignItems: 'center', gap: 10, flex: 1, justifyContent: 'center' },
+  compactIconWrapper: { width: 36, height: 36, borderRadius: 18, backgroundColor: 'rgba(159, 253, 80, 0.1)', alignItems: 'center', justifyContent: 'center' },
+  compactPedometerValue: { ...theme.typography.titleMd, color: theme.colors.onSurface, fontWeight: 'bold' },
+  compactPedometerLabel: { ...theme.typography.labelSm, color: theme.colors.onSurfaceVariant, marginTop: -2 },
+  compactDivider: { width: 1, height: 32, backgroundColor: theme.colors.surfaceBorder },
 });

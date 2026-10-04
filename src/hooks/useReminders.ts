@@ -28,6 +28,12 @@ export const useReminders = () => {
       }));
       
       setReminders(formatted);
+      
+      // SYNC NATIVE ALARMS
+      import('../utils/alarmUtils').then(({ syncAlarmsToNative }) => {
+        syncAlarmsToNative(formatted);
+      });
+      
     } catch (error) {
       console.error('Error fetching reminders:', error);
     } finally {
