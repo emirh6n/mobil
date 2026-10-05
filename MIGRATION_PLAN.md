@@ -35,7 +35,7 @@ Bu belge, Google Stitch üzerinde oluşturulmuş HTML/CSS (Tailwind) projesinin 
 - Tür güvenliği (Type-safety) için `RootStackParamList` tanımlanacak.
 
 ## 5. SQLite Veritabanı ve Modeller
-- `@op-engineering/op-sqlite` (cross-platform, hızlı ve JSI tabanlı) entegre edilecek.
+- `expo-sqlite` (resmi, modern ve JSI tabanlı Expo SQLite kütüphanesi) entegre edilecek.
 - Migration ve sürüm kontrolü (versioning) sistemi eklenecek.
 - CRUD işlemleri UI'dan bağımsız bir Repository katmanında yönetilecek.
 

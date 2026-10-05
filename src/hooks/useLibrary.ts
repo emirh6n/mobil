@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import db from '../database/database';
+import { LibraryRepository } from '../repositories/LibraryRepository';
 
 export interface LibraryResource {
   id: number;
@@ -17,8 +17,8 @@ export const useLibrary = () => {
   const fetchResources = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.execute('SELECT * FROM LibraryResources ORDER BY created_at DESC');
-      setResources((result.rows as any[]) || []);
+      const fetchedResources = await LibraryRepository.getResources();
+      setResources(fetchedResources);
     } catch (error) {
       console.error('Error fetching library resources:', error);
     } finally {
@@ -32,10 +32,7 @@ export const useLibrary = () => {
 
   const addResource = async (title: string, category: string, url: string, notes: string) => {
     try {
-      await db.execute(
-        'INSERT INTO LibraryResources (title, category, url, notes) VALUES (?, ?, ?, ?)',
-        [title, category, url, notes]
-      );
+      await LibraryRepository.addResource(title, category, url, notes);
       await fetchResources();
     } catch (error) {
       console.error('Error adding library resource:', error);
@@ -44,7 +41,7 @@ export const useLibrary = () => {
 
   const deleteResource = async (id: number) => {
     try {
-      await db.execute('DELETE FROM LibraryResources WHERE id = ?', [id]);
+      await LibraryRepository.deleteResource(id);
       await fetchResources();
     } catch (error) {
       console.error('Error deleting library resource:', error);
@@ -53,10 +50,7 @@ export const useLibrary = () => {
 
   const updateResource = async (id: number, title: string, category: string, url: string, notes: string) => {
     try {
-      await db.execute(
-        'UPDATE LibraryResources SET title = ?, category = ?, url = ?, notes = ? WHERE id = ?',
-        [title, category, url, notes, id]
-      );
+      await LibraryRepository.updateResource(id, title, category, url, notes);
       await fetchResources();
     } catch (error) {
       console.error('Error updating library resource:', error);

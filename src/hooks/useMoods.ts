@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import db from '../database/database';
+import { MoodRepository } from '../repositories/MoodRepository';
 
 export const useMoods = (date: string) => {
   const [rating, setRating] = useState(0);
@@ -8,13 +8,8 @@ export const useMoods = (date: string) => {
   const fetchMood = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.execute('SELECT * FROM Moods WHERE date = ?', [date]);
-      const rows = (result.rows as any[]) || [];
-      if (rows.length > 0) {
-        setRating(rows[0].rating);
-      } else {
-        setRating(0);
-      }
+      const moodRating = await MoodRepository.getMood(date);
+      setRating(moodRating);
     } catch (error) {
       console.error('Error fetching mood:', error);
     } finally {
@@ -28,10 +23,7 @@ export const useMoods = (date: string) => {
 
   const saveMood = async (newRating: number) => {
     try {
-      await db.execute(
-        'INSERT INTO Moods (date, rating) VALUES (?, ?) ON CONFLICT(date) DO UPDATE SET rating = excluded.rating',
-        [date, newRating]
-      );
+      await MoodRepository.saveMood(date, newRating);
       setRating(newRating);
     } catch (error) {
       console.error('Error saving mood:', error);
@@ -46,13 +38,7 @@ export const useMonthlyMoods = (yearMonth: string) => {
 
   const fetchMonthMoods = useCallback(async () => {
     try {
-      // yearMonth format: 'YYYY-MM'
-      const result = await db.execute('SELECT date, rating FROM Moods WHERE date LIKE ?', [`${yearMonth}-%`]);
-      const rows = (result.rows as any[]) || [];
-      const moodMap: Record<string, number> = {};
-      rows.forEach(r => {
-        moodMap[r.date] = r.rating;
-      });
+      const moodMap = await MoodRepository.getMonthlyMoods(yearMonth);
       setMoods(moodMap);
     } catch (error) {
       console.error('Error fetching monthly moods:', error);

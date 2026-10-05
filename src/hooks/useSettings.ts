@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import db from '../database/database';
+import { SettingsRepository } from '../repositories/SettingsRepository';
 
 export interface AppSettings {
   userName: string;
@@ -38,17 +38,7 @@ export const useSettings = () => {
   const fetchSettings = useCallback(async () => {
     try {
       setLoading(true);
-      const result = await db.execute('SELECT * FROM Settings');
-      const rows = (result.rows as any[]) || [];
-      
-      const loadedSettings = { ...defaultSettings };
-      
-      rows.forEach((row: any) => {
-        if (row.key in loadedSettings) {
-          (loadedSettings as any)[row.key] = row.value;
-        }
-      });
-      
+      const loadedSettings = await SettingsRepository.getSettings(defaultSettings);
       setSettings(loadedSettings);
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -63,10 +53,7 @@ export const useSettings = () => {
 
   const updateSetting = async (key: keyof AppSettings, value: string) => {
     try {
-      await db.execute(
-        'INSERT INTO Settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP',
-        [key, value]
-      );
+      await SettingsRepository.updateSetting(key, value);
       setSettings(prev => ({ ...prev, [key]: value }));
     } catch (error) {
       console.error(`Error updating setting ${key}:`, error);
@@ -79,19 +66,12 @@ export const useSettings = () => {
       let hasBodyParams = false;
       for (const key of keys) {
         if (['weight', 'height', 'waist', 'neck', 'hip'].includes(key)) hasBodyParams = true;
-        await db.execute(
-          'INSERT INTO Settings (key, value, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = CURRENT_TIMESTAMP',
-          [key, (updates as any)[key]]
-        );
+        await SettingsRepository.updateSetting(key, (updates as any)[key]);
       }
       setSettings(prev => {
         const next = { ...prev, ...updates };
         if (hasBodyParams) {
-           const today = new Date().toISOString().split('T')[0];
-           db.execute(`
-             INSERT INTO BodyMeasurements (date, weight, height, waist, neck, hip)
-             VALUES (?, ?, ?, ?, ?, ?)
-           `, [today, next.weight, next.height, next.waist, next.neck, next.hip]);
+           SettingsRepository.saveBodyMeasurements(next.weight, next.height, next.waist, next.neck, next.hip);
         }
         return next;
       });

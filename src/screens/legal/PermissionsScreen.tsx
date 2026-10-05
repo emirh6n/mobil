@@ -20,8 +20,8 @@ export const PermissionsScreen = () => {
   const checkPermissions = async () => {
     // 1. Notifications
     if (Platform.OS === 'android' && Platform.Version >= 33) {
-      const status = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
-      setNotifStatus(status ? 'granted' : 'denied');
+      const status = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+      setNotifStatus(status === PermissionsAndroid.RESULTS.GRANTED ? 'granted' : 'denied');
     } else {
       // Assuming granted on older Android unless we use specific push modules.
       // On iOS, we'd need a specific module to check. Since we rely on standard React Native,

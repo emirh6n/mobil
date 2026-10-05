@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import db from '../database/database';
+import { TaskRepository } from '../repositories/TaskRepository';
 
 export interface Task {
   id: number;
@@ -17,22 +17,7 @@ export const useTasks = (targetDate?: string) => {
   const fetchTasks = useCallback(async () => {
     try {
       setLoading(true);
-      let query = 'SELECT * FROM Tasks ORDER BY created_at DESC';
-      let params: any[] = [];
-      
-      if (targetDate) {
-        query = 'SELECT * FROM Tasks WHERE target_date = ? ORDER BY created_at DESC';
-        params = [targetDate];
-      }
-      
-      const result = await db.execute(query, params);
-      const rows = (result.rows as any[]) || [];
-      
-      const formattedTasks = rows.map((row: any) => ({
-        ...row,
-        is_completed: Boolean(row.is_completed)
-      }));
-      
+      const formattedTasks = await TaskRepository.getTasks(targetDate);
       setTasks(formattedTasks);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -47,10 +32,7 @@ export const useTasks = (targetDate?: string) => {
 
   const addTask = async (title: string, description: string, target_date?: string, target_time?: string) => {
     try {
-      await db.execute(
-        'INSERT INTO Tasks (title, description, target_date, target_time, is_completed) VALUES (?, ?, ?, ?, 0)',
-        [title, description, target_date || null, target_time || null]
-      );
+      await TaskRepository.addTask(title, description, target_date, target_time);
       await fetchTasks();
     } catch (error) {
       console.error('Error adding task:', error);
@@ -59,10 +41,7 @@ export const useTasks = (targetDate?: string) => {
 
   const toggleTask = async (id: number, currentStatus: boolean) => {
     try {
-      await db.execute(
-        'UPDATE Tasks SET is_completed = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [currentStatus ? 0 : 1, id]
-      );
+      await TaskRepository.toggleTask(id, currentStatus);
       await fetchTasks();
     } catch (error) {
       console.error('Error toggling task:', error);
@@ -71,7 +50,7 @@ export const useTasks = (targetDate?: string) => {
   
   const deleteTask = async (id: number) => {
     try {
-      await db.execute('DELETE FROM Tasks WHERE id = ?', [id]);
+      await TaskRepository.deleteTask(id);
       await fetchTasks();
     } catch (error) {
       console.error('Error deleting task:', error);
@@ -80,10 +59,7 @@ export const useTasks = (targetDate?: string) => {
 
   const updateTask = async (id: number, title: string, description: string) => {
     try {
-      await db.execute(
-        'UPDATE Tasks SET title = ?, description = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [title, description, id]
-      );
+      await TaskRepository.updateTask(id, title, description);
       await fetchTasks();
     } catch (error) {
       console.error('Error updating task:', error);
