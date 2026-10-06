@@ -6,8 +6,9 @@ import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
 import { Header } from '../components/Header';
 import { useWorkouts } from '../hooks/useWorkouts';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useDateContext } from '../context/DateContext';
+import { usePedometerContext } from '../context/PedometerContext';
 import db from '../database/database';
 
 const EXERCISE_DATA = {
@@ -34,84 +35,16 @@ export const SportsScreen = () => {
   const [muscleModalVisible, setMuscleModalVisible] = useState(false);
   const [exerciseModalVisible, setExerciseModalVisible] = useState(false);
   
-  // Pedometer State
-  const [isPedometerAvailable, setIsPedometerAvailable] = useState('checking');
-  const [pastStepCount, setPastStepCount] = useState(0);
-  const [currentStepCount, setCurrentStepCount] = useState(0);
-  const [isSyncEnabled, setIsSyncEnabled] = useState(false);
-  const pedometerSub = React.useRef<any>(null);
+  const currentExercises: string[] = muscleGroup && EXERCISE_DATA[muscleGroup as keyof typeof EXERCISE_DATA] ? EXERCISE_DATA[muscleGroup as keyof typeof EXERCISE_DATA] : [];
   
-  const currentExercises = muscleGroup && EXERCISE_DATA[muscleGroup as keyof typeof EXERCISE_DATA] ? EXERCISE_DATA[muscleGroup as keyof typeof EXERCISE_DATA] : [];
-  
-  // Cleanup for pedometer subscription
-  React.useEffect(() => {
-    return () => {
-      if (pedometerSub.current) {
-        pedometerSub.current.remove();
-      }
-    };
-  }, []);
+  const { isEnabled, stepCount, enable, disable, syncSteps } = usePedometerContext();
 
-  // Save steps to DB
-  React.useEffect(() => {
-    const saveSteps = async () => {
-      const totalSteps = pastStepCount + currentStepCount;
-      if (totalSteps > 0 && selectedDate) {
-        try {
-          await db.execute(
-            'INSERT INTO Steps (date, count, updated_at) VALUES (?, ?, CURRENT_TIMESTAMP) ON CONFLICT(date) DO UPDATE SET count = excluded.count, updated_at = CURRENT_TIMESTAMP',
-            [selectedDate, totalSteps]
-          );
-        } catch (e) {
-          console.error("Adım kaydetme hatası", e);
-        }
-      }
-    };
-    
-    // Yalnızca sync açıksa kaydet
-    if (isSyncEnabled) {
-      saveSteps();
-    }
-  }, [pastStepCount, currentStepCount, selectedDate, isSyncEnabled]);
-
-  const enablePedometer = async () => {
-    try {
-      const { status } = await Pedometer.requestPermissionsAsync();
-      if (status !== 'granted') {
-        Alert.alert('İzin Reddedildi', 'Adım sayar verilerine erişim izni vermeniz gerekiyor.');
-        return;
-      }
-
-      const isAvailable = await Pedometer.isAvailableAsync();
-      setIsPedometerAvailable(String(isAvailable));
-
-      if (isAvailable) {
-        const end = new Date();
-        const start = new Date();
-        start.setHours(0, 0, 0, 0);
-
-        try {
-          const pastResult = await Pedometer.getStepCountAsync(start, end);
-          if (pastResult) {
-            setPastStepCount(pastResult.steps);
-          }
-        } catch (stepErr) {
-          console.warn("Geçmiş adımlar alınamadı:", stepErr);
-        }
-
-        pedometerSub.current = Pedometer.watchStepCount(result => {
-          setCurrentStepCount(result.steps);
-        });
-
-        setIsSyncEnabled(true);
-      } else {
-        Alert.alert('Hata', 'Cihazınızda adım sayar sensörü bulunmuyor veya desteklenmiyor.');
-      }
-    } catch (e: any) {
-      console.error(e);
-      Alert.alert('Hata', 'Adım sayar başlatılamadı: ' + (e.message || 'Bilinmeyen hata'));
-    }
-  };
+  // Force sync steps when the screen comes into focus
+  useFocusEffect(
+    React.useCallback(() => {
+      syncSteps();
+    }, [syncSteps])
+  );
 
   const calculatedCalories = React.useMemo(() => {
     const s = parseFloat(sets) || 0;
@@ -156,9 +89,9 @@ export const SportsScreen = () => {
     return { totalSets: tSets, muscleDistribution: distribution };
   }, [workouts]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!muscleGroup.trim() || !exerciseName.trim() || !sets.trim() || !reps.trim()) return;
-    addWorkoutExercise(muscleGroup, exerciseName, parseInt(sets, 10) || 0, reps, weight);
+    await addWorkoutExercise(muscleGroup, exerciseName, parseInt(sets, 10) || 0, reps, weight);
     setExerciseName('');
     setSets('');
     setReps('');
@@ -374,22 +307,27 @@ export const SportsScreen = () => {
               <Icon name="directions-run" size={20} color={theme.colors.primary} />
               <Text style={styles.cardTitle}>Günlük Aktivite</Text>
             </View>
-            {isSyncEnabled && (
-              <View style={[styles.badge, { backgroundColor: 'rgba(159, 253, 80, 0.15)' }]}>
-                <Text style={styles.badgeText}>Senkronize Edildi</Text>
+            {isEnabled && (
+              <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' }}>
+                <View style={[styles.badge, { backgroundColor: 'rgba(159, 253, 80, 0.15)' }]}>
+                  <Text style={styles.badgeText}>Arka Planda Aktif</Text>
+                </View>
+                <TouchableOpacity onPress={disable}>
+                  <Icon name="power-settings-new" size={24} color={theme.colors.error} />
+                </TouchableOpacity>
               </View>
             )}
           </View>
 
-          {!isSyncEnabled ? (
+          {!isEnabled ? (
             <View style={styles.pedometerPromo}>
               <View style={styles.pedometerPromoIcon}>
                 <Icon name="sync" size={28} color={theme.colors.onSurfaceVariant} />
               </View>
               <Text style={styles.pedometerPromoText}>Adım, mesafe ve yakılan kalori verilerinizi takip etmek için cihazınızın adım sayar sensörüne erişim izni verin.</Text>
-              <TouchableOpacity style={styles.syncBtn} onPress={enablePedometer}>
+              <TouchableOpacity style={styles.syncBtn} onPress={enable}>
                 <Icon name="check-circle" size={18} color={theme.colors.onPrimary} />
-                <Text style={styles.syncBtnText}>Telefon Senkronizasyonunu Aç</Text>
+                <Text style={styles.syncBtnText}>Adım Sayarı Aç</Text>
               </TouchableOpacity>
             </View>
           ) : (
@@ -399,7 +337,7 @@ export const SportsScreen = () => {
                   <Icon name="do-not-step" size={20} color="#06b6d4" />
                 </View>
                 <View>
-                  <Text style={styles.compactPedometerValue}>{pastStepCount + currentStepCount}</Text>
+                  <Text style={styles.compactPedometerValue}>{stepCount}</Text>
                   <Text style={styles.compactPedometerLabel}>Adım</Text>
                 </View>
               </View>
@@ -411,7 +349,7 @@ export const SportsScreen = () => {
                   <Icon name="map" size={20} color="#06b6d4" />
                 </View>
                 <View>
-                  <Text style={styles.compactPedometerValue}>{((pastStepCount + currentStepCount) * 0.762 / 1000).toFixed(2)}</Text>
+                  <Text style={styles.compactPedometerValue}>{(stepCount * 0.762 / 1000).toFixed(2)}</Text>
                   <Text style={styles.compactPedometerLabel}>km</Text>
                 </View>
               </View>
@@ -423,7 +361,7 @@ export const SportsScreen = () => {
                   <Icon name="local-fire-department" size={20} color="#06b6d4" />
                 </View>
                 <View>
-                  <Text style={styles.compactPedometerValue}>{Math.round((pastStepCount + currentStepCount) * 0.04)}</Text>
+                  <Text style={styles.compactPedometerValue}>{Math.round(stepCount * 0.04)}</Text>
                   <Text style={styles.compactPedometerLabel}>kcal</Text>
                 </View>
               </View>

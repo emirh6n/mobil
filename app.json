@@ -16,24 +16,22 @@
       },
       "permissions": [
         "ACTIVITY_RECOGNITION"
+      ],
+      "blockedPermissions": [
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "assetBundlePatterns": [
       "**/*"
     ],
+    "splash": {
+      "backgroundColor": "#121316"
+    },
     "plugins": [
       "@react-native-community/datetimepicker",
       "expo-sharing",
       "expo-font",
-
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/new_splash.png",
-          "resizeMode": "contain",
-          "backgroundColor": "#121316"
-        }
-      ],
+      "expo-splash-screen",
       "expo-audio",
       "expo-localization"
     ],

@@ -4,6 +4,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Linking } from 'react-native';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
 import { useNavigation } from '@react-navigation/native';
@@ -58,6 +59,7 @@ export const SettingsScreen = () => {
   const handleSaveGeneral = () => updateSetting('userName', userName);
 
   const handleSavePersonal = () => {
+    const todayISO = new Date().toISOString();
     updateMultipleSettings({ 
       age: String(age), 
       gender, 
@@ -65,7 +67,9 @@ export const SettingsScreen = () => {
       weight: String(weight), 
       waist: String(waist), 
       neck: String(neck), 
-      hip: String(hip) 
+      hip: String(hip),
+      body_fat: String(metrics.bodyFat !== '-' ? metrics.bodyFat : ''),
+      last_biometric_update: todayISO
     });
     setPersonalExpanded(false);
   };
@@ -146,6 +150,19 @@ export const SettingsScreen = () => {
     };
   }, [weight, height, age, waist, neck, hip, gender]);
 
+  const lastUpdate = settings.last_biometric_update ? new Date(settings.last_biometric_update) : null;
+  let isLocked = false;
+  let remainingDays = 0;
+  
+  if (lastUpdate) {
+    const diffTime = Date.now() - lastUpdate.getTime();
+    const daysSinceUpdate = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    if (daysSinceUpdate < 7) {
+      isLocked = true;
+      remainingDays = 7 - daysSinceUpdate;
+    }
+  }
+
   if (loading) {
     return (
       <SafeAreaView style={[styles.safeArea, { alignItems: 'center', justifyContent: 'center' }]}>
@@ -218,51 +235,60 @@ export const SettingsScreen = () => {
             {personalExpanded && (
               <View style={styles.accordionContent}>
                 <View style={styles.grid2}>
-                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => ageRef.current?.focus()}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => !isLocked && ageRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Yaş</Text>
-                    <View style={styles.inputWrapper}><TextInput ref={ageRef} style={styles.miniInput} keyboardType="numeric" value={String(age)} onChangeText={setAge} /><Text style={styles.inputUnit}>yıl</Text></View>
+                    <View style={styles.inputWrapper}><TextInput editable={!isLocked} ref={ageRef} style={styles.miniInput} keyboardType="numeric" value={String(age)} onChangeText={setAge} /><Text style={styles.inputUnit}>yıl</Text></View>
                   </TouchableOpacity>
                   <View style={styles.gridItem}>
                     <Text style={styles.gridItemTitle}>Biyolojik Cinsiyet</Text>
                     <View style={styles.toggleRow}>
-                      <TouchableOpacity style={[styles.toggleBtn, gender === 'male' && { backgroundColor: 'rgba(59, 130, 246, 0.15)' }]} onPress={() => setGender('male')}>
+                      <TouchableOpacity disabled={isLocked} style={[styles.toggleBtn, gender === 'male' && { backgroundColor: 'rgba(59, 130, 246, 0.15)' }]} onPress={() => setGender('male')}>
                         <Icon name="male" size={24} color={gender === 'male' ? '#3b82f6' : theme.colors.onSurfaceVariant} />
                       </TouchableOpacity>
-                      <TouchableOpacity style={[styles.toggleBtn, gender === 'female' && { backgroundColor: 'rgba(236, 72, 153, 0.15)' }]} onPress={() => setGender('female')}>
+                      <TouchableOpacity disabled={isLocked} style={[styles.toggleBtn, gender === 'female' && { backgroundColor: 'rgba(236, 72, 153, 0.15)' }]} onPress={() => setGender('female')}>
                         <Icon name="female" size={24} color={gender === 'female' ? '#ec4899' : theme.colors.onSurfaceVariant} />
                       </TouchableOpacity>
                     </View>
                   </View>
                 </View>
                 <View style={styles.grid2}>
-                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => heightRef.current?.focus()}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => !isLocked && heightRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Boy (cm)</Text>
-                    <View style={styles.inputWrapper}><TextInput ref={heightRef} style={styles.miniInput} keyboardType="numeric" value={String(height)} onChangeText={setHeight} /><Text style={styles.inputUnit}>cm</Text></View>
+                    <View style={styles.inputWrapper}><TextInput editable={!isLocked} ref={heightRef} style={styles.miniInput} keyboardType="numeric" value={String(height)} onChangeText={setHeight} /><Text style={styles.inputUnit}>cm</Text></View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => weightRef.current?.focus()}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => !isLocked && weightRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Kilo (kg)</Text>
-                    <View style={styles.inputWrapper}><TextInput ref={weightRef} style={styles.miniInput} keyboardType="numeric" value={String(weight)} onChangeText={setWeight} /><Text style={styles.inputUnit}>kg</Text></View>
+                    <View style={styles.inputWrapper}><TextInput editable={!isLocked} ref={weightRef} style={styles.miniInput} keyboardType="numeric" value={String(weight)} onChangeText={setWeight} /><Text style={styles.inputUnit}>kg</Text></View>
                   </TouchableOpacity>
                 </View>
                 <View style={styles.grid2}>
-                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => waistRef.current?.focus()}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => !isLocked && waistRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Bel Çevresi</Text>
-                    <View style={styles.inputWrapper}><TextInput ref={waistRef} style={styles.miniInput} keyboardType="numeric" value={String(waist)} onChangeText={setWaist} /><Text style={styles.inputUnit}>cm</Text></View>
+                    <View style={styles.inputWrapper}><TextInput editable={!isLocked} ref={waistRef} style={styles.miniInput} keyboardType="numeric" value={String(waist)} onChangeText={setWaist} /><Text style={styles.inputUnit}>cm</Text></View>
                   </TouchableOpacity>
-                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => neckRef.current?.focus()}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => !isLocked && neckRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Boyun Çevresi</Text>
-                    <View style={styles.inputWrapper}><TextInput ref={neckRef} style={styles.miniInput} keyboardType="numeric" value={String(neck)} onChangeText={setNeck} /><Text style={styles.inputUnit}>cm</Text></View>
+                    <View style={styles.inputWrapper}><TextInput editable={!isLocked} ref={neckRef} style={styles.miniInput} keyboardType="numeric" value={String(neck)} onChangeText={setNeck} /><Text style={styles.inputUnit}>cm</Text></View>
                   </TouchableOpacity>
                 </View>
                 {gender === 'female' && (
-                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => hipRef.current?.focus()}>
+                  <TouchableOpacity style={styles.gridItem} activeOpacity={0.8} onPress={() => !isLocked && hipRef.current?.focus()}>
                     <Text style={styles.gridItemTitle}>Kalça Çevresi (cm)</Text>
-                    <View style={styles.inputWrapper}><TextInput ref={hipRef} style={styles.miniInput} keyboardType="numeric" value={String(hip)} onChangeText={setHip} /><Text style={styles.inputUnit}>cm</Text></View>
+                    <View style={styles.inputWrapper}><TextInput editable={!isLocked} ref={hipRef} style={styles.miniInput} keyboardType="numeric" value={String(hip)} onChangeText={setHip} /><Text style={styles.inputUnit}>cm</Text></View>
                   </TouchableOpacity>
                 )}
+                
+                {isLocked && (
+                  <View style={{ backgroundColor: 'rgba(255, 152, 0, 0.1)', padding: 12, borderRadius: 8, marginTop: 8 }}>
+                    <Text style={{ ...theme.typography.labelSm, color: '#ff9800' }}>
+                      Değişiklik kilitli. {remainingDays} gün sonra tekrar güncelleyebilirsiniz.
+                    </Text>
+                  </View>
+                )}
+                
                 <View style={styles.actionRow}>
                   <TouchableOpacity style={styles.btnSecondary} onPress={() => setPersonalExpanded(false)}><Text style={styles.btnSecondaryText}>Vazgeç</Text></TouchableOpacity>
-                  <TouchableOpacity style={styles.btnPrimary} onPress={handleSavePersonal}><Icon name="check-circle" size={18} color={theme.colors.onPrimaryContainer} /><Text style={styles.btnPrimaryText}>Kaydet</Text></TouchableOpacity>
+                  <TouchableOpacity disabled={isLocked} style={[styles.btnPrimary, isLocked && { opacity: 0.5 }]} onPress={handleSavePersonal}><Icon name="check-circle" size={18} color={theme.colors.onPrimaryContainer} /><Text style={styles.btnPrimaryText}>Kaydet</Text></TouchableOpacity>
                 </View>
               </View>
             )}
@@ -288,6 +314,14 @@ export const SettingsScreen = () => {
                 <Icon name="water-drop" size={24} color="#3b82f6" />
                 <Text style={styles.analysisValue}>{metrics.bodyFat !== '-' ? `%${metrics.bodyFat}` : '-'}</Text>
                 <Text style={styles.analysisLabel}>Vücut Yağ Oranı</Text>
+              </View>
+            </View>
+            <View style={{ padding: 12, borderTopWidth: 1, borderTopColor: 'rgba(38, 40, 46, 0.6)', marginTop: 8 }}>
+              <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 8 }}>
+                <Icon name="info" size={16} color={theme.colors.onSurfaceVariant} />
+                <Text style={{ ...theme.typography.bodySm, fontSize: 10, color: theme.colors.onSurfaceVariant, flex: 1, lineHeight: 14 }}>
+                  Feragatname: Bu uygulamanın verileri tıbbi bir teşhis veya tedavi amacı taşımaz, sunulan istatistikler ve oranlar tamamen yaklaşıktır ve yalnızca kişisel takip ve bilgilendirme amaçlıdır.
+                </Text>
               </View>
             </View>
           </View>
@@ -329,6 +363,19 @@ export const SettingsScreen = () => {
               </View>
               <Icon name="arrow-forward" size={18} color={theme.colors.onSurfaceVariant} />
             </TouchableOpacity>
+            
+            <View style={styles.divider} />
+            <TouchableOpacity style={styles.listItem} onPress={() => Linking.openURL('https://aremworkgroup.github.io/TRKN-Yasal/')}>
+              <View style={styles.listItemLeft}>
+                <View style={styles.cardIconBox}><Icon name="privacy-tip" size={22} color={theme.colors.onSurfaceVariant} /></View>
+                <View>
+                  <Text style={styles.listItemTitle}>Gizlilik Politikası</Text>
+                  <Text style={styles.listItemSub}>Verileriniz tamamen cihazınızda (offline) tutulur.</Text>
+                </View>
+              </View>
+              <Icon name="open-in-new" size={18} color={theme.colors.onSurfaceVariant} />
+            </TouchableOpacity>
+
           </View>
         </View>
 

@@ -14,6 +14,7 @@ export interface BodyMeasurementData {
   date: string;
   weight: number;
   height: number;
+  body_fat: number | null;
 }
 
 export interface LibraryCategoryStat {
@@ -25,7 +26,6 @@ export const useStatistics = (date: string) => {
   const [loading, setLoading] = useState(true);
   const [tasksCompleted, setTasksCompleted] = useState(0);
   const [tasksTotal, setTasksTotal] = useState(0);
-  const [calories, setCalories] = useState(0);
   const [stepAvg, setStepAvg] = useState(0);
   const [prs, setPrs] = useState<PRData[]>([]);
   const [libraryTotal, setLibraryTotal] = useState(0);
@@ -39,14 +39,8 @@ export const useStatistics = (date: string) => {
     try {
       setLoading(true);
       
-      // Tasks stat (Today)
-      const tasksStat = await StatisticsRepository.getTasksStat(date);
-      setTasksTotal(tasksStat.total);
-      setTasksCompleted(tasksStat.completed);
-
-      // Weekly dates calculation (Monday to Sunday for selected week)
       const selDateObj = new Date(date);
-      const dayOfWeek = selDateObj.getDay() || 7; // 1-7 (Mon-Sun)
+      const dayOfWeek = selDateObj.getDay() || 7;
       
       const mon = new Date(selDateObj);
       mon.setDate(selDateObj.getDate() - dayOfWeek + 1);
@@ -56,8 +50,35 @@ export const useStatistics = (date: string) => {
       const monStr = mon.toISOString().split('T')[0];
       const sunStr = sun.toISOString().split('T')[0];
 
-      // Focus Time (Mon-Sun total)
-      const focusTotalSec = await StatisticsRepository.getFocusTime(monStr, sunStr);
+      const w1Start = new Date(mon);
+      w1Start.setDate(w1Start.getDate() - 21);
+      const w1StartStr = w1Start.toISOString().split('T')[0];
+      const year = date.split('-')[0];
+      const monthPrefix = date.substring(0, 7);
+
+      const [
+        tasksStat,
+        focusTotalSec,
+        weeklyTasks,
+        avgSteps,
+        fetchedPrs,
+        libStats,
+        activeDays,
+        fetchedBodyHistory
+      ] = await Promise.all([
+        StatisticsRepository.getTasksStat(date),
+        StatisticsRepository.getFocusTime(monStr, sunStr),
+        StatisticsRepository.getWeeklyTasks(w1StartStr, sunStr, mon),
+        StatisticsRepository.getStepAvg(date),
+        StatisticsRepository.getPrs(year),
+        StatisticsRepository.getLibraryStats(),
+        StatisticsRepository.getNoteDays(monthPrefix),
+        StatisticsRepository.getBodyHistory()
+      ]);
+
+      setTasksTotal(tasksStat.total);
+      setTasksCompleted(tasksStat.completed);
+
       const totalMin = Math.floor(focusTotalSec / 60);
       if (totalMin >= 60) {
         const h = Math.floor(totalMin / 60);
@@ -67,39 +88,12 @@ export const useStatistics = (date: string) => {
         setFocusTimeStr(`${totalMin} dakika`);
       }
 
-      // Tasks stat (4-week history)
-      const w1Start = new Date(mon);
-      w1Start.setDate(w1Start.getDate() - 21);
-      const w1StartStr = w1Start.toISOString().split('T')[0];
-
-      const weeklyTasks = await StatisticsRepository.getWeeklyTasks(w1StartStr, sunStr, mon);
       setTaskWeeks(weeklyTasks.map(w => w.t > 0 ? Math.round((w.c / w.t) * 100) : 0));
-
-      // Calories stat
-      const todayCal = await StatisticsRepository.getCalories(date);
-      setCalories(todayCal);
-
-      // Steps
-      const avgSteps = await StatisticsRepository.getStepAvg(date);
       setStepAvg(avgSteps);
-
-      // PRs
-      const year = date.split('-')[0];
-      const fetchedPrs = await StatisticsRepository.getPrs(year);
       setPrs(fetchedPrs);
-
-      // Library Stats
-      const libStats = await StatisticsRepository.getLibraryStats();
       setLibraryTotal(libStats.libTotal);
       setLibraryCategories(libStats.libraryCategories);
-
-      // Monthly Notes
-      const monthPrefix = date.substring(0, 7);
-      const activeDays = await StatisticsRepository.getNoteDays(monthPrefix);
       setNoteDays(activeDays);
-
-      // Body Measurements History
-      const fetchedBodyHistory = await StatisticsRepository.getBodyHistory();
       setBodyHistory(fetchedBodyHistory);
 
     } catch (error) {
@@ -113,5 +107,5 @@ export const useStatistics = (date: string) => {
     fetchStats();
   }, [fetchStats]);
 
-  return { loading, tasksCompleted, tasksTotal, calories, stepAvg, prs, libraryTotal, libraryCategories, noteDays, focusTimeStr, taskWeeks, bodyHistory, refresh: fetchStats };
+  return { loading, tasksCompleted, tasksTotal, stepAvg, prs, libraryTotal, libraryCategories, noteDays, focusTimeStr, taskWeeks, bodyHistory, refresh: fetchStats };
 };

@@ -14,6 +14,8 @@ export interface AppSettings {
   waist: string;
   neck: string;
   hip: string;
+  body_fat: string;
+  last_biometric_update: string;
 }
 
 const defaultSettings: AppSettings = {
@@ -29,6 +31,8 @@ const defaultSettings: AppSettings = {
   waist: '',
   neck: '',
   hip: '',
+  body_fat: '',
+  last_biometric_update: '',
 };
 
 export const useSettings = () => {
@@ -65,13 +69,13 @@ export const useSettings = () => {
       const keys = Object.keys(updates);
       let hasBodyParams = false;
       for (const key of keys) {
-        if (['weight', 'height', 'waist', 'neck', 'hip'].includes(key)) hasBodyParams = true;
+        if (['weight', 'height', 'waist', 'neck', 'hip', 'body_fat'].includes(key)) hasBodyParams = true;
         await SettingsRepository.updateSetting(key, (updates as any)[key]);
       }
       setSettings(prev => {
         const next = { ...prev, ...updates };
         if (hasBodyParams) {
-           SettingsRepository.saveBodyMeasurements(next.weight, next.height, next.waist, next.neck, next.hip);
+           SettingsRepository.saveBodyMeasurements(next.weight, next.height, next.waist, next.neck, next.hip, next.body_fat);
         }
         return next;
       });

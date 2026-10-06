@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -11,7 +11,7 @@ import { useDateContext } from '../context/DateContext';
 export const StatisticsScreen = () => {
   const navigation = useNavigation();
   const { selectedDate } = useDateContext();
-  const { loading, tasksCompleted, tasksTotal, calories, stepAvg, prs, libraryTotal, libraryCategories, noteDays, focusTimeStr, taskWeeks, bodyHistory, refresh } = useStatistics(selectedDate);
+  const { loading, tasksCompleted, tasksTotal, stepAvg, prs, libraryTotal, libraryCategories, noteDays, focusTimeStr, taskWeeks, bodyHistory, refresh } = useStatistics(selectedDate);
 
   useFocusEffect(
     useCallback(() => {
@@ -20,14 +20,9 @@ export const StatisticsScreen = () => {
   );
 
   const [activeCategory, setActiveCategory] = useState('verimlilik');
-  const [activeMuscle, setActiveMuscle] = useState('göğüs');
+  const [activeMuscle, setActiveMuscle] = useState('tümü');
   const [activeExercise, setActiveExercise] = useState<string | null>(null);
   const [bodyHistoryExpanded, setBodyHistoryExpanded] = useState(false);
-
-  const calPercent = Math.min(100, Math.round((calories / 2400) * 100));
-
-
-
   const renderTamamlamaGrafigi = () => {
     const weeks = [
       { label: '3H Önce', val: taskWeeks[0] },
@@ -128,7 +123,7 @@ export const StatisticsScreen = () => {
   };
 
   const renderSpor = () => {
-    const muscles = ['Göğüs', 'Sırt', 'Omuz', 'Kol', 'Bacak & Kalça', 'Boyun', 'Karın'];
+    const muscles = ['Tümü', 'Göğüs', 'Sırt', 'Omuz', 'Kol', 'Bacak & Kalça', 'Boyun', 'Karın'];
     
     const muscleExercises: Record<string, string[]> = {
       göğüs: ['Machine Pec Deck / Cable Fly', 'Dips', 'Bench Press (Incline, Seated)', 'Seated Chest Press'],
@@ -140,10 +135,11 @@ export const StatisticsScreen = () => {
       karın: ['Cable Crunch']
     };
 
-    const currentExercises = muscleExercises[activeMuscle.toLowerCase()] || [];
+    const currentExercises = activeMuscle === 'tümü' ? [] : (muscleExercises[activeMuscle.toLowerCase()] || []);
 
     const filteredPrs = prs.filter(pr => {
       if (activeExercise) return pr.exercise_name === activeExercise;
+      if (activeMuscle === 'tümü') return true;
       return currentExercises.includes(pr.exercise_name);
     });
 
@@ -185,17 +181,19 @@ export const StatisticsScreen = () => {
             ))}
           </ScrollView>
           
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingBottom: 8 }}>
-            {currentExercises.map(e => (
-              <TouchableOpacity 
-                key={e} 
-                style={[styles.prChip, activeExercise === e && styles.prChipActive]}
-                onPress={() => handleExerciseSelect(e)}
-              >
-                <Text style={[styles.prChipText, activeExercise === e && styles.prChipTextActive]}>{e}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
+          {currentExercises.length > 0 && (
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingBottom: 8 }}>
+              {currentExercises.map(e => (
+                <TouchableOpacity 
+                  key={e} 
+                  style={[styles.prChip, activeExercise === e && styles.prChipActive]}
+                  onPress={() => handleExerciseSelect(e)}
+                >
+                  <Text style={[styles.prChipText, activeExercise === e && styles.prChipTextActive]}>{e}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
           
           {filteredPrs.length > 0 ? (
             <View style={[styles.prList, { marginTop: 16 }]}>
@@ -249,27 +247,62 @@ export const StatisticsScreen = () => {
               <View style={{ padding: 20, paddingTop: 0 }}>
                 {bodyHistory.length > 0 ? (
                   <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingBottom: 8 }}>
-                    {bodyHistory.map((item, idx) => (
-                      <View key={idx} style={styles.bodyHistoryCard}>
-                        <View style={styles.bodyHistoryHeader}>
-                          <Icon name="event" size={14} color={theme.colors.onSurfaceVariant} />
-                          <Text style={styles.bodyHistoryDate}>{item.date}</Text>
+                    {bodyHistory.map((item, idx) => {
+                      const prev = bodyHistory[idx + 1];
+                      
+                      const renderDiff = (current: number | null | undefined, previous: number | null | undefined, unit: string) => {
+                        if (current == null || previous == null) return null;
+                        const diff = current - previous;
+                        if (diff === 0) return null;
+                        const sign = diff > 0 ? '+' : '';
+                        // Using a neutral color because weight gain could be a goal (bulking) or weight loss could be a goal (cutting).
+                        return (
+                          <Text style={{ fontSize: 11, color: theme.colors.onSurfaceVariant, marginLeft: 6, fontWeight: '500' }}>
+                            ({sign}{diff.toFixed(1)} {unit})
+                          </Text>
+                        );
+                      };
+
+                      return (
+                        <View key={idx} style={styles.bodyHistoryCard}>
+                          <View style={styles.bodyHistoryHeader}>
+                            <Icon name="event" size={14} color={theme.colors.onSurfaceVariant} />
+                            <Text style={styles.bodyHistoryDate}>{item.date}</Text>
+                          </View>
+                          <View style={styles.bodyHistoryRow}>
+                            <Icon name="monitor-weight" size={20} color={theme.colors.primary} />
+                            <Text style={styles.bodyHistoryValue}>{item.weight} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>kg</Text></Text>
+                            {renderDiff(item.weight, prev?.weight, 'kg')}
+                          </View>
+                          <View style={styles.bodyHistoryRow}>
+                            <Icon name="height" size={20} color={theme.colors.secondary} />
+                            <Text style={styles.bodyHistoryValue}>{item.height} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>cm</Text></Text>
+                            {renderDiff(item.height, prev?.height, 'cm')}
+                          </View>
+                          {item.body_fat != null && (
+                            <View style={styles.bodyHistoryRow}>
+                              <Icon name="analytics" size={20} color="#ff9800" />
+                              <Text style={styles.bodyHistoryValue}>{item.body_fat} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>% Yağ</Text></Text>
+                              {renderDiff(item.body_fat, prev?.body_fat, '%')}
+                            </View>
+                          )}
                         </View>
-                        <View style={styles.bodyHistoryRow}>
-                          <Icon name="monitor-weight" size={20} color={theme.colors.primary} />
-                          <Text style={styles.bodyHistoryValue}>{item.weight} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>kg</Text></Text>
-                        </View>
-                        <View style={styles.bodyHistoryRow}>
-                          <Icon name="height" size={20} color={theme.colors.secondary} />
-                          <Text style={styles.bodyHistoryValue}>{item.height} <Text style={{fontSize: 12, color: theme.colors.onSurfaceVariant}}>cm</Text></Text>
-                        </View>
-                      </View>
-                    ))}
+                      );
+                    })}
                   </ScrollView>
                 ) : (
-                  <Text style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center', fontSize: 12, marginBottom: 8 }}>
-                    Henüz kaydedilmiş vücut analizi yok. Ayarlar menüsünden boy ve kilonuzu güncelleyerek ölçüm kaydedebilirsiniz.
-                  </Text>
+                  <View style={{ alignItems: 'center', paddingVertical: 16 }}>
+                    <Text style={{ color: theme.colors.onSurfaceVariant, textAlign: 'center', fontSize: 13, marginBottom: 12 }}>
+                      Henüz vücut analizi kaydınız bulunmuyor. Görebilmek için ayarlar menüsünden biyometrik parametrelerinizi doldurunuz.
+                    </Text>
+                    <TouchableOpacity 
+                      style={{ backgroundColor: theme.colors.surfaceContainerHighest, paddingHorizontal: 16, paddingVertical: 8, borderRadius: 8, flexDirection: 'row', alignItems: 'center', gap: 6 }}
+                      onPress={() => (navigation.navigate as any)('Settings')}
+                    >
+                      <Icon name="settings" size={16} color={theme.colors.primary} />
+                      <Text style={{ color: theme.colors.primary, fontWeight: '500', fontSize: 13 }}>Ayarlara Git</Text>
+                    </TouchableOpacity>
+                  </View>
                 )}
               </View>
             )}
@@ -285,7 +318,25 @@ export const StatisticsScreen = () => {
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <Header subtitle="İstatistik" hideBackButton />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      {loading && tasksTotal === 0 && prs.length === 0 ? (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <ActivityIndicator size="large" color={theme.colors.primary} />
+          <Text style={{ marginTop: 12, color: theme.colors.onSurfaceVariant, fontSize: 14 }}>
+            Verileriniz Hesaplanıyor...
+          </Text>
+        </View>
+      ) : (
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={
+          <RefreshControl 
+            refreshing={loading} 
+            onRefresh={refresh} 
+            tintColor={theme.colors.primary} 
+            colors={[theme.colors.primary]} 
+          />
+        }
+      >
         {/* Date Row */}
         <View style={styles.subheadRow}>
           <View style={styles.subheadLeft}>
@@ -319,6 +370,7 @@ export const StatisticsScreen = () => {
         {activeCategory === 'spor' && renderSpor()}
 
       </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

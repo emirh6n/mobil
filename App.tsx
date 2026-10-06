@@ -4,7 +4,9 @@ import { RootNavigator } from './src/navigation/RootNavigator';
 import { StatusBar, View, Text } from 'react-native';
 import { initDatabase } from './src/database/database';
 import { DateProvider } from './src/context/DateContext';
+import { PedometerProvider } from './src/context/PedometerContext';
 import * as SplashScreen from 'expo-splash-screen';
+import { AnimatedSplashScreen } from './src/components/AnimatedSplashScreen';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -37,13 +39,14 @@ class ErrorBoundary extends Component<{children: React.ReactNode}, {hasError: bo
 
 const App = () => {
   const [dbReady, setDbReady] = useState(false);
+  const [splashFinished, setSplashFinished] = useState(false);
 
   useEffect(() => {
     async function prepare() {
       try {
         await initDatabase();
-        // Keep splash screen visible for at least 2 seconds for better user experience
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // A short delay before replacing native splash screen with our animated one
+        await new Promise(resolve => setTimeout(resolve, 300));
       } catch (e) {
         console.warn(e);
       } finally {
@@ -62,9 +65,15 @@ const App = () => {
     <SafeAreaProvider>
       <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
       <ErrorBoundary>
-        <DateProvider>
-          <RootNavigator />
-        </DateProvider>
+        <PedometerProvider>
+          <DateProvider>
+            {!splashFinished ? (
+              <AnimatedSplashScreen onAnimationComplete={() => setSplashFinished(true)} />
+            ) : (
+              <RootNavigator />
+            )}
+          </DateProvider>
+        </PedometerProvider>
       </ErrorBoundary>
     </SafeAreaProvider>
   );

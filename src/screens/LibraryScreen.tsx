@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Linking, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Linking, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -20,13 +20,13 @@ export const LibraryScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterCategory, setFilterCategory] = useState('');
 
-  const handleAddResource = () => {
+  const handleAddResource = async () => {
     if (!title.trim()) return;
     if (editingId) {
-      updateResource(editingId, title, category, url, notes);
+      await updateResource(editingId, title, category, url, notes);
       setEditingId(null);
     } else {
-      addResource(title, category, url, notes);
+      await addResource(title, category, url, notes);
     }
     setTitle('');
     setCategory('');
@@ -80,8 +80,8 @@ export const LibraryScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <Header subtitle="Kütüphane" />
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         
         {/* Kütüphane Yönetimi */}
         <View style={styles.card}>
@@ -183,8 +183,8 @@ export const LibraryScreen = () => {
           
 
         </View>
-
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

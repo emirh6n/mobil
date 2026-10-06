@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -21,15 +21,15 @@ export const NotesScreen = () => {
     }
   }, [loading, note]);
 
-  const handleSave = () => {
-    saveNote(localNote);
+  const handleSave = async () => {
+    await saveNote(localNote);
   };
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <Header subtitle="Notlar" />
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         
         <View style={styles.subheadRow}>
           <View style={styles.subheadLeft}>
@@ -76,8 +76,8 @@ export const NotesScreen = () => {
             </View>
           )}
         </View>
-
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

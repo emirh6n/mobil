@@ -83,7 +83,7 @@ export const Header: React.FC<HeaderProps> = ({ subtitle, hideBackButton }) => {
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           {!hideBackButton && navigation.canGoBack() && (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }}>
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: 8 }} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
               <Icon name="arrow-back" size={24} color={theme.colors.onSurface} />
             </TouchableOpacity>
           )}
@@ -107,7 +107,7 @@ export const Header: React.FC<HeaderProps> = ({ subtitle, hideBackButton }) => {
             <Icon name="calendar-today" size={18} color={theme.colors.primary} />
             <Text style={styles.dateBtnText}>{dateText}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.settingsBtn} onPress={() => navigation.navigate('Settings')}>
+          <TouchableOpacity style={styles.settingsBtn} onPress={() => navigation.navigate('Settings')} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
             <Icon name="settings" size={22} color={theme.colors.onSurfaceVariant} />
           </TouchableOpacity>
         </View>
@@ -123,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({ subtitle, hideBackButton }) => {
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Tarih Seçin</Text>
-              <TouchableOpacity onPress={() => setModalVisible(false)}>
+              <TouchableOpacity onPress={() => setModalVisible(false)} hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}>
                 <Icon name="close" size={24} color={theme.colors.onSurfaceVariant} />
               </TouchableOpacity>
             </View>

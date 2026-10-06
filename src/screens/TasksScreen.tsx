@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, ActivityIndicator, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '../theme/theme';
 import { Icon } from '../components/Icon';
@@ -17,13 +17,13 @@ export const TasksScreen = () => {
   const [title, setTitle] = useState('');
   const [desc, setDesc] = useState('');
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (!title.trim()) return;
     if (editingId) {
-      updateTask(editingId, title, desc);
+      await updateTask(editingId, title, desc);
       setEditingId(null);
     } else {
-      addTask(title, desc, selectedDate);
+      await addTask(title, desc, selectedDate);
     }
     setTitle('');
     setDesc('');
@@ -65,8 +65,8 @@ export const TasksScreen = () => {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <Header subtitle="Görev Disiplini" />
-
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         <View style={styles.subheadRow}>
           <View style={styles.subheadLeft}>
             <Icon name="calendar-month" size={18} color={theme.colors.primary} />
@@ -171,8 +171,8 @@ export const TasksScreen = () => {
             <Text style={styles.submitBtnText}>{editingId ? 'Görevi Güncelle' : 'Görevi Kaydet'}</Text>
           </TouchableOpacity>
         </View>
-
       </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };

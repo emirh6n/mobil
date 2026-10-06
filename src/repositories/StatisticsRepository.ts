@@ -43,15 +43,7 @@ export const StatisticsRepository = {
     return weeklyTasks;
   },
 
-  async getCalories(date: string) {
-    const macrosRes = await db.execute('SELECT total_calories, total_protein FROM DailyMacros WHERE date = ?', [date]);
-    const macrosRows = (macrosRes.rows as any[]) || [];
-    let todayCal = 0;
-    if (macrosRows.length > 0) {
-      todayCal = macrosRows[0].total_calories || (macrosRows[0].total_protein * 4); // basic fallback
-    }
-    return todayCal;
-  },
+
 
   async getStepAvg(date: string) {
     const stepsRes = await db.execute(`
@@ -66,7 +58,7 @@ export const StatisticsRepository = {
     const prsRes = await db.execute(`
       SELECT 
         we.exercise_name, 
-        MAX(CAST(we.weight AS INTEGER)) as max_weight, 
+        MAX(CAST(we.weight AS REAL)) as max_weight, 
         we.reps, 
         we.sets,
         w.date,
@@ -102,9 +94,9 @@ export const StatisticsRepository = {
 
   async getBodyHistory(): Promise<BodyMeasurementData[]> {
     const bodyRes = await db.execute(`
-      SELECT date, weight, height 
+      SELECT date, weight, height, body_fat 
       FROM BodyMeasurements 
-      ORDER BY date ASC
+      ORDER BY date DESC
     `);
     return (bodyRes.rows as any[]) || [];
   }

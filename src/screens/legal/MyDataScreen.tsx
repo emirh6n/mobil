@@ -8,7 +8,7 @@ import { Icon } from '../../components/Icon';
 import { useNavigation } from '@react-navigation/native';
 import { t } from '../../legal/i18n';
 import db from '../../database/database';
-// Import alarm module to clear alarms if needed
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeModules } from 'react-native';
 const { ExpoAlarmModule } = NativeModules;
 
@@ -37,25 +37,31 @@ export const MyDataScreen = () => {
 
   const handleDeleteAll = async () => {
     try {
-      // Basic reset logic: delete the database file or drop tables.
-      // Easiest is to drop tables or just clear them.
-      await db.execute('DELETE FROM Reminders;');
-      await db.execute('DELETE FROM Tasks;');
-      await db.execute('DELETE FROM Moods;');
       await db.execute('DELETE FROM Settings;');
-      await db.execute('DELETE FROM Steps;');
+      await db.execute('DELETE FROM Tasks;');
+      await db.execute('DELETE FROM Reminders;');
+      await db.execute('DELETE FROM ImportantDates;');
+      await db.execute('DELETE FROM LibraryResources;');
+      await db.execute('DELETE FROM DailyNotes;');
+      await db.execute('DELETE FROM Moods;');
       await db.execute('DELETE FROM Workouts;');
       await db.execute('DELETE FROM WorkoutExercises;');
-      await db.execute('DELETE FROM BodyMetrics;');
+      await db.execute('DELETE FROM WorkoutSets;');
+      await db.execute('DELETE FROM DailySteps;');
+      await db.execute('DELETE FROM FocusSessions;');
+      await db.execute('DELETE FROM BodyMeasurements;');
+
+      await AsyncStorage.clear();
 
       // Cancel any native alarms
       if (ExpoAlarmModule && ExpoAlarmModule.cancelAlarm) {
-        // You'd ideally fetch active alarm IDs and cancel, but here we can just do a broad reset if module supports it
-        // Or we assume deleting DB handles it if we sync
+        // Broad reset if module supports it
       }
       
       setModalVisible(false);
-      Alert.alert(t('success'), t('dataDeleted'));
+      Alert.alert(t('success'), t('dataDeleted'), [
+        { text: 'OK', onPress: () => navigation.reset({ index: 0, routes: [{ name: 'Splash' }] }) }
+      ]);
     } catch (error) {
       console.error(error);
       Alert.alert(t('error'), 'Failed to delete data.');
