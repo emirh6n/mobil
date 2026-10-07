@@ -10,6 +10,7 @@ import androidx.work.WorkerParameters
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
+import androidx.work.ListenableWorker.Result
 
 class StepWorker(
     appContext: Context,

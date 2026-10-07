@@ -15,7 +15,11 @@
         "backgroundColor": "#121316"
       },
       "permissions": [
-        "ACTIVITY_RECOGNITION"
+        "ACTIVITY_RECOGNITION",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
       ],
       "blockedPermissions": [
         "android.permission.RECORD_AUDIO"
@@ -25,7 +29,9 @@
       "**/*"
     ],
     "splash": {
-      "backgroundColor": "#121316"
+      "backgroundColor": "#121316",
+      "image": "./assets/transparent.png",
+      "resizeMode": "contain"
     },
     "plugins": [
       "@react-native-community/datetimepicker",
@@ -37,7 +43,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "b19047a5-b937-4d41-8707-8611c92830a4"
+        "projectId": "bfd89145-6af4-4066-9f29-9d26ebcb724f"
       }
     }
   }
